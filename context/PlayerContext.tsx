@@ -131,13 +131,11 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     }, [likedSongs, playlists, isAuthenticated, user]);
 
 
-    const playSong = useCallback(async (song: Song) => {
-        try {
-            // 1. Stop everything current immediately
             if (!song.src) {
                 alert('Không tìm thấy link nhạc!');
                 return;
             }
+            console.log('--- SONG PLAY REQUEST ---', { title: song.title, src: song.src, isOnline: song.isOnline });
             setIsPlaying(false);
             if (audioRef.current) {
                 audioRef.current.pause();
@@ -150,6 +148,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
 
             // CASE 1: Online Song (Need YouTube ID)
             if (song.isOnline) {
+                console.log('Detected as ONLINE song. Fetching YouTube ID...');
                 try {
                     const res = await fetch(`/api/youtube?q=${encodeURIComponent(song.title + ' ' + song.artist)}`);
                     const data = await res.json();
@@ -355,20 +354,36 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             {children}
             {/* Hidden ReactPlayer for YouTube Audio */}
             {youtubeUrl && (
-                <div style={{ display: 'none' }}>
+                <div style={{ 
+                    position: 'fixed', 
+                    top: '-1000px', 
+                    left: '-1000px', 
+                    width: '1px', 
+                    height: '1px', 
+                    overflow: 'hidden', 
+                    opacity: 0,
+                    pointerEvents: 'none',
+                    zIndex: -1
+                }}>
                     {/* @ts-expect-error - dynamic import typing conflict */}
                     <ReactPlayer
                         ref={playerRef as never}
                         url={youtubeUrl}
                         playing={isPlaying}
                         volume={volume}
+                        onBuffer={() => console.log('YouTube Buffering...')}
+                        onReady={() => console.log('YouTube Player Ready')}
+                        onStart={() => console.log('YouTube Playback Started')}
                         onProgress={(state: { playedSeconds: number }) => setCurrentTime(state.playedSeconds)}
                         onDuration={(d: number) => setDuration(d)}
                         onEnded={nextSong}
-                        onError={(e: unknown) => console.error('ReactPlayer Error:', e)}
+                        onError={(e: unknown) => {
+                            console.error('ReactPlayer Error:', e);
+                            alert('Lỗi khi phát video YouTube. Có thể do video bị giới hạn hoặc không hỗ trợ nhúng.');
+                        }}
                         config={{
                             youtube: {
-                                playerVars: { autoplay: 1, controls: 0 }
+                                playerVars: { autoplay: 1, controls: 0, origin: typeof window !== 'undefined' ? window.location.origin : '' }
                             }
                         }}
                     />

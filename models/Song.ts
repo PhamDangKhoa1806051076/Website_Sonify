@@ -6,6 +6,7 @@ export interface ISong extends Document {
     artist: string;
     cover: string;
     src: string;
+    isOnline?: boolean;
     createdAt: Date;
 }
 
@@ -15,6 +16,7 @@ const SongSchema: Schema = new Schema({
     artist: { type: String, required: true },
     cover: { type: String, required: true },
     src: { type: String, required: true },
+    isOnline: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now }
 });
 

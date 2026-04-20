@@ -75,7 +75,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
             const response = await fetch('/api/songs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newSong)
+                body: JSON.stringify({ ...newSong, isOnline: useExternalSource })
             });
             const data = await response.json();
             if (data.success) {

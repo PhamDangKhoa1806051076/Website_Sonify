@@ -13,6 +13,7 @@ export async function GET() {
             artist: s.artist,
             cover: s.cover,
             src: s.src,
+            isOnline: s.isOnline,
             _id: s._id // keep raw id if needed
         }));
         return NextResponse.json({ success: true, data: formattedSongs });
