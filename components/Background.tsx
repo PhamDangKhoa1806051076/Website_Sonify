@@ -6,11 +6,11 @@ import { useTheme } from '@/context/ThemeContext';
 
 const Background: React.FC = () => {
     const { currentSong } = usePlayer();
-    const { theme } = useTheme();
+    const { resolvedTheme } = useTheme();
     
     if (!currentSong) return null;
 
-    const isLight = theme === 'light';
+    const isLight = resolvedTheme === 'light';
 
     return (
         <div style={{
@@ -23,10 +23,10 @@ const Background: React.FC = () => {
             backgroundImage: `url(${currentSong.cover})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            filter: `blur(80px) brightness(${isLight ? 0.9 : 0.3})`,
-            opacity: isLight ? 0.4 : 0.8,
+            filter: `blur(100px) brightness(${isLight ? 1.05 : 0.4}) saturate(${isLight ? 1.2 : 0.8})`,
+            opacity: isLight ? 0.35 : 0.55,
             transform: 'scale(1.2)',
-            transition: 'background-image 1s ease-in-out, filter 0.5s ease, opacity 0.5s ease'
+            transition: 'background-image 1.2s ease-in-out, filter 0.8s ease, opacity 0.8s ease'
         }} />
     );
 };

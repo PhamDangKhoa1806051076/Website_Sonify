@@ -33,9 +33,10 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
             background: 'var(--bg-sidebar)',
             borderLeft: '1px solid var(--glass-border)',
             padding: '20px',
-            zIndex: 900,
+            zIndex: 1100,
             overflowY: 'auto',
-            animation: 'slideIn 0.3s ease'
+            animation: 'slideIn 0.3s ease',
+            boxShadow: 'var(--theme-shadow, -10px 0 40px rgba(0, 0, 0, 0.3))'
         }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h3 style={{ fontSize: '1.2rem', margin: 0 }}>Hàng chờ</h3>

@@ -6,6 +6,7 @@ type Theme = 'dark' | 'light' | 'system' | 'blue';
 
 interface ThemeContextType {
     theme: Theme;
+    resolvedTheme: Theme;
     setTheme: (theme: Theme) => void;
 }
 
@@ -13,6 +14,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const [theme, setThemeState] = useState<Theme>('dark'); 
+    const [resolvedTheme, setResolvedTheme] = useState<Theme>('dark');
 
     useEffect(() => {
         const savedTheme = localStorage.getItem('sonify_theme') as Theme;
@@ -29,25 +31,26 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             let actualTheme = theme;
             
             if (theme === 'system') {
-                const hour = new Date().getHours();
-                // Day: 6 AM to 6 PM (18:00)
-                actualTheme = (hour >= 6 && hour < 18) ? 'light' : 'dark';
+                const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                actualTheme = isDarkMode ? 'dark' : 'light';
             }
 
+            setResolvedTheme(actualTheme);
             root.setAttribute('data-theme', actualTheme);
             localStorage.setItem('sonify_theme', theme);
         };
 
         updateTheme();
 
-        // If in system mode, check every minute for time-based changes
-        let interval: NodeJS.Timeout;
-        if (theme === 'system') {
-            interval = setInterval(updateTheme, 60000);
-        }
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = () => {
+            if (theme === 'system') updateTheme();
+        };
+
+        mediaQuery.addEventListener('change', handleChange);
 
         return () => {
-            if (interval) clearInterval(interval);
+            mediaQuery.removeEventListener('change', handleChange);
         };
     }, [theme]);
 
@@ -56,7 +59,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <ThemeContext.Provider value={{ theme, setTheme }}>
+        <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme }}>
             {children}
         </ThemeContext.Provider>
     );
