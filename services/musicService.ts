@@ -43,10 +43,16 @@ export async function getTrendingSongs(): Promise<Song[]> {
 
 export async function getChineseTopSongs(): Promise<Song[]> {
     try {
-        // iTunes RSS Top Songs (Hong Kong) - Richer in C-pop/Mandopop
-        const response = await fetch('https://itunes.apple.com/hk/rss/topsongs/limit=50/json');
+        // Fetch more to account for filtering (International hits are common in HK store)
+        const response = await fetch('https://itunes.apple.com/hk/rss/topsongs/limit=150/json');
         const data = await response.json();
-        return parseRSSFeed(data);
+        const allSongs = parseRSSFeed(data);
+        
+        // Filter for Chinese hits (using Hanzi character check)
+        const chineseRegex = /[\u4e00-\u9fa5]/;
+        return allSongs
+            .filter(song => chineseRegex.test(song.title) || chineseRegex.test(song.artist))
+            .slice(0, 50);
     } catch (error) {
         console.error('Error fetching Chinese top songs:', error);
         return [];
@@ -55,10 +61,16 @@ export async function getChineseTopSongs(): Promise<Song[]> {
 
 export async function getVietnamTopSongs(): Promise<Song[]> {
     try {
-        // iTunes RSS Top Songs (Vietnam) - Genre 1251 (V-Pop)
-        const response = await fetch('https://itunes.apple.com/vn/rss/topsongs/limit=50/genre=1251/json');
+        // Fetch more to account for filtering (International hits are common in VN store)
+        const response = await fetch('https://itunes.apple.com/vn/rss/topsongs/limit=200/json');
         const data = await response.json();
-        return parseRSSFeed(data);
+        const allSongs = parseRSSFeed(data);
+        
+        // Filter for Vietnamese hits (using Vietnamese diacritics check)
+        const vnRegex = /[ÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/;
+        return allSongs
+            .filter(song => vnRegex.test(song.title) || vnRegex.test(song.artist))
+            .slice(0, 50);
     } catch (error) {
         console.error('Error fetching VN top songs:', error);
         return [];
