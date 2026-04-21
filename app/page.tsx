@@ -153,7 +153,7 @@ export default function Home() {
         {activeTab === 'home' && !searchQuery.trim() && (() => {
           const banners = [
             { 
-              img: '/img/banner-nature.png', 
+              img: '/img/banner_nature.png', 
               text: "Gói ghém Bình yên", 
               color: '#e0f2fe', 
               bg: 'rgba(0,30,60,0.5)', 
@@ -161,7 +161,7 @@ export default function Home() {
               textAlign: 'left' 
             },
             { 
-              img: '/img/banner-house.png', 
+              img: '/img/banner_house.png', 
               text: "Story hôm nay up bài gì?", 
               color: '#ffedd5', 
               bg: 'rgba(80,30,10,0.4)', 
@@ -169,7 +169,7 @@ export default function Home() {
               textAlign: 'right' 
             },
             { 
-              img: '/img/banner-boat.png', 
+              img: '/img/banner_boat.png', 
               text: "Bảng Xếp Hạng\nHot Trong Tuần", 
               color: '#fdf2f2', 
               bg: 'rgba(10,30,60,0.5)', 
@@ -178,7 +178,7 @@ export default function Home() {
               featured: trendingSongs.length > 0 ? trendingSongs.slice(0, 3) : null
             },
             { 
-              img: '/img/banner-sunset.png', 
+              img: '/img/banner_sunset.png', 
               text: "Những Bài Hát\nNghe Nhiều Nhất", 
               color: '#f0f9ff', 
               bg: 'rgba(40,20,10,0.5)', 
