@@ -12,6 +12,7 @@ import FeedbackModal from '@/components/FeedbackModal';
 import { useLanguage } from '@/context/LanguageContext';
 import { usePlayer } from '@/context/PlayerContext';
 import { searchOnlineSongs } from '@/services/musicService';
+import ChartListView from '@/components/ChartListView';
 
 import { Song } from '@/data/constants';
 
@@ -28,6 +29,9 @@ export default function Home() {
   const [trendingSongs, setTrendingSongs] = useState<Song[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isExploreLoading, setIsExploreLoading] = useState(false);
+  const [chartGlobalSongs, setChartGlobalSongs] = useState<Song[]>([]);
+  const [chartVnSongs, setChartVnSongs] = useState<Song[]>([]);
+  const [chartMostListenedSongs, setChartMostListenedSongs] = useState<Song[]>([]);
   const [currentBanner, setCurrentBanner] = useState(0);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -89,6 +93,35 @@ export default function Home() {
     }
   }, [trendingSongs.length]);
 
+  // Handle Chart data loading
+  useEffect(() => {
+    const fetchCharts = async () => {
+      try {
+        const { getGlobalTopSongs, getVietnamTopSongs, getMostListenedSongs } = await import('@/services/musicService');
+        if (activeTab === 'chart-global' && chartGlobalSongs.length === 0) {
+            setIsExploreLoading(true);
+            setChartGlobalSongs(await getGlobalTopSongs());
+            setIsExploreLoading(false);
+        } else if (activeTab === 'chart-vn' && chartVnSongs.length === 0) {
+            setIsExploreLoading(true);
+            setChartVnSongs(await getVietnamTopSongs());
+            setIsExploreLoading(false);
+        } else if (activeTab === 'chart-most-listened' && chartMostListenedSongs.length === 0) {
+            setIsExploreLoading(true);
+            setChartMostListenedSongs(await getMostListenedSongs());
+            setIsExploreLoading(false);
+        }
+      } catch (err) {
+          console.error("Failed to fetch chart:", err);
+          setIsExploreLoading(false);
+      }
+    };
+
+    if (activeTab.startsWith('chart-')) {
+      fetchCharts();
+    }
+  }, [activeTab, chartGlobalSongs.length, chartVnSongs.length, chartMostListenedSongs.length]);
+
   // Load recently played from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('sonify_recent');
@@ -106,13 +139,19 @@ export default function Home() {
     
     if (activeTab === 'home' || activeTab === 'library') {
       setDisplaySongs(allSongs);
-    } else if (activeTab === 'explore') {
+    } else if (activeTab === 'explore' || activeTab === 'chart-trending') {
       setDisplaySongs(trendingSongs);
     } else if (activeTab === 'recent') {
       setDisplaySongs(recentSongs);
     } else if (activeTab === 'liked') {
       const filtered = likedSongs.map((id: string | number) => allSongs.find(s => s.id === id)).filter(Boolean) as Song[];
       setDisplaySongs(filtered);
+    } else if (activeTab === 'chart-global') {
+      setDisplaySongs(chartGlobalSongs);
+    } else if (activeTab === 'chart-vn') {
+      setDisplaySongs(chartVnSongs);
+    } else if (activeTab === 'chart-most-listened') {
+      setDisplaySongs(chartMostListenedSongs);
     } else if (activeTab.startsWith('playlist-')) {
       const playlistId = activeTab.replace('playlist-', '');
       const playlist = playlists.find(p => p.id === playlistId);
@@ -121,7 +160,7 @@ export default function Home() {
         setDisplaySongs(filtered);
       }
     }
-  }, [activeTab, recentSongs, likedSongs, trendingSongs, playlists, allSongs]);
+  }, [activeTab, recentSongs, likedSongs, trendingSongs, playlists, allSongs, chartGlobalSongs, chartVnSongs, chartMostListenedSongs]);
 
   const isAdminTab = activeTab.startsWith('admin-');
 
@@ -293,16 +332,26 @@ export default function Home() {
                     activeTab === 'home' ? t('song-list-title') : 
                     activeTab === 'recent' ? t('nav-recent') : 
                     activeTab === 'explore' ? t('nav-explore') : 
-                    activeTab === 'liked' ? t('nav-liked') : t('song-list-title')
+                    activeTab === 'liked' ? t('nav-liked') :
+                    activeTab === 'chart-trending' ? 'Bài Hát Thịnh Hành' :
+                    activeTab === 'chart-global' ? 'Top Toàn Cầu' :
+                    activeTab === 'chart-vn' ? 'Top Việt Nam' :
+                    activeTab === 'chart-most-listened' ? 'Nghe Nhiều Nhất' :
+                    t('song-list-title')
                   )}
                 </h2>
-                {activeTab === 'explore' && isExploreLoading ? (
+                {(activeTab.startsWith('chart-') || activeTab === 'explore') && isExploreLoading ? (
                     <span className="searching-spinner"><i className="fa-solid fa-spinner fa-spin"></i> {t('searching')}</span>
                 ) : (
                     <span>{localSearchResults.length} {t('song-count')}</span>
                 )}
               </div>
-              <SongGrid songs={localSearchResults} />
+              
+              {activeTab.startsWith('chart-') && activeTab !== 'chart-trending' ? (
+                  <ChartListView songs={localSearchResults} />
+              ) : (
+                  <SongGrid songs={localSearchResults} />
+              )}
             </section>
 
             {/* Online Section */}

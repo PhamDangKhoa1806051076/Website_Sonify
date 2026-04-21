@@ -70,17 +70,54 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isCollapsed =
                 <ul>
                     {navItems.map(item => {
                         if (item.adminOnly && !isAdmin) return null;
+                        
+                        // Insert the chart section right after "recent"
+                        const isAfterRecent = item.id === 'explore';
+                        
                         return (
-                            <li 
-                                key={item.id}
-                                className={activeTab === item.id ? 'active' : ''}
-                                onClick={() => onTabChange(item.id)}
-                                title={isCollapsed ? (item.label.startsWith('nav-') ? t(item.label) : item.label) : ''}
-                                style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
-                            >
-                                <i className={`fa-solid ${item.icon}`}></i>
-                                {!isCollapsed && <span>{item.label.startsWith('nav-') ? t(item.label) : item.label}</span>}
-                            </li>
+                            <React.Fragment key={item.id}>
+                                {isAfterRecent && (!isAdmin && isAuthenticated && !isCollapsed) && (
+                                    <div className="sidebar-section">
+                                        <h3 style={{
+                                            fontSize: '0.75rem',
+                                            textTransform: 'uppercase',
+                                            letterSpacing: '1px',
+                                            color: 'var(--text-muted)',
+                                            margin: '1.5rem 1rem 0.5rem',
+                                            fontWeight: '600'
+                                        }}>Bảng xếp hạng</h3>
+                                        <ul>
+                                            <li className={activeTab === 'chart-trending' ? 'active' : ''} onClick={() => onTabChange('chart-trending')}>
+                                                <i className="fa-solid fa-fire"></i>
+                                                <span>Bài hát thịnh hành</span>
+                                            </li>
+                                            <li className={activeTab === 'chart-global' ? 'active' : ''} onClick={() => onTabChange('chart-global')}>
+                                                <i className="fa-solid fa-earth-americas" style={{color: '#f3727f'}}></i>
+                                                <span style={{color: '#f3727f'}}>Top toàn cầu</span>
+                                            </li>
+                                            <li className={activeTab === 'chart-vn' ? 'active' : ''} onClick={() => onTabChange('chart-vn')}>
+                                                <i className="fa-solid fa-star" style={{color: '#ffa42b'}}></i>
+                                                <span style={{color: '#ffa42b'}}>Top Việt Nam</span>
+                                            </li>
+                                            <li className={activeTab === 'chart-most-listened' ? 'active' : ''} onClick={() => onTabChange('chart-most-listened')}>
+                                                <i className="fa-solid fa-headphones" style={{color: '#539df5'}}></i>
+                                                <span style={{color: '#539df5'}}>Nghe nhiều nhất</span>
+                                            </li>
+                                        </ul>
+                                        {/* Divider after chart section */}
+                                        <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '1rem' }} />
+                                    </div>
+                                )}
+                                <li 
+                                    className={activeTab === item.id ? 'active' : ''}
+                                    onClick={() => onTabChange(item.id)}
+                                    title={isCollapsed ? (item.label.startsWith('nav-') ? t(item.label) : item.label) : ''}
+                                    style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
+                                >
+                                    <i className={`fa-solid ${item.icon}`}></i>
+                                    {!isCollapsed && <span>{item.label.startsWith('nav-') ? t(item.label) : item.label}</span>}
+                                </li>
+                            </React.Fragment>
                         );
                     })}
                 </ul>
