@@ -47,51 +47,51 @@ const ChartSection: React.FC<ChartSectionProps> = ({ title, songs, titleColor = 
         paddingBottom: '10px',
         borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', flex: 1, minWidth: 0 }}>
           <h3 style={{ 
             color: 'white', 
-            fontSize: '1.2rem', 
+            fontSize: '1.1rem', 
             fontWeight: '700',
             margin: 0,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            maxWidth: '180px'
           }}>
             {title}
           </h3>
-          <i className="fa-solid fa-chevron-right" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}></i>
+          <i className="fa-solid fa-chevron-right" style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8rem' }}></i>
         </div>
         
         <button 
           onClick={handlePlayAll}
+          title={t('btn-play-all') || 'Phát'}
           style={{
-            background: 'rgba(255, 255, 255, 0.1)',
+            background: 'rgba(255, 255, 255, 0.12)',
             border: 'none',
-            borderRadius: '20px',
-            padding: '6px 14px',
+            borderRadius: '50%',
+            width: '34px',
+            height: '34px',
             color: 'white',
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
+            justifyContent: 'center',
             cursor: 'pointer',
-            fontSize: '0.9rem',
-            fontWeight: '600',
-            transition: 'var(--transition)'
+            transition: 'all 0.2s ease',
+            flexShrink: 0
           }}
           onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'}
+          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'}
         >
-          <span>{t('btn-play-all') || 'Phát'}</span>
           <i className="fa-solid fa-play" style={{ 
             background: 'var(--accent-gradient)', 
-            width: '24px', 
-            height: '24px', 
+            width: '26px', 
+            height: '26px', 
             borderRadius: '50%', 
             display: 'flex', 
             alignItems: 'center', 
             justifyContent: 'center',
-            fontSize: '0.7rem'
+            fontSize: '0.8rem',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
           }}></i>
         </button>
       </div>

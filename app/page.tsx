@@ -11,7 +11,7 @@ import Profile from '@/components/Profile';
 import FeedbackModal from '@/components/FeedbackModal';
 import { useLanguage } from '@/context/LanguageContext';
 import { usePlayer } from '@/context/PlayerContext';
-import { searchOnlineSongs, getGlobalTopSongs, getVietnamTopSongs, getTrendingSongs, getChineseTopSongs, getYoutubeTrendingSongs } from '@/services/musicService';
+import { searchOnlineSongs, getGlobalTopSongs, getVietnamTopSongs, getTrendingSongs, getChineseTopSongs } from '@/services/musicService';
 import ChartSection from '@/components/ChartSection';
 
 import { Song } from '@/data/constants';
@@ -29,7 +29,7 @@ export default function Home() {
   const [trendingSongs, setTrendingSongs] = useState<Song[]>([]);
   const [vietnamSongs, setVietnamSongs] = useState<Song[]>([]);
   const [chineseSongs, setChineseSongs] = useState<Song[]>([]);
-  const [youtubeSongs, setYoutubeSongs] = useState<Song[]>([]);
+  const [usUkSongs, setUsUkSongs] = useState<Song[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isExploreLoading, setIsExploreLoading] = useState(false);
   const [currentBanner, setCurrentBanner] = useState(0);
@@ -79,16 +79,16 @@ export default function Home() {
     const fetchCharts = async () => {
       setIsExploreLoading(true);
       try {
-        const [trending, vn, cn, yt] = await Promise.all([
+        const [trending, vn, cn, usuk] = await Promise.all([
           getTrendingSongs(),
           getVietnamTopSongs(),
           getChineseTopSongs(),
-          getYoutubeTrendingSongs()
+          getGlobalTopSongs()
         ]);
         setTrendingSongs(trending);
         setVietnamSongs(vn);
         setChineseSongs(cn);
-        setYoutubeSongs(yt);
+        setUsUkSongs(usuk);
       } catch (error) {
         console.error("Failed to fetch charts:", error);
       } finally {
@@ -319,17 +319,17 @@ export default function Home() {
               </section>
             )}
 
-            {/* Charts Sections - Shows on Home tab (below lists) or on specific Charts tab */}
-            {(activeTab === 'home' || activeTab === 'charts') && !searchQuery.trim() && (
-              <section className="charts-container-wrapper" style={{ marginTop: '2.5rem' }}>
+            {/* Charts Sections - Shows ONLY on specific Charts tab */}
+            {activeTab === 'charts' && !searchQuery.trim() && (
+              <section className="charts-container-wrapper" style={{ marginTop: '1.5rem' }}>
                 <div className="section-header">
-                  <h2 style={{ fontSize: '1.6rem', marginBottom: '1.5rem', fontWeight: '800' }}>{t('nav-charts')}</h2>
+                  <h2 style={{ fontSize: '1.8rem', marginBottom: '1.8rem', fontWeight: '900', letterSpacing: '-0.5px' }}>{t('nav-charts')}</h2>
                 </div>
                 <div className="charts-horizontal-scroll" style={{
                   display: 'flex',
-                  gap: '20px',
+                  gap: '24px',
                   overflowX: 'auto',
-                  paddingBottom: '20px',
+                  paddingBottom: '30px',
                   scrollbarWidth: 'thin',
                   scrollbarColor: 'rgba(255,255,255,0.2) transparent'
                 }}>
@@ -352,10 +352,10 @@ export default function Home() {
                     bgColor="rgba(30, 20, 50, 0.4)"
                   />
                   <ChartSection 
-                    title={t('charts-youtube')} 
-                    songs={youtubeSongs} 
-                    titleColor="#ef4444" 
-                    bgColor="rgba(50, 10, 10, 0.4)"
+                    title={t('charts-usuk')} 
+                    songs={usUkSongs} 
+                    titleColor="#3b82f6" 
+                    bgColor="rgba(10, 30, 60, 0.4)"
                   />
                 </div>
               </section>

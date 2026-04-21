@@ -139,10 +139,9 @@ export const translations = {
         "searching": "Đang tìm kiếm...",
         "nav-charts": "Bảng xếp hạng",
         "charts-trending": "Top 50 Bài Hát Thịnh Hành",
-        "charts-global": "Top 50 Nhạc Quốc Tế",
         "charts-vietnam": "Top 50 Nhạc Việt",
         "charts-chinese": "Top 50 Nhạc Hoa",
-        "charts-youtube": "Top 50 Youtube Thịnh Hành"
+        "charts-usuk": "Top 50 Nhạc US/UK"
     },
     en: {
         "nav-home": "Home",
@@ -181,10 +180,9 @@ export const translations = {
         "searching": "Searching...",
         "nav-charts": "Charts",
         "charts-trending": "Top 50 Trending Songs",
-        "charts-global": "Top 50 Global Songs",
         "charts-vietnam": "Top 50 Vietnam Songs",
         "charts-chinese": "Top 50 Chinese Songs",
-        "charts-youtube": "Top 50 Youtube Trending"
+        "charts-usuk": "Top 50 US/UK Songs"
     }
 };
 
