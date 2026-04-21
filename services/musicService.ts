@@ -30,50 +30,53 @@ export async function searchOnlineSongs(query: string): Promise<Song[]> {
 }
 
 export async function getTrendingSongs(): Promise<Song[]> {
-    return fetchItunesChart('us', 50); // Using US as a proxy for trending/global
+    try {
+        // iTunes RSS Hot Songs (VN)
+        const response = await fetch('https://itunes.apple.com/vn/rss/topsongs/limit=30/json');
+        const data = await response.json();
+        return parseRSSFeed(data);
+    } catch (error) {
+        console.error('Error fetching trending songs:', error);
+        return [];
+    }
 }
 
 export async function getGlobalTopSongs(): Promise<Song[]> {
-    return fetchItunesChart('us', 50); // iTunes US for Global approximation
+    try {
+        // iTunes RSS Top Songs (Global/US)
+        const response = await fetch('https://itunes.apple.com/us/rss/topsongs/limit=30/json');
+        const data = await response.json();
+        return parseRSSFeed(data);
+    } catch (error) {
+        console.error('Error fetching global top songs:', error);
+        return [];
+    }
 }
 
 export async function getVietnamTopSongs(): Promise<Song[]> {
-    return fetchItunesChart('vn', 50); // iTunes VN for Vietnam Top
-}
-
-export async function getMostListenedSongs(): Promise<Song[]> {
-    // We can use UK or another popular region, or just standard pop hits as a proxy
-    return fetchItunesChart('gb', 50);
-}
-
-async function fetchItunesChart(country: string, limit: number): Promise<Song[]> {
     try {
-        const response = await fetch(`https://itunes.apple.com/${country}/rss/topsongs/limit=${limit}/json`);
+        const response = await fetch('https://itunes.apple.com/vn/rss/topsongs/limit=30/json');
         const data = await response.json();
-
-        if (!data.feed || !data.feed.entry) return [];
-
-        return data.feed.entry.map((entry: { 
-            id: { attributes: { 'im:id': string } };
-            'im:name': { label: string };
-            'im:artist': { label: string };
-            'im:image': { label: string }[];
-            link: { attributes: { href: string } }[];
-        }) => {
-            const trackId = entry.id.attributes['im:id'];
-            return {
-                id: `chart-${country}-${trackId}`,
-                title: entry['im:name'].label,
-                artist: entry['im:artist'].label,
-                // Replace 170x170 with 600x600 for high quality
-                cover: entry['im:image'][2]?.label.replace(/\/\d+x\d+/, '/600x600') || '',
-                src: entry.link[1]?.attributes?.href || '', // Preview URL
-                isOnline: true,
-                youtubeSearch: `${entry['im:name'].label} ${entry['im:artist'].label} lyrics`
-            };
-        });
+        return parseRSSFeed(data);
     } catch (error) {
-        console.error(`Error fetching ${country} chart songs:`, error);
+        console.error('Error fetching VN top songs:', error);
         return [];
     }
+}
+
+function parseRSSFeed(data: any): Song[] {
+    if (!data.feed || !data.feed.entry) return [];
+
+    return data.feed.entry.map((entry: any) => {
+        const trackId = entry.id.attributes['im:id'];
+        return {
+            id: `chart-${trackId}-${Math.random().toString(36).substr(2, 5)}`, // ensure unique ids
+            title: entry['im:name'].label,
+            artist: entry['im:artist'].label,
+            cover: entry['im:image'][2].label.replace(/\/\d+x\d+/, '/600x600'),
+            src: entry.link[1]?.attributes?.href || entry.link[0]?.attributes?.href, 
+            isOnline: true,
+            youtubeSearch: `${entry['im:name'].label} ${entry['im:artist'].label} lyrics`
+        };
+    });
 }

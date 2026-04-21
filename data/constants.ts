@@ -136,7 +136,12 @@ export const translations = {
         "search-local": "Nhạc trong máy",
         "search-online": "Kết quả trực tuyến",
         "online-track": "Trực tuyến",
-        "searching": "Đang tìm kiếm..."
+        "searching": "Đang tìm kiếm...",
+        "nav-charts": "Bảng xếp hạng",
+        "charts-trending": "Danh sách bài hát thịnh hành",
+        "charts-global": "Top bài hát xếp hạng toàn cầu",
+        "charts-vietnam": "Top bài hát xếp hạng toàn Việt Nam",
+        "charts-mostplayed": "Những bài hát có số lượng nghe nhiều nhất"
     },
     en: {
         "nav-home": "Home",
@@ -172,7 +177,12 @@ export const translations = {
         "search-local": "Local Songs",
         "search-online": "Online Results",
         "online-track": "Online",
-        "searching": "Searching..."
+        "searching": "Searching...",
+        "nav-charts": "Charts",
+        "charts-trending": "Trending Songs",
+        "charts-global": "Global Top Songs",
+        "charts-vietnam": "Vietnam Top Songs",
+        "charts-mostplayed": "Most Played Songs"
     }
 };
 

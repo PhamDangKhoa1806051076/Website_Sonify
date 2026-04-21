@@ -7,12 +7,11 @@ import PlayerBar from '@/components/PlayerBar';
 import SongGrid from '@/components/SongGrid';
 import AuthModal from '@/components/AuthModal';
 import AdminPanel from '@/components/AdminPanel';
-import Profile from '@/components/Profile';
 import FeedbackModal from '@/components/FeedbackModal';
 import { useLanguage } from '@/context/LanguageContext';
 import { usePlayer } from '@/context/PlayerContext';
-import { searchOnlineSongs } from '@/services/musicService';
-import ChartListView from '@/components/ChartListView';
+import { searchOnlineSongs, getGlobalTopSongs, getVietnamTopSongs, getTrendingSongs } from '@/services/musicService';
+import ChartSection from '@/components/ChartSection';
 
 import { Song } from '@/data/constants';
 
@@ -27,11 +26,11 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [onlineSongs, setOnlineSongs] = useState<Song[]>([]);
   const [trendingSongs, setTrendingSongs] = useState<Song[]>([]);
+  const [globalSongs, setGlobalSongs] = useState<Song[]>([]);
+  const [vietnamSongs, setVietnamSongs] = useState<Song[]>([]);
+  const [mostPlayedSongs, setMostPlayedSongs] = useState<Song[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [isExploreLoading, setIsExploreLoading] = useState(false);
-  const [chartGlobalSongs, setChartGlobalSongs] = useState<Song[]>([]);
-  const [chartVnSongs, setChartVnSongs] = useState<Song[]>([]);
-  const [chartMostListenedSongs, setChartMostListenedSongs] = useState<Song[]>([]);
   const [currentBanner, setCurrentBanner] = useState(0);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
@@ -74,53 +73,32 @@ export default function Home() {
     }
   }, [searchQuery, fetchOnline]);
 
-  // Handle Trending Songs for banners and Explore tab
-  useEffect(() => {
-    if (trendingSongs.length === 0) {
-      const fetchTrending = async () => {
-        setIsExploreLoading(true);
-        try {
-          const { getTrendingSongs } = await import('@/services/musicService');
-          const results = await getTrendingSongs();
-          setTrendingSongs(results);
-        } catch (error) {
-          console.error("Failed to fetch trending songs:", error);
-        } finally {
-          setIsExploreLoading(false);
-        }
-      };
-      fetchTrending();
-    }
-  }, [trendingSongs.length]);
-
-  // Handle Chart data loading
+  // Handle Trending and Charts Songs
   useEffect(() => {
     const fetchCharts = async () => {
+      setIsExploreLoading(true);
       try {
-        const { getGlobalTopSongs, getVietnamTopSongs, getMostListenedSongs } = await import('@/services/musicService');
-        if (activeTab === 'chart-global' && chartGlobalSongs.length === 0) {
-            setIsExploreLoading(true);
-            setChartGlobalSongs(await getGlobalTopSongs());
-            setIsExploreLoading(false);
-        } else if (activeTab === 'chart-vn' && chartVnSongs.length === 0) {
-            setIsExploreLoading(true);
-            setChartVnSongs(await getVietnamTopSongs());
-            setIsExploreLoading(false);
-        } else if (activeTab === 'chart-most-listened' && chartMostListenedSongs.length === 0) {
-            setIsExploreLoading(true);
-            setChartMostListenedSongs(await getMostListenedSongs());
-            setIsExploreLoading(false);
-        }
-      } catch (err) {
-          console.error("Failed to fetch chart:", err);
-          setIsExploreLoading(false);
+        const [trending, global, vn] = await Promise.all([
+          getTrendingSongs(),
+          getGlobalTopSongs(),
+          getVietnamTopSongs()
+        ]);
+        setTrendingSongs(trending);
+        setGlobalSongs(global);
+        setVietnamSongs(vn);
+        // Simulate "Most Played" by shuffling/taking slice of trending or using a separate logic
+        setMostPlayedSongs([...trending].sort(() => 0.5 - Math.random()).slice(0, 10));
+      } catch (error) {
+        console.error("Failed to fetch charts:", error);
+      } finally {
+        setIsExploreLoading(false);
       }
     };
-
-    if (activeTab.startsWith('chart-')) {
+    
+    if (trendingSongs.length === 0) {
       fetchCharts();
     }
-  }, [activeTab, chartGlobalSongs.length, chartVnSongs.length, chartMostListenedSongs.length]);
+  }, [trendingSongs.length]);
 
   // Load recently played from localStorage
   useEffect(() => {
@@ -139,19 +117,13 @@ export default function Home() {
     
     if (activeTab === 'home' || activeTab === 'library') {
       setDisplaySongs(allSongs);
-    } else if (activeTab === 'explore' || activeTab === 'chart-trending') {
+    } else if (activeTab === 'explore') {
       setDisplaySongs(trendingSongs);
     } else if (activeTab === 'recent') {
       setDisplaySongs(recentSongs);
     } else if (activeTab === 'liked') {
       const filtered = likedSongs.map((id: string | number) => allSongs.find(s => s.id === id)).filter(Boolean) as Song[];
       setDisplaySongs(filtered);
-    } else if (activeTab === 'chart-global') {
-      setDisplaySongs(chartGlobalSongs);
-    } else if (activeTab === 'chart-vn') {
-      setDisplaySongs(chartVnSongs);
-    } else if (activeTab === 'chart-most-listened') {
-      setDisplaySongs(chartMostListenedSongs);
     } else if (activeTab.startsWith('playlist-')) {
       const playlistId = activeTab.replace('playlist-', '');
       const playlist = playlists.find(p => p.id === playlistId);
@@ -160,7 +132,7 @@ export default function Home() {
         setDisplaySongs(filtered);
       }
     }
-  }, [activeTab, recentSongs, likedSongs, trendingSongs, playlists, allSongs, chartGlobalSongs, chartVnSongs, chartMostListenedSongs]);
+  }, [activeTab, recentSongs, likedSongs, trendingSongs, playlists, allSongs]);
 
   const isAdminTab = activeTab.startsWith('admin-');
 
@@ -325,34 +297,51 @@ export default function Home() {
         ) : (
           <div className="scroll-container">
             {/* Local Section */}
-            <section className="song-list-container">
-              <div className="section-header">
-                <h2>
-                  {searchQuery.trim() ? t('search-local') : (
-                    activeTab === 'home' ? t('song-list-title') : 
-                    activeTab === 'recent' ? t('nav-recent') : 
-                    activeTab === 'explore' ? t('nav-explore') : 
-                    activeTab === 'liked' ? t('nav-liked') :
-                    activeTab === 'chart-trending' ? 'Bài Hát Thịnh Hành' :
-                    activeTab === 'chart-global' ? 'Top Toàn Cầu' :
-                    activeTab === 'chart-vn' ? 'Top Việt Nam' :
-                    activeTab === 'chart-most-listened' ? 'Nghe Nhiều Nhất' :
-                    t('song-list-title')
+            {activeTab !== 'charts' && (
+              <section className="song-list-container">
+                <div className="section-header">
+                  <h2>
+                    {searchQuery.trim() ? t('search-local') : (
+                      activeTab === 'home' ? t('song-list-title') : 
+                      activeTab === 'recent' ? t('nav-recent') : 
+                      activeTab === 'explore' ? t('nav-explore') : 
+                      activeTab === 'liked' ? t('nav-liked') : t('song-list-title')
+                    )}
+                  </h2>
+                  {activeTab === 'explore' && isExploreLoading ? (
+                      <span className="searching-spinner"><i className="fa-solid fa-spinner fa-spin"></i> {t('searching')}</span>
+                  ) : (
+                      <span>{localSearchResults.length} {t('song-count')}</span>
                   )}
-                </h2>
-                {(activeTab.startsWith('chart-') || activeTab === 'explore') && isExploreLoading ? (
-                    <span className="searching-spinner"><i className="fa-solid fa-spinner fa-spin"></i> {t('searching')}</span>
-                ) : (
-                    <span>{localSearchResults.length} {t('song-count')}</span>
-                )}
-              </div>
-              
-              {activeTab.startsWith('chart-') && activeTab !== 'chart-trending' ? (
-                  <ChartListView songs={localSearchResults} />
-              ) : (
-                  <SongGrid songs={localSearchResults} />
-              )}
-            </section>
+                </div>
+                <SongGrid songs={localSearchResults} />
+              </section>
+            )}
+
+            {/* Charts Sections - Shows on Home tab (below lists) or on specific Charts tab */}
+            {(activeTab === 'home' || activeTab === 'charts') && !searchQuery.trim() && (
+              <>
+                <ChartSection 
+                  title={t('charts-trending')} 
+                  songs={trendingSongs} 
+                />
+                <ChartSection 
+                  title={t('charts-global')} 
+                  songs={globalSongs} 
+                  titleColor="#ff7eb6" 
+                />
+                <ChartSection 
+                  title={t('charts-vietnam')} 
+                  songs={vietnamSongs} 
+                  titleColor="#facc15" 
+                />
+                <ChartSection 
+                  title={t('charts-mostplayed')} 
+                  songs={mostPlayedSongs} 
+                  titleColor="#22c55e" 
+                />
+              </>
+            )}
 
             {/* Online Section */}
             {searchQuery.trim() && (
