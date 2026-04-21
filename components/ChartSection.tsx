@@ -31,7 +31,7 @@ const ChartSection: React.FC<ChartSectionProps> = ({ title, songs, titleColor = 
           <div 
             key={song.id} 
             className="chart-item" 
-            onClick={() => playSong(song, songs)}
+            onClick={() => playSong(song)}
             style={{
               display: 'flex',
               alignItems: 'center',
