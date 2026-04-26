@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'dark' | 'light' | 'system' | 'auto' | 'blue';
+type Theme = 'dark' | 'light' | 'system' | 'blue';
 
 interface ThemeContextType {
     theme: Theme;
@@ -31,9 +31,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             let actualTheme = theme;
             
             if (theme === 'system') {
-                const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                actualTheme = isDarkMode ? 'dark' : 'light';
-            } else if (theme === 'auto') {
                 const hour = new Date().getHours();
                 // 6:00 AM đến 5:59 PM là ban ngày (light), còn lại là ban đêm (dark)
                 const isDayTime = hour >= 6 && hour < 18;
@@ -47,20 +44,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
         updateTheme();
 
-        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-        const handleSystemChange = () => {
-            if (theme === 'system') updateTheme();
-        };
-        mediaQuery.addEventListener('change', handleSystemChange);
-
         let intervalId: NodeJS.Timeout;
-        if (theme === 'auto') {
+        if (theme === 'system') {
             // Kiểm tra mỗi phút để cập nhật giao diện nếu chuyển giao giữa ngày và đêm
             intervalId = setInterval(updateTheme, 60000);
         }
 
         return () => {
-            mediaQuery.removeEventListener('change', handleSystemChange);
             if (intervalId) clearInterval(intervalId);
         };
     }, [theme]);

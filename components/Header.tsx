@@ -160,7 +160,7 @@ const Header: React.FC<HeaderProps> = ({ setActiveTab, onLoginClick, onFeedbackC
                                             <i className="fa-solid fa-arrow-left"></i>
                                             <span>{t('settings-back')}</span>
                                         </div>
-                                        {(['dark', 'light', 'blue', 'system', 'auto'] as const).map(t_opt => (
+                                        {(['dark', 'light', 'blue', 'system'] as const).map(t_opt => (
                                             <div
                                                 key={t_opt}
                                                 className={`lang-option ${theme === t_opt ? 'active' : ''}`}
@@ -170,8 +170,7 @@ const Header: React.FC<HeaderProps> = ({ setActiveTab, onLoginClick, onFeedbackC
                                                     {t_opt === 'dark' ? `🌙 ${t('theme-dark')}` : 
                                                      t_opt === 'light' ? `☀️ ${t('theme-light')}` : 
                                                      t_opt === 'blue' ? `💧 ${t('theme-blue')}` : 
-                                                     t_opt === 'auto' ? `⏰ ${t('theme-auto')}` :
-                                                     `⚙️ ${t('theme-system')}`}
+                                                     `⏰ ${t('theme-system')}`}
                                                 </span>
                                                 {theme === t_opt && <i className="fa-solid fa-check check-icon"></i>}
                                             </div>
