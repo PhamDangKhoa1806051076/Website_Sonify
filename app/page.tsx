@@ -20,7 +20,27 @@ import { Song } from '@/data/constants';
 export default function Home() {
   const { t } = useLanguage();
   const { likedSongs, playlists, allSongs } = usePlayer();
-  const [activeTab, setActiveTab] = useState('home');
+
+  // Persist active tab in URL hash so F5 reloads to the same tab
+  const getHashTab = () => {
+    if (typeof window === 'undefined') return 'home';
+    const hash = window.location.hash.replace('#', '');
+    return hash || 'home';
+  };
+
+  const [activeTab, setActiveTabState] = useState('home');
+
+  // Read tab from URL on first mount
+  useEffect(() => {
+    setActiveTabState(getHashTab());
+  }, []);
+
+  // Write tab to URL whenever it changes
+  const setActiveTab = (tab: string) => {
+    window.location.hash = tab;
+    setActiveTabState(tab);
+  };
+
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [recentSongs, setRecentSongs] = useState<Song[]>([]);
