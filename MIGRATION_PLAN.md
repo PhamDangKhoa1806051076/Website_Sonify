@@ -63,11 +63,17 @@ Script này sẽ giúp:
 
 ---
 
-## 🆘 NẾU GẶP LỖI?
+## 🔐 THÔNG TIN ĐĂNG NHẬP (LƯU TRỮ TẠM THỜI)
+
+Sau khi di tản, bạn có thể sử dụng các tài khoản sau:
+- **Admin**: `admin` / `1234`
+- **User**: `user` / `123`
+
+---
 
 > [!TIP]
 > Nếu bạn thấy thông báo lỗi liên quan đến `Authentication Failed` hoặc `IP Not Allowed`, hãy chụp màn hình hoặc copy lỗi gửi vào đây. Tôi sẽ hỗ trợ bạn fix ngay lập tức!
 
 ---
 
-**Bạn đã sẵn sàng chưa? Hãy bắt đầu với Bước 1 và gửi cho tôi chuỗi kết nối (đã thay mật khẩu) nếu bạn muốn tôi giúp kiểm tra kết nối nhé!**
+**CHÚC MỪNG! Dự án Sonify của bạn đã chính thức chạy trên MongoDB Atlas + Vercel hoàn toàn miễn phí.**
