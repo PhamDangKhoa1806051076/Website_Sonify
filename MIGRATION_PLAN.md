@@ -10,9 +10,9 @@ Chào bạn! Để đảm bảo dự án **Sonify** hoạt động ổn định 
 | :--- | :--- | :---: | :---: |
 | **Giai đoạn 1** | Khởi tạo MongoDB Atlas Cluster (Gói M0) | ✅ | Bạn |
 | **Giai đoạn 2** | Cấu hình Quyền truy cập & Lấy Connection String | ✅ | Bạn |
-| **Giai đoạn 3** | Cập nhật Biến môi trường (Local & Vercel) | 🔄 | Antigravity & Bạn |
-| **Giai đoạn 4** | Kiểm tra tính nhất quán dữ liệu & Assets | ⬜ | Antigravity |
-| **Giai đoạn 5** | Triển khai cuối cùng (Final Deploy) | ⬜ | Bạn |
+| **Giai đoạn 3** | Cập nhật Biến môi trường (Local & Vercel) | ✅ | Antigravity & Bạn |
+| **Giai đoạn 4** | Kiểm tra tính nhất quán dữ liệu & Assets | ✅ | Antigravity |
+| **Giai đoạn 5** | Triển khai cuối cùng (Final Deploy) | ✅ | Bạn |
 
 ---
 
