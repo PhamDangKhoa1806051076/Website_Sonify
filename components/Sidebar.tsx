@@ -60,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isCollapsed =
                 </button>
                 
                 {!isCollapsed && (
-                    <div className="logo" onClick={() => window.location.reload()} style={{ cursor: 'pointer', padding: 0 }}>
+                    <div className="logo" onClick={() => { window.location.href = '/'; }} style={{ cursor: 'pointer', padding: 0 }}>
                         <i className="fa-solid fa-music"></i>
                         <span>Sonify</span>
                     </div>
@@ -75,7 +75,14 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isCollapsed =
                             <li 
                                 key={item.id}
                                 className={activeTab === item.id ? 'active' : ''}
-                                onClick={() => onTabChange(item.id)}
+                                onClick={() => {
+                                    if (item.id === 'home') {
+                                        // Full reload for home - resets everything
+                                        window.location.href = '/';
+                                    } else {
+                                        onTabChange(item.id);
+                                    }
+                                }}
                                 title={isCollapsed ? (item.label.startsWith('nav-') ? t(item.label) : item.label) : ''}
                                 style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
                             >

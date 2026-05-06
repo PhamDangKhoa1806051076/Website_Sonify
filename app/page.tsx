@@ -21,23 +21,17 @@ export default function Home() {
   const { t } = useLanguage();
   const { likedSongs, playlists, allSongs } = usePlayer();
 
-  // Persist active tab in URL hash so F5 reloads to the same tab
-  const getHashTab = () => {
+  // Read tab from hash synchronously on first render to avoid flash
+  const [activeTab, setActiveTabState] = useState<string>(() => {
     if (typeof window === 'undefined') return 'home';
     const hash = window.location.hash.replace('#', '');
     return hash || 'home';
-  };
+  });
 
-  const [activeTab, setActiveTabState] = useState('home');
-
-  // Read tab from URL on first mount
-  useEffect(() => {
-    setActiveTabState(getHashTab());
-  }, []);
-
-  // Write tab to URL whenever it changes
+  // Update URL hash silently (no scroll jump) when tab changes
   const setActiveTab = (tab: string) => {
-    window.location.hash = tab;
+    // history.replaceState avoids the browser's scroll-to-top behaviour
+    history.replaceState(null, '', `#${tab}`);
     setActiveTabState(tab);
   };
 
