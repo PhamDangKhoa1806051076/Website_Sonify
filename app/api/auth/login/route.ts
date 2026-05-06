@@ -6,7 +6,8 @@ import bcrypt from 'bcryptjs';
 export async function POST(request: Request) {
     try {
         await dbConnect();
-        const { username, password } = await request.json();
+        const body = await request.json();
+        const { username, password, deviceId } = body;
 
         const user = await User.findOne({ username });
         if (!user) {
@@ -30,8 +31,27 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, message: 'Invalid credentials' }, { status: 401 });
         }
 
-        // Record activity
-        user.lastActive = new Date();
+        // Handle multi-session / device tracking
+        let finalDeviceId = deviceId;
+        
+        if (!user.sessions) user.sessions = [];
+        
+        let session = user.sessions.find(s => s.deviceId === deviceId);
+        
+        if (!session) {
+            // New device/session
+            finalDeviceId = Math.random().toString(36).substring(2, 15);
+            const deviceCount = user.sessions.length + 1;
+            user.sessions.push({
+                deviceId: finalDeviceId,
+                lastActive: new Date(),
+                label: `Thiết bị ${deviceCount}`
+            });
+        } else {
+            // Existing device
+            session.lastActive = new Date();
+        }
+
         await user.save();
 
         return NextResponse.json({
@@ -39,7 +59,8 @@ export async function POST(request: Request) {
             user: {
                 username: user.username,
                 name: user.name,
-                role: user.role
+                role: user.role,
+                deviceId: finalDeviceId // Send back to client to store
             }
         });
 

@@ -8,6 +8,7 @@ interface User {
     role: 'admin' | 'user';
     likedSongs?: string[];
     playlists?: { id: string; name: string; songIds: (number | string)[] }[];
+    deviceId?: string;
 }
 
 interface AuthContextType {
@@ -32,10 +33,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const login = async (username: string, password: string): Promise<{ success: boolean; message?: string }> => {
         try {
+            const deviceId = localStorage.getItem('sonify_deviceId');
+            
             const response = await fetch('/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password, deviceId })
             });
 
             const data = await response.json();
@@ -43,6 +46,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             if (data.success) {
                 const userData: User = data.user;
                 setUser(userData);
+                
+                // Store device info for multi-session tracking
+                if (data.user.deviceId) {
+                    localStorage.setItem('sonify_deviceId', data.user.deviceId);
+                }
+                
                 sessionStorage.setItem('sonify_session', JSON.stringify(userData));
                 return { success: true };
             }

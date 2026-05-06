@@ -8,7 +8,7 @@ interface User {
     role: string;
     email?: string;
     createdAt?: string;
-    lastActive?: string;
+    sessions?: { deviceId: string; lastActive: string; label: string }[];
 }
 
 interface AdminUsersProps {
@@ -38,8 +38,23 @@ const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers }) => {
                             <td style={{ padding: '12px', textAlign: 'center', color: 'var(--text-muted)' }}>
                                 {u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : 'Không rõ'}
                             </td>
-                            <td style={{ padding: '12px', textAlign: 'center', color: 'var(--primary-color)', fontWeight: 600 }}>
-                                {u.lastActive ? new Date(u.lastActive).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit' }) : 'Chưa có'}
+                            <td style={{ padding: '12px', textAlign: 'center' }}>
+                                {u.sessions && u.sessions.length > 0 ? (
+                                    <div style={{ fontSize: '0.8rem' }}>
+                                        {u.sessions.map((s, idx) => {
+                                            const isActive = (new Date().getTime() - new Date(s.lastActive).getTime()) < 5 * 60 * 1000;
+                                            return (
+                                                <div key={s.deviceId} style={{ color: isActive ? 'var(--primary-color)' : 'var(--text-muted)', marginBottom: '4px' }}>
+                                                    <span style={{ fontWeight: 700 }}>{s.label}: </span>
+                                                    {new Date(s.lastActive).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })}
+                                                    {isActive && <span style={{ marginLeft: '4px', fontSize: '0.7rem', color: '#10b981' }}>(Online)</span>}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <span style={{ color: 'var(--text-muted)' }}>Chưa có</span>
+                                )}
                             </td>
                             <td style={{ padding: '12px', textAlign: 'center' }}>
                                 <span style={{ background: u.role==='admin' ? '#f59e0b' : 'var(--primary-color)', padding: '4px 10px', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 'bold', color: 'white', display: 'inline-block', minWidth: '70px', textAlign: 'center' }}>

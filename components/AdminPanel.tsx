@@ -22,7 +22,7 @@ interface Feedback {
 const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
     const { user } = useAuth();
     const { allSongs, refreshSongs } = usePlayer();
-    const [users, setUsers] = useState<{ username: string; name: string; role: string; createdAt?: string; lastActive?: string }[]>([]);
+    const [users, setUsers] = useState<{ username: string; name: string; role: string; createdAt?: string; sessions?: any[] }[]>([]);
     const [localSounds, setLocalSounds] = useState<string[]>([]);
     const [localImages, setLocalImages] = useState<string[]>([]);
     const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);

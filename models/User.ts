@@ -9,7 +9,7 @@ export interface IUser extends Document {
     likedSongs: string[]; // Store Song IDs or custom ID strings
     playlists: { id: string, name: string, songIds: string[] }[];
     createdAt: Date;
-    lastActive?: Date;
+    sessions: { deviceId: string; lastActive: Date; label: string }[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -25,7 +25,11 @@ const UserSchema: Schema = new Schema({
         songIds: [String]
     }],
     createdAt: { type: Date, default: Date.now },
-    lastActive: { type: Date, default: Date.now }
+    sessions: [{
+        deviceId: String,
+        lastActive: { type: Date, default: Date.now },
+        label: String
+    }]
 });
 
 // Since Next.js API routes are stateless, we avoid compiling the model multiple times
