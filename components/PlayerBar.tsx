@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import { usePlayer } from '@/context/PlayerContext';
 import QueuePanel from './QueuePanel';
@@ -20,15 +20,15 @@ const PlayerBar: React.FC = () => {
 
     if (!currentSong) return null;
 
-    const formatTime = (time: number) => {
+    const formatTime = useCallback((time: number) => {
         if (!time || isNaN(time)) return '00:00';
         const mins = Math.floor(time / 60);
         const secs = Math.floor(time % 60);
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    };
+    }, []);
 
-    const progress = duration ? (currentTime / duration) * 100 : 0;
-    const isLiked = likedSongs.includes(currentSong.id);
+    const progress = useMemo(() => duration ? (currentTime / duration) * 100 : 0, [currentTime, duration]);
+    const isLiked = useMemo(() => likedSongs.includes(currentSong.id), [likedSongs, currentSong.id]);
 
     return (
         <footer className="player-bar">

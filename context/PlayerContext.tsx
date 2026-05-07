@@ -267,30 +267,30 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         };
     }, [isRepeat, isShuffle, currentSong, nextSong, volume]);
 
-    const prevSong = () => {
+    const prevSong = useCallback(() => {
         if (!currentSong || allSongs.length === 0) return;
         const currentIdx = allSongs.findIndex(s => s.id === currentSong.id);
         const prevIdx = currentIdx === -1 ? 0 : (currentIdx - 1 + allSongs.length) % allSongs.length;
         playSong(allSongs[prevIdx]);
-    };
+    }, [currentSong, allSongs, playSong]);
 
-    const seek = (time: number) => {
+    const seek = useCallback((time: number) => {
         setCurrentTime(time);
         if (audioRef.current) {
             audioRef.current.currentTime = time;
         }
-    };
+    }, []);
 
-    const setVolume = (v: number) => {
+    const setVolume = useCallback((v: number) => {
         if (audioRef.current) audioRef.current.volume = v;
         setVolumeState(v);
         localStorage.setItem('sonify_volume', v.toString());
-    };
+    }, []);
 
-    const toggleShuffle = () => setIsShuffle(!isShuffle);
-    const toggleRepeat = () => setIsRepeat(!isRepeat);
+    const toggleShuffle = useCallback(() => setIsShuffle(prev => !prev), []);
+    const toggleRepeat = useCallback(() => setIsRepeat(prev => !prev), []);
 
-    const toggleLike = (songId: number | string) => {
+    const toggleLike = useCallback((songId: number | string) => {
         setLikedSongs((prev) => {
             const isLiked = prev.includes(songId);
             const newLikes = isLiked ? prev.filter((id) => id !== songId) : [...prev, songId];
@@ -298,53 +298,63 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             window.dispatchEvent(new Event('sonify_likes_updated'));
             return newLikes;
         });
-    };
+    }, []);
 
-    const createPlaylist = (name: string) => {
+    const createPlaylist = useCallback((name: string) => {
         const newPlaylist = { id: `p-${Date.now()}`, name, songIds: [] };
-        const updated = [...playlists, newPlaylist];
-        setPlaylists(updated);
-        localStorage.setItem('sonify_playlists', JSON.stringify(updated));
-    };
+        setPlaylists(prev => {
+            const updated = [...prev, newPlaylist];
+            localStorage.setItem('sonify_playlists', JSON.stringify(updated));
+            return updated;
+        });
+    }, []);
 
-    const createAndAddToPlaylist = (name: string, songId: number | string) => {
+    const createAndAddToPlaylist = useCallback((name: string, songId: number | string) => {
         const newPlaylist = { id: `p-${Date.now()}`, name, songIds: [songId] };
-        const updated = [...playlists, newPlaylist];
-        setPlaylists(updated);
-        localStorage.setItem('sonify_playlists', JSON.stringify(updated));
-    };
-
-    const deletePlaylist = (id: string) => {
-        const updated = playlists.filter(p => p.id !== id);
-        setPlaylists(updated);
-        localStorage.setItem('sonify_playlists', JSON.stringify(updated));
-    };
-
-    const addToPlaylist = (playlistId: string, songId: number | string) => {
-        const updated = playlists.map(p => {
-            if (p.id === playlistId && !p.songIds.includes(songId)) {
-                return { ...p, songIds: [...p.songIds, songId] };
-            }
-            return p;
+        setPlaylists(prev => {
+            const updated = [...prev, newPlaylist];
+            localStorage.setItem('sonify_playlists', JSON.stringify(updated));
+            return updated;
         });
-        setPlaylists(updated);
-        localStorage.setItem('sonify_playlists', JSON.stringify(updated));
-    };
+    }, []);
 
-    const removeFromPlaylist = (playlistId: string, songId: number | string) => {
-        const updated = playlists.map(p => {
-            if (p.id === playlistId) {
-                return { ...p, songIds: p.songIds.filter(id => id !== songId) };
-            }
-            return p;
+    const deletePlaylist = useCallback((id: string) => {
+        setPlaylists(prev => {
+            const updated = prev.filter(p => p.id !== id);
+            localStorage.setItem('sonify_playlists', JSON.stringify(updated));
+            return updated;
         });
-        setPlaylists(updated);
-        localStorage.setItem('sonify_playlists', JSON.stringify(updated));
-    };
+    }, []);
 
-    const addToNextUp = (song: Song) => {
+    const addToPlaylist = useCallback((playlistId: string, songId: number | string) => {
+        setPlaylists(prev => {
+            const updated = prev.map(p => {
+                if (p.id === playlistId && !p.songIds.includes(songId)) {
+                    return { ...p, songIds: [...p.songIds, songId] };
+                }
+                return p;
+            });
+            localStorage.setItem('sonify_playlists', JSON.stringify(updated));
+            return updated;
+        });
+    }, []);
+
+    const removeFromPlaylist = useCallback((playlistId: string, songId: number | string) => {
+        setPlaylists(prev => {
+            const updated = prev.map(p => {
+                if (p.id === playlistId) {
+                    return { ...p, songIds: p.songIds.filter(id => id !== songId) };
+                }
+                return p;
+            });
+            localStorage.setItem('sonify_playlists', JSON.stringify(updated));
+            return updated;
+        });
+    }, []);
+
+    const addToNextUp = useCallback((song: Song) => {
         setQueue(prev => [song, ...prev]);
-    };
+    }, []);
 
     return (
         <PlayerContext.Provider value={{
