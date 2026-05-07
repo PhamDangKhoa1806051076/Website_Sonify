@@ -28,5 +28,12 @@ Tài liệu này ghi nhận toàn bộ các chỉnh sửa và nâng cấp quan t
 - **Technical**: Build thành công 100% trên Vercel, Fix lỗi TypeScript.
 
 ---
+## [07/05/2026] - Hoàn thiện & Sửa lỗi cuối kỳ
+- **Fixes**: Restored missing React imports and hooks after image optimization.
+- **Cleanup**: Removed obsolete migration plans and temporary scripts.
+- **Performance**: Replaced all `<img>` tags with `next/image` for better LCP.
+- **Backup**: Created backup snapshot `../backup_07-05-2026`.
+- **Features**: Added smooth tab switching, home/logo reload, online/offline heartbeat tracking; persisted active tab in URL hash; multi-device session tracking numbering; lastActive tracking display in admin panel.
+---
 **Ghi chú**: Phiên bản hiện tại đã đạt độ hoàn thiện cao về mặt thẩm mỹ UX/UI. (force push)
 **Người thực hiện**: Antigravity AI (Pair Programming)
