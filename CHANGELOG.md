@@ -1,4 +1,4 @@
-# Nhật Ký Thay Đổi & Phát Triển - Sonify (Cập nhật 20/04/2026)
+# Nhật Ký Thay Đổi & Phát Triển - Sonify (Cập nhật 07/05/2026)
 
 Tài liệu này ghi nhận toàn bộ các chỉnh sửa và nâng cấp quan trọng đã được thực hiện cho dự án Web Nhạc Sonify.
 
