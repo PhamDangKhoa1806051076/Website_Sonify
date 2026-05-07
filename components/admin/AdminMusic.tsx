@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Song } from '@/data/constants';
 import FilePickerModal from './FilePickerModal';

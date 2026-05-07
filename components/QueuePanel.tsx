@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Image from 'next/image';
 import { usePlayer } from '@/context/PlayerContext';
 import { songs } from '@/data/constants';

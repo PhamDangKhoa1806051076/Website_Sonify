@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { usePlayer } from '@/context/PlayerContext';

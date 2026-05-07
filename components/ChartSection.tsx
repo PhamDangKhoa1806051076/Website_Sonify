@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Image from 'next/image';
 import { Song } from '@/data/constants';
 import { useLanguage } from '@/context/LanguageContext';

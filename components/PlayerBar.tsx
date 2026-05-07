@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { usePlayer } from '@/context/PlayerContext';
 import QueuePanel from './QueuePanel';
