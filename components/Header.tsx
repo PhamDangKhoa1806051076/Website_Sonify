@@ -14,6 +14,31 @@ interface HeaderProps {
     onSearch: (query: string) => void;
 }
 
+const UserAvatar: React.FC<{ user: any, onClick: () => void }> = ({ user, onClick }) => {
+    const [imgError, setImgError] = useState(false);
+    const initials = user.name ? user.name.charAt(0).toUpperCase() : '?';
+    
+    return (
+        <>
+            {!imgError ? (
+                <Image
+                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=6366f1&color=fff&size=64`}
+                    alt="Avatar"
+                    width={32}
+                    height={32}
+                    onClick={onClick}
+                    onError={() => setImgError(true)}
+                    className="avatar-img"
+                />
+            ) : (
+                <div className="avatar-fallback" onClick={onClick}>
+                    {initials}
+                </div>
+            )}
+        </>
+    );
+};
+
 const Header: React.FC<HeaderProps> = ({ setActiveTab, onLoginClick, onFeedbackClick, onSearch }) => {
     const { t, language, setLanguage } = useLanguage();
     const { user, logout } = useAuth();
@@ -80,14 +105,7 @@ const Header: React.FC<HeaderProps> = ({ setActiveTab, onLoginClick, onFeedbackC
 
                     {user ? (
                         <div className="user-avatar-wrap" ref={userDropdownRef}>
-                            <Image
-                                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=6366f1&color=fff&size=64`}
-                                alt="Avatar"
-                                width={32}
-                                height={32}
-                                onClick={() => setIsUserDropdownOpen(prev => !prev)}
-                                style={{ borderRadius: '50%', cursor: 'pointer' }}
-                            />
+                            <UserAvatar user={user} onClick={() => setIsUserDropdownOpen(prev => !prev)} />
 
                             {isUserDropdownOpen && (
                                 <div className="user-dropdown">
