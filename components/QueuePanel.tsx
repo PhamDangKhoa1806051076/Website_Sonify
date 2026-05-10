@@ -11,17 +11,22 @@ interface QueuePanelProps {
 }
 
 const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
-    const { currentSong, playSong, queue, shuffleQueue, isShuffle, toggleShuffle } = usePlayer();
+    const { currentSong, playSong, queue, shuffleQueue, isShuffle, toggleShuffle, allSongs } = usePlayer();
 
     if (!isOpen) return null;
 
     // The order of next songs: 
     // 1. Manually added queue
     // 2. Regular songs in order
-    const currentIndex = currentSong ? songs.findIndex(s => s.id === currentSong.id) : 0;
+    const currentSongsList = allSongs.length > 0 ? allSongs : songs;
+    const currentIndex = currentSong ? currentSongsList.findIndex(s => s.id === currentSong.id) : 0;
+    
+    // If shuffle is on, we might want to show a randomized list, 
+    // but usually queue panels show the original order or the randomized order if it's pre-calculated.
+    // For now, let's just use the current songs list.
     const regularUpcoming = [
-        ...songs.slice(currentIndex + 1),
-        ...songs.slice(0, currentIndex)
+        ...currentSongsList.slice(currentIndex + 1),
+        ...currentSongsList.slice(0, currentIndex)
     ];
 
     return (
@@ -41,9 +46,30 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
         }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h3 style={{ fontSize: '1.2rem', margin: 0 }}>Hàng chờ</h3>
-                <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '1.2rem' }}>
-                    <i className="fa-solid fa-xmark"></i>
-                </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <button 
+                        onClick={toggleShuffle} 
+                        title={isShuffle ? "Tắt xáo trộn" : "Bật xáo trộn"}
+                        style={{ 
+                            background: isShuffle ? 'rgba(99, 102, 241, 0.2)' : 'none', 
+                            border: isShuffle ? '1px solid var(--primary-color)' : 'none',
+                            color: isShuffle ? 'var(--primary-color)' : 'var(--text-muted)', 
+                            cursor: 'pointer', 
+                            fontSize: '1rem',
+                            padding: '4px 8px',
+                            borderRadius: '6px',
+                            transition: 'all 0.2s',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    >
+                        <i className="fa-solid fa-shuffle"></i>
+                    </button>
+                    <button onClick={onClose} style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '1.2rem' }}>
+                        <i className="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
             </div>
 
             {/* Current Song Section */}
