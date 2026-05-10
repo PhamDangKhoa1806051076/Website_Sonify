@@ -86,9 +86,10 @@ export async function POST(request: Request) {
         });
 
     } catch (error) {
+        const errMsg = error instanceof Error ? error.message : 'Unknown error';
         return NextResponse.json({ 
             success: false, 
-            error: error instanceof Error ? error.message : 'Unknown error' 
+            message: `Lỗi Hệ Thống: ${errMsg}` 
         }, { status: 500 });
     }
 }
