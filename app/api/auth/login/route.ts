@@ -11,14 +11,16 @@ export async function POST(request: Request) {
         const { username, password, deviceId } = body;
 
         // AUTO-SETUP: Ensure default accounts exist
-        const totalUsers = await User.countDocuments();
-        if (totalUsers === 0) {
-            console.log('--- AUTO-SEEDING DEFAULT USERS ---');
-            await User.insertMany(initialUsers.map(u => ({
-                ...u,
-                likedSongs: [],
-                sessions: []
-            })));
+        for (const u of initialUsers) {
+            const exists = await User.exists({ username: u.username });
+            if (!exists) {
+                console.log(`--- AUTO-SEEDING USER: ${u.username} ---`);
+                await User.create({
+                    ...u,
+                    likedSongs: [],
+                    sessions: []
+                });
+            }
         }
 
         const user = await User.findOne({ username });
