@@ -11,7 +11,7 @@ interface QueuePanelProps {
 }
 
 const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
-    const { currentSong, playSong, queue } = usePlayer();
+    const { currentSong, playSong, queue, shuffleQueue, isShuffle, toggleShuffle } = usePlayer();
 
     if (!isOpen) return null;
 
@@ -74,7 +74,27 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
             {/* Dynamic Queue Section (Items added via "Add to Next up") */}
             {queue.length > 0 && (
                 <div style={{ marginBottom: '25px' }}>
-                    <p style={{ color: 'var(--cyan-accent)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px', fontWeight: 600 }}>Phát tiếp theo</p>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                        <p style={{ color: 'var(--cyan-accent)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', margin: 0, fontWeight: 600 }}>Phát tiếp theo</p>
+                        <button 
+                            onClick={shuffleQueue}
+                            title="Xáo trộn danh sách chờ"
+                            style={{ 
+                                background: 'rgba(0, 229, 255, 0.1)', 
+                                border: '1px solid rgba(0, 229, 255, 0.2)', 
+                                color: 'var(--cyan-accent)', 
+                                borderRadius: '4px', 
+                                padding: '2px 8px', 
+                                fontSize: '0.7rem', 
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
+                            }}
+                            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(0, 229, 255, 0.2)'}
+                            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(0, 229, 255, 0.1)'}
+                        >
+                            <i className="fa-solid fa-shuffle" style={{ marginRight: '4px' }}></i> Xáo trộn
+                        </button>
+                    </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         {queue.map((song, idx) => (
                             <div 

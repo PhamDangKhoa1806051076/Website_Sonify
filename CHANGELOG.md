@@ -25,9 +25,6 @@
 
 ---
 
-
-Tài liệu này ghi nhận toàn bộ các chỉnh sửa và nâng cấp quan trọng đã được thực hiện cho dự án Web Nhạc Sonify.
-
 ## [20/04/2026] - Cách Mạng Giao Diện (UI Revolution)
 ### 1. Nâng Cấp Bố Cục (Layout Transformations)
 - **Sidebar Thu Gọn (Collapsible Sidebar)**:
@@ -47,6 +44,8 @@ Tài liệu này ghi nhận toàn bộ các chỉnh sửa và nâng cấp quan t
 - **Banner Slider Chuẩn hóa**:
     - Đưa toàn bộ 4 banner về cùng chiều cao 240px, xóa bỏ hiện tượng nhảy khung.
     - Cập nhật bộ ảnh thiên nhiên chất lượng cao và giao diện chữ dàn hàng ngang chuyên nghiệp.
+    
+---
 
 ## [18/04/2026] - Khắc Phục Lỗi & Tính Năng Quản Trị
 - **Bug Fixes**: Sửa lỗi Auth, đồng bộ trình phát nhạc Online/Offline.
@@ -54,14 +53,16 @@ Tài liệu này ghi nhận toàn bộ các chỉnh sửa và nâng cấp quan t
 - **Technical**: Build thành công 100% trên Vercel, Fix lỗi TypeScript.
 
 ---
+
 ## [07/05/2026] - Hoàn thiện & Sửa lỗi cuối kỳ
 - **Fixes**: Restored missing React imports and hooks after image optimization.
 - **Cleanup**: Removed obsolete migration plans and temporary scripts.
 - **Performance**: Replaced all `<img>` tags with `next/image` for better LCP.
 - **Backup**: Created backup snapshot `../backup_07-05-2026`.
 - **Features**: Added smooth tab switching, home/logo reload, online/offline heartbeat tracking; persisted active tab in URL hash; multi-device session tracking numbering; lastActive tracking display in admin panel.
+
 ---
----
+
 ## [08/05/2026] - Đợt bảo trì & Tối ưu hóa hệ thống (Stability Patch)
 - **Technical**: Hạ cấp Next.js về phiên bản ổn định (v15.1.0) và React (v19.0.0) để tương thích 100% với môi trường Production của Vercel.
 - **Performance**: Áp dụng `useMemo` và `useCallback` cho các thành phần quan trọng, giảm thiểu 40% số lần re-render thừa.

@@ -33,6 +33,7 @@ interface PlayerContextType {
     queue: Song[];
     allSongs: Song[];
     addToNextUp: (song: Song) => void;
+    shuffleQueue: () => void;
     refreshSongs: () => Promise<void>;
 }
 
@@ -352,8 +353,15 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         });
     }, []);
 
-    const addToNextUp = useCallback((song: Song) => {
-        setQueue(prev => [song, ...prev]);
+    const shuffleQueue = useCallback(() => {
+        setQueue(prev => {
+            const shuffled = [...prev];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        });
     }, []);
 
     return (
@@ -362,7 +370,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             playSong, togglePlay, nextSong, prevSong, seek, setVolume, toggleShuffle, toggleRepeat,
             likedSongs, toggleLike,
             playlists, createPlaylist, deletePlaylist, addToPlaylist, removeFromPlaylist, createAndAddToPlaylist,
-            queue, allSongs, addToNextUp, refreshSongs
+            queue, allSongs, addToNextUp, shuffleQueue, refreshSongs
         }}>
             {children}
             {/* Hidden ReactPlayer for YouTube Audio */}
