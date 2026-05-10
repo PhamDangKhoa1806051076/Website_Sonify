@@ -436,7 +436,8 @@ h1, h2, h3, .logo span {
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     z-index: 2000;
     min-width: 180px;
-    animation: dropIn 0.2s ease;
+    transform-origin: top right;
+    animation: dropIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .user-dropdown button {
@@ -490,7 +491,8 @@ h1, h2, h3, .logo span {
     padding: 8px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     z-index: 2000;
-    animation: dropIn 0.2s ease;
+    transform-origin: top right;
+    animation: dropIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .settings-menu-item, .lang-option {
@@ -500,7 +502,7 @@ h1, h2, h3, .logo span {
     padding: 10px 14px;
     border-radius: 8px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     color: var(--text-main);
     font-size: 0.88rem;
 }
@@ -1609,8 +1611,8 @@ h1, h2, h3, .logo span {
 }
 
 @keyframes dropIn {
-    from { opacity: 0; transform: translateY(-8px) scale(0.97); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    0% { opacity: 0; transform: translateY(-12px) scale(0.95); filter: blur(4px); }
+    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
 }
 
 /* ===== CHECKBOX ===== */
