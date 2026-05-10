@@ -117,13 +117,19 @@ export default function Home() {
 
   // Load recently played from localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('sonify_recent');
-    if (saved && allSongs.length > 0) {
-      const recentIds = JSON.parse(saved);
-      const filtered = recentIds.map((id: string | number) => allSongs.find(s => s.id === id)).filter(Boolean) as Song[];
-      setRecentSongs(filtered);
-    }
-  }, [activeTab, allSongs]);
+    const updateRecent = () => {
+      const saved = localStorage.getItem('sonify_recent');
+      if (saved && allSongs.length > 0) {
+        const recentIds = JSON.parse(saved);
+        const filtered = recentIds.map((id: string | number) => allSongs.find(s => s.id === id)).filter(Boolean) as Song[];
+        setRecentSongs(filtered);
+      }
+    };
+
+    updateRecent();
+    window.addEventListener('sonify_recent_updated', updateRecent);
+    return () => window.removeEventListener('sonify_recent_updated', updateRecent);
+  }, [allSongs]);
 
   // Compute displayed songs based on active tab using useMemo for performance
   const displaySongs = React.useMemo(() => {

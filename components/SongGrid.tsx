@@ -18,4 +18,4 @@ const SongGrid: React.FC<SongGridProps> = ({ songs }) => {
     );
 };
 
-export default SongGrid;
+export default React.memo(SongGrid);

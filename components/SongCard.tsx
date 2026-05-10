@@ -40,4 +40,4 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
     );
 };
 
-export default SongCard;
+export default React.memo(SongCard);

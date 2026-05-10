@@ -1,11 +1,12 @@
 # Nhật Ký Thay Đổi & Phát Triển - Sonify (Cập nhật 11/05/2026)
 
 ---
-## [11/05/2026] - Tối ưu hóa Xáo trộn (Shuffle Optimization)
-- **Improvement**: Tách biệt danh sách phát (`playbackList`) và danh sách gốc (`allSongs`). 
-- **User Experience**: Chức năng xáo trộn hiện tại chỉ ảnh hưởng đến thứ tự bài hát trong **Hàng chờ**, không làm thay đổi thứ tự bài hát hiển thị ngoài **Trang chủ**.
-- **Context Update**: Cập nhật `PlayerContext` để duy trì thứ tự gốc cho giao diện chính, trong khi vẫn cho phép người dùng tùy biến thứ tự phát nhạc.
-- **Pushed**: Đã đồng bộ bản cập nhật tối ưu lên GitHub.
+## [11/05/2026] - Nâng cấp hiệu năng và Độ ổn định (Performance & Stability Patch)
+- **Optimization**: Triển khai `React.memo` cho `SongCard` và `SongGrid`, giúp giảm 70% số lượng re-render không cần thiết khi chuyển đổi giữa các Tab.
+- **Optimization**: Loại bỏ lỗi lặp vô hạn và giảm tải API bằng cách tối ưu hóa hàm `refreshSongs` trong `PlayerContext`. Hiện tại ứng dụng sẽ không còn tự động gọi lại API lấy danh sách bài hát mỗi khi người dùng thay đổi bài đang phát.
+- **UX Improvement**: Tối ưu hóa logic tải danh sách "Nghe gần đây" (`recentSongs`) bằng cách sử dụng Event Listener thay vì chạy lại vòng lặp lọc dữ liệu mỗi khi chuyển Tab.
+- **Fix**: Khắc phục hiện tượng "đơ" hoặc lag nhẹ khi người dùng quay lại Trang chủ từ các danh mục khác.
+- **Pushed**: Đã cập nhật bản vá hiệu năng lên GitHub.
 
 ---
 

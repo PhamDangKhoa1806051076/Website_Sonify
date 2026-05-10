@@ -62,6 +62,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     const { user, isAuthenticated } = useAuth();
     
     // Reusable fetch function
+    // Reusable fetch function
     const refreshSongs = useCallback(async () => {
         try {
             const response = await fetch('/api/songs');
@@ -69,14 +70,13 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             if (data.success) {
                 setAllSongs(data.data);
                 setPlaybackList(data.data);
-                if (data.data.length > 0 && !currentSong) {
-                    setCurrentSong(data.data[0]);
-                }
+                // Only set currentSong if it hasn't been set yet
+                setCurrentSong(prev => prev || (data.data.length > 0 ? data.data[0] : null));
             }
         } catch (error) {
             console.error('Failed to fetch songs:', error);
         }
-    }, [currentSong]);
+    }, []); // No longer depends on currentSong
 
     // Initial fetch of songs & local storage fallback
     useEffect(() => {
