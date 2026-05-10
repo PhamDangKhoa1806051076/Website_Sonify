@@ -14,6 +14,17 @@
 
 ---
 
+## [10/05/2026] - Sửa lỗi kết nối và Tối ưu Giao diện (Session 2)
+- **Database**: Cập nhật logic kết nối MongoDB theo chuẩn `Connection Pooling` của Next.js (bật `bufferCommands: true`) để khắc phục triệt để lỗi "Cannot call findOne" do Race Condition trên Vercel.
+- **Authentication**: Nâng cấp Auto-seeding, tự động khôi phục tài khoản mặc định (`admin`/`1234`) chống lỗi đăng nhập "ảo". Hiển thị chi tiết lỗi Server cho Frontend.
+- **UI/UX**: Gộp nút "Bảng điều khiển" vào "Quản lý Nhạc" trên Sidebar Admin để loại bỏ sự thừa thãi.
+- **UI/UX**: Tối ưu màu sắc hiển thị của Đồng hồ và các Menu Dropdown (Cài đặt, Avatar) tự động thích ứng với 4 Giao diện (Sáng/Tối/Xanh/Hệ thống), khắc phục lỗi "chữ tàng hình".
+- **Animation**: Nâng cấp hiệu ứng `dropIn` thả menu và hover bằng `cubic-bezier` kết hợp `blur` tạo cảm giác chuyển động siêu mượt và cao cấp.
+- **Backup**: Đồng bộ mã nguồn hoàn chỉnh vào thư mục `Backup_10-05-2026`.
+**Người thực hiện**: Antigravity AI
+
+---
+
 
 Tài liệu này ghi nhận toàn bộ các chỉnh sửa và nâng cấp quan trọng đã được thực hiện cho dự án Web Nhạc Sonify.
 
