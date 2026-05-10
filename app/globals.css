@@ -456,7 +456,7 @@ h1, h2, h3, .logo span {
     white-space: nowrap;
 }
 
-.user-dropdown button:hover { background: rgba(255, 255, 255, 0.08); }
+.user-dropdown button:hover { background: var(--glass-border); color: var(--primary-light); }
 
 /* ===== SETTINGS GEAR ===== */
 .header-settings {
@@ -477,7 +477,7 @@ h1, h2, h3, .logo span {
     flex-shrink: 0;
 }
 
-.header-settings:hover { color: white; background: rgba(255, 255, 255, 0.1); }
+.header-settings:hover { color: var(--text-main); background: var(--glass-border); }
 
 .settings-dropdown {
     position: absolute;
@@ -506,7 +506,8 @@ h1, h2, h3, .logo span {
 }
 
 .settings-menu-item:hover, .lang-option:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--primary-light);
 }
 
 .lang-option.active {
@@ -529,7 +530,8 @@ h1, h2, h3, .logo span {
 
 .settings-menu-item .arrow-icon, .lang-option .check-icon {
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: var(--text-main);
+    opacity: 0.5;
 }
 
 .submenu-header {
@@ -542,10 +544,12 @@ h1, h2, h3, .logo span {
     cursor: pointer;
     font-weight: 600;
     font-size: 0.88rem;
-    transition: color 0.2s;
+    color: var(--text-main);
+    transition: color 0.2s, background 0.2s;
+    border-radius: 8px 8px 0 0;
 }
 
-.submenu-header:hover { color: var(--cyan-accent); }
+.submenu-header:hover { color: var(--primary-light); background: rgba(99, 102, 241, 0.08); }
 
 /* ===== HERO SECTION ===== */
 /* ==========================================================================
