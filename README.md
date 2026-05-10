@@ -14,7 +14,7 @@
 
 ## 🔗 Live Demo
 
-**[▶ Trải nghiệm Sonify trực tuyến](https://git-website-nh-c.vercel.app)**
+**[▶ Trải nghiệm Sonify trực tuyến](https://sonify.vercel.app)** (hoặc [Link dự phòng](https://git-website-nh-c.vercel.app))
 
 ---
 
@@ -26,18 +26,18 @@
 | 💊 **Modern UI** | Sidebar thu gọn (YouTube-style) và Floating Pill Header với hiệu ứng Glassmorphism cực mạnh. |
 | 🌈 **Dynamic Visuals** | Nền web tự động thay đổi màu sắc theo Cover Art của bài hát (Apple Music Style). |
 | 📱 **Responsive Design** | Giao diện tương thích hoàn hảo trên mọi thiết bị: Desktop, Tablet và Mobile. |
-| 🔐 **Account System** | Đăng ký/Đăng nhập bảo mật với MongoDB Atlas, hỗ trợ lưu trữ yêu thích bền vững. |
+| 🔐 **Account System** | Tự động Auto-seeding tài khoản, đăng nhập bảo mật, hỗ trợ lưu trữ yêu thích bền vững. |
 | 📊 **Admin Dashboard** | Quản lý nhạc, người dùng và theo dõi trạng thái **Online/Offline Heartbeat** thời gian thực. |
 | 📟 **Session Tracking** | Hệ thống nhận diện và đánh số session đa thiết bị, hiển thị thời gian hoạt động cuối (`lastActive`). |
-| 🚀 **LCP Optimized** | Tối ưu hóa hình ảnh bằng `next/image`, đảm bảo tốc độ tải trang cực nhanh. |
+| 🚀 **Smooth UX** | Hiệu ứng thả xuống (`dropIn`), hover màu sắc và `cubic-bezier` animations chuẩn cao cấp. |
 
 ---
 
 ## 🛠️ Công nghệ sử dụng (Tech Stack)
 
-- **Frontend Framework:** [Next.js 16](https://nextjs.org/) (App Router) - Tối ưu hóa Server-side Rendering.
+- **Frontend Framework:** [Next.js 15+](https://nextjs.org/) (App Router) - Tối ưu hóa Server-side Rendering.
 - **UI Library:** [React 19](https://react.dev/) + TypeScript 5.
-- **Database:** [MongoDB Atlas](https://www.mongodb.com/atlas) (Cloud NoSQL).
+- **Database:** [MongoDB Atlas](https://www.mongodb.com/atlas) (Tích hợp **Official Connection Pooling**).
 - **Styling:** Vanilla CSS (Modern CSS Variables & Glassmorphism).
 - **Authentication:** Mã hóa mật khẩu với `bcryptjs`.
 - **State Management:** React Context API (Auth, Player, Theme, Language).
@@ -45,16 +45,12 @@
 
 ---
 
-## 📈 Cập nhật mới nhất (07/05/2026)
+## 📈 Cập nhật mới nhất (10/05/2026)
 
-- **Performance Boost:** Thay thế toàn bộ tag `<img>` bằng `next/image` để tối ưu chỉ số LCP.
-- **Enhanced Stability:** Khắc phục triệt để lỗi Hydration và các hook bị thiếu sau khi tối ưu ảnh.
-- **Smart Tracking:** Thêm tính năng theo dõi nhịp tim (Heartbeat) để xác định trạng thái Online/Offline của người dùng.
-- **UX Refinement:** 
-    - Lưu trạng thái Tab hiện tại vào URL Hash để không bị mất khi reload trang.
-    - Hiệu ứng chuyển Tab và tải trang siêu mượt.
-    - Logo Home tự động reload toàn bộ trạng thái app.
-- **Clean Architecture:** Loại bỏ hoàn toàn các file rác và migration cũ, đảm bảo codebase sạch sẽ 100%.
+- **Security & Stability:** Nâng cấp Next.js và Mongoose lên bản vá bảo mật mới nhất. Thiết lập **Connection Pooling** (bật `bufferCommands`) giải quyết triệt để lỗi kết nối Race Condition trên Vercel Serverless.
+- **Premium UI/UX:** Tối ưu màu sắc tương phản trên 4 giao diện (Sáng/Tối/Xanh/Hệ thống). Nâng cấp hiệu ứng menu Dropdown với đường cong `cubic-bezier` mượt mà.
+- **Auto-Seeding Logic:** Hệ thống tự động thiết lập và khôi phục tài khoản Admin/User về mặc định (`1234`) nếu phát hiện lỗi bất thường từ Database.
+- **Performance Boost:** Tối ưu hóa `next/image` và loại bỏ các thành phần rác, đảm bảo chỉ số LCP luôn đạt mức cao nhất.
 
 ---
 
