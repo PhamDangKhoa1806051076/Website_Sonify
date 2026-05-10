@@ -43,14 +43,7 @@
 - **State Management:** React Context API (Auth, Player, Theme, Language).
 - **Deployment:** Tự động triển khai qua [Vercel](https://vercel.com).
 
----
 
-## 📈 Cập nhật mới nhất (10/05/2026)
-
-- **Security & Stability:** Nâng cấp Next.js và Mongoose lên bản vá bảo mật mới nhất. Thiết lập **Connection Pooling** (bật `bufferCommands`) giải quyết triệt để lỗi kết nối Race Condition trên Vercel Serverless.
-- **Premium UI/UX:** Tối ưu màu sắc tương phản trên 4 giao diện (Sáng/Tối/Xanh/Hệ thống). Nâng cấp hiệu ứng menu Dropdown với đường cong `cubic-bezier` mượt mà.
-- **Auto-Seeding Logic:** Hệ thống tự động thiết lập và khôi phục tài khoản Admin/User về mặc định (`1234`) nếu phát hiện lỗi bất thường từ Database.
-- **Performance Boost:** Tối ưu hóa `next/image` và loại bỏ các thành phần rác, đảm bảo chỉ số LCP luôn đạt mức cao nhất.
 
 ---
 
@@ -72,16 +65,16 @@ MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/sonify
 
 ## 📁 Cấu trúc thư mục chính
 
-```
+```text
 Sonify/
 ├── app/                # Next.js App Router (Pages, Layouts, APIs)
 ├── components/         # Các thành phần UI (Header, Player, Sidebar, Modal...)
 ├── context/            # Quản lý State toàn cục (Auth, Music Player, UI Settings)
 ├── data/               # Dữ liệu tĩnh, bản dịch và constants
 ├── lib/                # Cấu hình Database và các utility functions
+├── models/             # Mongoose Schemas (Cơ sở dữ liệu)
 └── public/             # Assets tĩnh (Icons, Logo, Images)
 ```
 
 ---
 **Phát triển bởi:** Antigravity AI & Nonesen
-**Trạng thái:** Production Ready ✅
