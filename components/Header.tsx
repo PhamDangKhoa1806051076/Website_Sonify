@@ -131,7 +131,7 @@ const Header: React.FC<HeaderProps> = ({ setActiveTab, onLoginClick, onFeedbackC
                         ref={settingsRef}
                         onClick={() => { setIsSettingsOpen(prev => !prev); setSettingsView('main'); }}
                     >
-                        <i className="fa-solid fa-gear"></i>
+                        <i className="fa-solid fa-gear" style={{ transition: 'transform 0.3s ease' }}></i>
 
                         {isSettingsOpen && (
                             <div className="settings-dropdown" onClick={e => e.stopPropagation()}>
