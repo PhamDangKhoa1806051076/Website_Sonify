@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 interface Session {
     deviceId: string;
@@ -35,6 +36,7 @@ function formatTimeAgo(date: Date): string {
 }
 
 const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers }) => {
+    const { user } = useAuth();
     const [now, setNow] = useState<number>(0);
 
     // Initial time set and Tick every 30s
@@ -49,36 +51,40 @@ const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers }) => {
     useEffect(() => {
         const refresh = setInterval(async () => {
             try {
-                const res = await fetch('/api/users');
+                const res = await fetch('/api/users', {
+                    headers: {
+                        'x-username': user?.username || ''
+                    }
+                });
                 const data = await res.json();
                 if (data.success) setUsers(data.data);
             } catch { /* silent */ }
         }, 60000);
         return () => clearInterval(refresh);
-    }, [setUsers]);
+    }, [setUsers, user?.username]);
 
     return (
         <div className="admin-table-container">
             <table className="admin-table" style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
                 <thead>
-                    <tr>
-                        <th style={{ padding: '12px', textAlign: 'left' }}>Tài khoản</th>
-                        <th style={{ padding: '12px', textAlign: 'left' }}>Tên hiển thị</th>
-                        <th style={{ padding: '12px', textAlign: 'center' }}>Ngày tạo</th>
-                        <th style={{ padding: '12px', textAlign: 'center' }}>Hoạt động cuối</th>
-                        <th style={{ padding: '12px', textAlign: 'center' }}>Phân quyền</th>
-                        <th style={{ padding: '12px', textAlign: 'right' }}>Thao tác</th>
+                    <tr style={{ background: 'rgba(255,255,255,0.02)' }}>
+                        <th style={{ padding: '14px 12px', textAlign: 'left', color: 'var(--text-muted)', borderBottom: '1px solid var(--glass-border)' }}>Tài khoản</th>
+                        <th style={{ padding: '14px 12px', textAlign: 'left', color: 'var(--text-muted)', borderBottom: '1px solid var(--glass-border)' }}>Tên hiển thị</th>
+                        <th style={{ padding: '14px 12px', textAlign: 'center', color: 'var(--text-muted)', borderBottom: '1px solid var(--glass-border)' }}>Ngày tạo</th>
+                        <th style={{ padding: '14px 12px', textAlign: 'center', color: 'var(--text-muted)', borderBottom: '1px solid var(--glass-border)' }}>Hoạt động cuối</th>
+                        <th style={{ padding: '14px 12px', textAlign: 'center', color: 'var(--text-muted)', borderBottom: '1px solid var(--glass-border)' }}>Phân quyền</th>
+                        <th style={{ padding: '14px 12px', textAlign: 'right', color: 'var(--text-muted)', borderBottom: '1px solid var(--glass-border)' }}>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
                     {users.map(u => (
-                        <tr key={u.username} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                            <td style={{ padding: '12px', fontWeight: 600 }}>{u.username}</td>
-                            <td style={{ padding: '12px' }}>{u.name}</td>
-                            <td style={{ padding: '12px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                        <tr key={u.username} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', transition: 'all 0.2s' }} className="admin-table-row">
+                            <td style={{ padding: '16px 12px', fontWeight: 600 }}>{u.username}</td>
+                            <td style={{ padding: '16px 12px' }}>{u.name}</td>
+                            <td style={{ padding: '16px 12px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
                                 {u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : 'Không rõ'}
                             </td>
-                            <td style={{ padding: '12px', textAlign: 'center' }}>
+                            <td style={{ padding: '16px 12px', textAlign: 'center' }}>
                                 {u.sessions && u.sessions.length > 0 ? (
                                     <div style={{ fontSize: '0.8rem' }}>
                                         {u.sessions.map((s) => {
@@ -107,18 +113,23 @@ const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers }) => {
                                     <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Chưa đăng nhập</span>
                                 )}
                             </td>
-                            <td style={{ padding: '12px', textAlign: 'center' }}>
-                                <span style={{ background: u.role === 'admin' ? '#f59e0b' : 'var(--primary-color)', padding: '4px 10px', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 'bold', color: 'white', display: 'inline-block', minWidth: '70px', textAlign: 'center' }}>
+                            <td style={{ padding: '16px 12px', textAlign: 'center' }}>
+                                <span style={{ background: u.role === 'admin' ? '#f59e0b' : 'var(--primary-color)', padding: '4px 12px', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 'bold', color: 'white', display: 'inline-block', minWidth: '75px', textAlign: 'center' }}>
                                     {u.role}
                                 </span>
                             </td>
-                            <td style={{ padding: '12px', textAlign: 'right' }}>
+                            <td style={{ padding: '16px 12px', textAlign: 'right' }}>
                                 {u.role !== 'admin' && (
                                     <button
                                         onClick={async () => {
                                             if (confirm(`Bạn có chắc chắn muốn xóa tài khoản "${u.username}" vĩnh viễn không?`)) {
                                                 try {
-                                                    const res = await fetch(`/api/users?username=${u.username}`, { method: 'DELETE' });
+                                                    const res = await fetch(`/api/users?username=${u.username}`, { 
+                                                        method: 'DELETE',
+                                                        headers: {
+                                                            'x-username': user?.username || ''
+                                                        }
+                                                    });
                                                     const data = await res.json();
                                                     if (data.success) {
                                                         setUsers(prev => prev.filter(user => user.username !== u.username));
@@ -130,7 +141,19 @@ const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers }) => {
                                                 }
                                             }
                                         }}
-                                        style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem' }}
+                                        style={{ 
+                                            background: 'rgba(239,68,68,0.1)', 
+                                            color: '#ef4444', 
+                                            border: 'none', 
+                                            padding: '8px 14px', 
+                                            borderRadius: '8px', 
+                                            cursor: 'pointer', 
+                                            fontSize: '0.8rem',
+                                            fontWeight: 600,
+                                            transition: 'all 0.2s'
+                                        }}
+                                        onMouseEnter={(e) => { e.currentTarget.style.background = '#ef4444'; e.currentTarget.style.color = 'white'; }}
+                                        onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; e.currentTarget.style.color = '#ef4444'; }}
                                     >
                                         <i className="fa-solid fa-trash"></i> Xóa
                                     </button>

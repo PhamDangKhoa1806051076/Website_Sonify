@@ -2,8 +2,24 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 
-export async function GET() {
+async function verifyAdmin(request: Request): Promise<boolean> {
     try {
+        const username = request.headers.get('x-username');
+        if (!username) return false;
+        await dbConnect();
+        const user = await User.findOne({ username });
+        return user?.role === 'admin';
+    } catch {
+        return false;
+    }
+}
+
+export async function GET(request: Request) {
+    try {
+        if (!(await verifyAdmin(request))) {
+            return NextResponse.json({ success: false, error: 'Unauthorized: Quyền truy cập bị từ chối' }, { status: 403 });
+        }
+
         await dbConnect();
         const users = await User.find({}, '-password'); // Don't return passwords
         return NextResponse.json({ success: true, data: users });
@@ -20,6 +36,12 @@ export async function PATCH(request: Request) {
 
         if (!username) {
             return NextResponse.json({ success: false, error: 'Username is required' }, { status: 400 });
+        }
+
+        // Verify that the user is updating their own account
+        const requester = request.headers.get('x-username');
+        if (!requester || requester !== username) {
+            return NextResponse.json({ success: false, error: 'Unauthorized: Không thể cập nhật tài khoản của người khác' }, { status: 403 });
         }
 
         const user = await User.findOneAndUpdate(
@@ -40,6 +62,10 @@ export async function PATCH(request: Request) {
 
 export async function DELETE(request: Request) {
     try {
+        if (!(await verifyAdmin(request))) {
+            return NextResponse.json({ success: false, error: 'Unauthorized: Quyền truy cập bị từ chối' }, { status: 403 });
+        }
+
         await dbConnect();
         const url = new URL(request.url);
         const username = url.searchParams.get('username');

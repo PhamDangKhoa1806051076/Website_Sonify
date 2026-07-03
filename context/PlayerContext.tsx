@@ -99,7 +99,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             const v = parseFloat(savedVol);
             if (!isNaN(v) && v >= 0 && v <= 1) setVolumeState(v);
         }
-    }, [isAuthenticated, currentSong, refreshSongs]);
+    }, [isAuthenticated, refreshSongs]);
 
     // Sync from Cloud when user logs in
     useEffect(() => {
@@ -117,7 +117,10 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
                 try {
                     await fetch('/api/users', {
                         method: 'PATCH',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'x-username': user.username
+                        },
                         body: JSON.stringify({
                             username: user.username,
                             likedSongs,

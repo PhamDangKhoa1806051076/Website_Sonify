@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
-import Song from '@/models/Song';
+import Category from '@/models/Category';
 import User from '@/models/User';
 
 async function verifyAdmin(request: Request): Promise<boolean> {
@@ -10,7 +10,8 @@ async function verifyAdmin(request: Request): Promise<boolean> {
         await dbConnect();
         const user = await User.findOne({ username });
         return user?.role === 'admin';
-    } catch {
+    } catch (e) {
+        console.error('Error verifying admin:', e);
         return false;
     }
 }
@@ -27,20 +28,33 @@ export async function PUT(
         await dbConnect();
         const { id } = await params;
         const body = await request.json();
+        const { name, slug, description } = body;
 
-        // Try updating by customId first
-        let result = await Song.findOneAndUpdate({ customId: id }, body, { new: true });
-        
-        if (!result) {
-            // Fallback to updating by MongoDB _id
-            result = await Song.findByIdAndUpdate(id, body, { new: true });
+        if (!name || !slug) {
+            return NextResponse.json({ success: false, error: 'Tên và đường dẫn (slug) là bắt buộc' }, { status: 400 });
         }
 
-        if (!result) {
-            return NextResponse.json({ success: false, error: 'Không tìm thấy bài hát để cập nhật' }, { status: 404 });
+        // Verify that the new slug or name is not taken by another category
+        const duplicate = await Category.findOne({
+            _id: { $ne: id },
+            $or: [{ name }, { slug }]
+        });
+
+        if (duplicate) {
+            return NextResponse.json({ success: false, error: 'Tên thể loại hoặc slug đã được sử dụng bởi danh mục khác' }, { status: 409 });
         }
 
-        return NextResponse.json({ success: true, data: result });
+        const updated = await Category.findByIdAndUpdate(
+            id,
+            { name, slug, description },
+            { new: true }
+        );
+
+        if (!updated) {
+            return NextResponse.json({ success: false, error: 'Không tìm thấy thể loại cần cập nhật' }, { status: 404 });
+        }
+
+        return NextResponse.json({ success: true, data: updated });
     } catch (error) {
         return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 400 });
     }
@@ -57,16 +71,13 @@ export async function DELETE(
 
         await dbConnect();
         const { id } = await params;
-        
-        // Try deleting by customId first
-        const result = await Song.findOneAndDelete({ customId: id });
-        
-        if (!result) {
-            // Fallback to deleting by MongoDB _id
-            await Song.findByIdAndDelete(id);
+
+        const deleted = await Category.findByIdAndDelete(id);
+        if (!deleted) {
+            return NextResponse.json({ success: false, error: 'Không tìm thấy thể loại cần xóa' }, { status: 404 });
         }
 
-        return NextResponse.json({ success: true, message: 'Đã xóa bài hát thành công' });
+        return NextResponse.json({ success: true, message: 'Thể loại đã được xóa thành công' });
     } catch (error) {
         return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 400 });
     }

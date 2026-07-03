@@ -6,9 +6,10 @@ import { usePlayer } from '@/context/PlayerContext';
 import AdminMusic from './admin/AdminMusic';
 import AdminUsers from './admin/AdminUsers';
 import AdminStats from './admin/AdminStats';
+import AdminCategories from './admin/AdminCategories';
 
 interface AdminPanelProps {
-    view: 'manage' | 'users' | 'stats' | 'music';
+    view: 'manage' | 'users' | 'stats' | 'music' | 'categories';
 }
 
 interface Feedback {
@@ -52,7 +53,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
 
                 // Fetch users
                 if (view === 'users') {
-                    const uRes = await fetch('/api/users');
+                    const uRes = await fetch('/api/users', {
+                        headers: { 'x-username': user?.username || '' }
+                    });
                     const uData = await uRes.json();
                     if (uData.success) setUsers(uData.data);
                 }
@@ -61,7 +64,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
             }
         };
         fetchData();
-    }, [view]);
+    }, [view, user?.username]);
 
     if (user?.role !== 'admin') return <div className="content">Access Denied</div>;
 
@@ -81,7 +84,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
     return (
         <section id="admin-panel" className="admin-section">
             <div className="section-header">
-                <h2>{view === 'users' ? 'Quản lý người dùng' : 'Bảng điều khiển Admin'}</h2>
+                <h2>{view === 'users' ? 'Quản lý người dùng' : view === 'categories' ? 'Quản lý Thể loại' : 'Bảng điều khiển Admin'}</h2>
             </div>
             
             <div className="admin-tools">
@@ -101,6 +104,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
                         localSounds={localSounds}
                         localImages={localImages}
                     />
+                )}
+
+                {view === 'categories' && (
+                    <AdminCategories />
                 )}
 
                 {view === 'users' && (

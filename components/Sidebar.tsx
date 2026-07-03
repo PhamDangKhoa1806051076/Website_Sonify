@@ -26,6 +26,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isCollapsed =
         { id: 'explore', icon: 'fa-compass', label: 'nav-explore', userOnly: true, adminOnly: false },
         { id: 'library', icon: 'fa-music', label: 'nav-library', userOnly: true, adminOnly: false },
         { id: 'admin-music', icon: 'fa-compact-disc', label: 'Quản lý Nhạc', userOnly: false, adminOnly: true },
+        { id: 'admin-categories', icon: 'fa-folder-tree', label: 'Quản lý Thể loại', userOnly: false, adminOnly: true },
         { id: 'admin-users', icon: 'fa-users', label: 'Quản lý User', userOnly: false, adminOnly: true },
     ];
 

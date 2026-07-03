@@ -4,11 +4,11 @@ import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/context/AuthContext';
 import { usePlayer } from '@/context/PlayerContext';
-import { songs } from '@/data/constants';
+
 
 const Profile: React.FC = () => {
     const { user } = useAuth();
-    const { likedSongs, playlists, createPlaylist, playSong, deletePlaylist } = usePlayer();
+    const { likedSongs, playlists, createPlaylist, playSong, deletePlaylist, allSongs } = usePlayer();
     
     const [activeTab, setActiveTab] = useState('All');
     const [isEditingName, setIsEditingName] = useState(false);
@@ -40,7 +40,7 @@ const Profile: React.FC = () => {
         }
     };
 
-    const likedList = songs.filter(s => likedSongs.includes(s.id));
+    const likedList = allSongs.filter(s => likedSongs.includes(s.id));
 
     const renderContent = () => {
         if (activeTab === 'All' || activeTab === 'Tracks') {

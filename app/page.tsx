@@ -28,11 +28,15 @@ export default function Home() {
     return hash || 'home';
   });
 
+  const [categories, setCategories] = useState<{ _id: string; name: string; slug: string }[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>('');
+
   // Update URL hash silently (no scroll jump) when tab changes
   const setActiveTab = (tab: string) => {
     // history.replaceState avoids the browser's scroll-to-top behaviour
     history.replaceState(null, '', `#${tab}`);
     setActiveTabState(tab);
+    setSelectedCategory(''); // Reset category filters on tab switch
   };
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -48,6 +52,15 @@ export default function Home() {
   const [isExploreLoading, setIsExploreLoading] = useState(false);
   const [currentBanner, setCurrentBanner] = useState(0);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+
+  // Fetch categories
+  useEffect(() => {
+    fetch('/api/categories')
+      .then(r => r.json())
+      .then(d => {
+        if (d.success) setCategories(d.data);
+      });
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -135,23 +148,28 @@ export default function Home() {
   const displaySongs = React.useMemo(() => {
     if (allSongs.length === 0) return [];
     
+    let baseList: Song[] = [];
     if (activeTab === 'home' || activeTab === 'library') {
-      return allSongs;
+      baseList = allSongs;
     } else if (activeTab === 'explore') {
-      return trendingSongs;
+      baseList = trendingSongs;
     } else if (activeTab === 'recent') {
-      return recentSongs;
+      baseList = recentSongs;
     } else if (activeTab === 'liked') {
-      return likedSongs.map((id: string | number) => allSongs.find(s => s.id === id)).filter(Boolean) as Song[];
+      baseList = likedSongs.map((id: string | number) => allSongs.find(s => s.id === id)).filter(Boolean) as Song[];
     } else if (activeTab.startsWith('playlist-')) {
       const playlistId = activeTab.replace('playlist-', '');
       const playlist = playlists.find(p => p.id === playlistId);
       if (playlist) {
-        return playlist.songIds.map(id => allSongs.find(s => s.id === id)).filter(Boolean) as Song[];
+        baseList = playlist.songIds.map(id => allSongs.find(s => s.id === id)).filter(Boolean) as Song[];
       }
     }
-    return [];
-  }, [activeTab, recentSongs, likedSongs, trendingSongs, playlists, allSongs]);
+
+    if (selectedCategory && (activeTab === 'home' || activeTab === 'library')) {
+      return baseList.filter(s => s.category === selectedCategory);
+    }
+    return baseList;
+  }, [activeTab, recentSongs, likedSongs, trendingSongs, playlists, allSongs, selectedCategory]);
 
   const isAdminTab = activeTab.startsWith('admin-');
 
@@ -190,7 +208,7 @@ export default function Home() {
         )}
 
         {isAdminTab ? (
-          <AdminPanel view={activeTab.split('-')[1] as 'music' | 'users' | 'stats'} />
+          <AdminPanel view={activeTab.split('-')[1] as 'music' | 'users' | 'stats' | 'categories'} />
         ) : activeTab === 'profile' ? (
           <Profile />
         ) : (
@@ -198,7 +216,7 @@ export default function Home() {
             {/* Local Section */}
             {activeTab !== 'charts' && (
               <section className="song-list-container">
-                <div className="section-header">
+                <div className="section-header" style={{ marginBottom: '1rem' }}>
                   <h2>
                     {searchQuery.trim() ? t('search-local') : (
                       activeTab === 'home' ? t('song-list-title') : 
@@ -213,6 +231,62 @@ export default function Home() {
                       <span>{localSearchResults.length} {t('song-count')}</span>
                   )}
                 </div>
+
+                {/* Category Chips Filters */}
+                {(activeTab === 'home' || activeTab === 'library') && !searchQuery.trim() && categories.length > 0 && (
+                  <div className="category-chips" style={{
+                    display: 'flex',
+                    gap: '10px',
+                    marginBottom: '1.8rem',
+                    overflowX: 'auto',
+                    paddingBottom: '8px',
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none'
+                  }}>
+                    <button
+                      onClick={() => setSelectedCategory('')}
+                      className={`category-chip ${selectedCategory === '' ? 'active' : ''}`}
+                      style={{
+                        background: selectedCategory === '' ? 'var(--primary-color)' : 'rgba(255,255,255,0.04)',
+                        color: 'white',
+                        border: '1px solid var(--glass-border)',
+                        padding: '8px 22px',
+                        borderRadius: '50px',
+                        fontSize: '0.82rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        whiteSpace: 'nowrap',
+                        transition: 'var(--transition)',
+                        boxShadow: selectedCategory === '' ? '0 4px 15px rgba(99, 102, 241, 0.4)' : 'none'
+                      }}
+                    >
+                      Tất cả
+                    </button>
+                    {categories.map(cat => (
+                      <button
+                        key={cat.slug}
+                        onClick={() => setSelectedCategory(cat.slug)}
+                        className={`category-chip ${selectedCategory === cat.slug ? 'active' : ''}`}
+                        style={{
+                          background: selectedCategory === cat.slug ? 'var(--primary-color)' : 'rgba(255,255,255,0.04)',
+                          color: 'white',
+                          border: '1px solid var(--glass-border)',
+                          padding: '8px 22px',
+                          borderRadius: '50px',
+                          fontSize: '0.82rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          whiteSpace: 'nowrap',
+                          transition: 'var(--transition)',
+                          boxShadow: selectedCategory === cat.slug ? '0 4px 15px rgba(99, 102, 241, 0.4)' : 'none'
+                        }}
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
                 <SongGrid songs={localSearchResults} />
               </section>
             )}
