@@ -85,7 +85,11 @@
 }
 
 body {
-    font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-feature-settings: 'ss01', 'ss02', 'cv01';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.01em;
 }
 
 html, body {
@@ -107,8 +111,10 @@ body {
 }
 
 h1, h2, h3, .logo span {
-    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
 }
 
 /* ===== APP LAYOUT ===== */
@@ -158,15 +164,17 @@ h1, h2, h3, .logo span {
     display: flex;
     align-items: center;
     gap: 14px;
-    font-size: 1.6rem;
+    font-size: 1.5rem;
+    font-weight: 800;
     color: var(--primary-light);
     cursor: pointer;
     text-decoration: none;
     padding: 1.2rem 1.5rem 2rem 1.5rem;
     user-select: none;
+    letter-spacing: -0.04em;
 }
 
-.logo i { font-size: 1.4rem; }
+.logo i { font-size: 1.3rem; }
 
 .nav-menu ul, .playlists ul {
     list-style: none;
@@ -176,17 +184,18 @@ h1, h2, h3, .logo span {
 }
 
 .nav-menu li, .playlists li {
-    padding: 12px 20px;
+    padding: 10px 18px;
     border-radius: 50px;
     cursor: pointer;
     color: var(--text-muted);
     transition: var(--transition);
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 0.9rem;
+    gap: 11px;
+    font-size: 0.875rem;
     font-weight: 500;
     white-space: nowrap;
+    letter-spacing: -0.01em;
 }
 
 .nav-menu li:hover, .playlists li:hover {
@@ -243,12 +252,12 @@ h1, h2, h3, .logo span {
 }
 
 .playlists h3 {
-    font-size: 0.72rem;
+    font-size: 0.6875rem;
     color: var(--text-muted);
     margin-bottom: 0.8rem;
-    padding-left: 20px;
+    padding-left: 18px;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 0.1em;
     font-weight: 600;
 }
 
@@ -338,7 +347,7 @@ h1, h2, h3, .logo span {
 }
 
 #greeting-text {
-    font-size: 0.85rem;
+    font-size: 0.8125rem;
     color: var(--text-muted);
     font-weight: 500;
     max-width: 220px;
@@ -347,20 +356,22 @@ h1, h2, h3, .logo span {
     white-space: nowrap;
     display: inline-block;
     vertical-align: middle;
+    letter-spacing: -0.01em;
 }
 
 .header-clock {
-    font-family: 'JetBrains Mono', 'Courier New', monospace;
-    font-size: 0.85rem;
-    font-weight: 700;
+    font-family: var(--font-jetbrains), 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 0.8125rem;
+    font-weight: 600;
     color: var(--clock-color, var(--primary-color));
     background: var(--clock-bg, rgba(99, 102, 241, 0.12));
-    padding: 4px 12px;
+    padding: 5px 13px;
     border-radius: 20px;
     border: 1px solid var(--clock-border, rgba(99, 102, 241, 0.25));
-    min-width: 80px;
+    min-width: 82px;
     text-align: center;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.02em;
+    font-variant-numeric: tabular-nums;
 }
 
 /* ===== LOGIN BUTTON (GUEST) ===== */
@@ -702,8 +713,16 @@ h1, h2, h3, .logo span {
     margin-bottom: 1.2rem;
 }
 
-.section-header h2 { font-size: 1.2rem; }
-.section-header span { color: var(--text-muted); font-size: 0.85rem; }
+.section-header h2 { 
+    font-size: 1.25rem; 
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+.section-header span { 
+    color: var(--text-muted); 
+    font-size: 0.8125rem;
+    font-weight: 500;
+}
 
 .song-grid {
     display: grid;
@@ -779,21 +798,25 @@ h1, h2, h3, .logo span {
 }
 
 .song-card h4 {
-    font-size: 0.88rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: var(--text-main);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 0.2rem;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
 .song-card p {
     color: var(--text-muted);
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: -0.005em;
 }
 
 /* ==========================================================================
@@ -837,21 +860,24 @@ h1, h2, h3, .logo span {
 }
 
 .track-info h4 {
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     color: var(--text-main);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 2px;
+    letter-spacing: -0.015em;
 }
 
 .track-info p {
-    font-size: 0.8rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
     color: var(--text-muted);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: -0.005em;
 }
 
 .track-actions {
@@ -1059,11 +1085,13 @@ h1, h2, h3, .logo span {
 }
 
 .playback-progress span {
-    font-size: 0.72rem;
+    font-size: 0.6875rem;
     color: var(--text-muted);
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--font-jetbrains), 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
     min-width: 38px;
     text-align: center;
+    letter-spacing: 0.01em;
 }
 
 .progress-bar-container {
@@ -1555,9 +1583,9 @@ h1, h2, h3, .logo span {
 .admin-table th {
     color: var(--text-muted);
     font-weight: 600;
-    font-size: 0.78rem;
+    font-size: 0.6875rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
     background: rgba(255,255,255,0.03);
 }
 
