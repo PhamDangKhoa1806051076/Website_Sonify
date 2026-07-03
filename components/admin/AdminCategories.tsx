@@ -208,7 +208,7 @@ const AdminCategories: React.FC = () => {
                             <input
                                 type="text"
                                 placeholder="Nhạc Trẻ, Ballad..."
-                                style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'white', outline: 'none' }}
+                                style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'var(--text-main)', outline: 'none' }}
                                 value={name}
                                 onChange={handleNameChange}
                                 required
@@ -220,7 +220,7 @@ const AdminCategories: React.FC = () => {
                             <input
                                 type="text"
                                 placeholder="v-pop, ballad..."
-                                style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'white', outline: 'none' }}
+                                style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'var(--text-main)', outline: 'none' }}
                                 value={slug}
                                 onChange={e => setSlug(e.target.value)}
                                 required
@@ -232,7 +232,7 @@ const AdminCategories: React.FC = () => {
                             <textarea
                                 placeholder="Giai điệu Việt Nam trữ tình mới nhất..."
                                 rows={3}
-                                style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'white', outline: 'none', resize: 'none', fontFamily: 'inherit' }}
+                                style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'var(--text-main)', outline: 'none', resize: 'none', fontFamily: 'inherit' }}
                                 value={description}
                                 onChange={e => setDescription(e.target.value)}
                             />

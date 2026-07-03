@@ -202,19 +202,19 @@ const AdminMusic: React.FC<AdminMusicProps> = ({
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.2rem' }}>
-                        <div className="form-group"><label style={{ display: 'block', marginBottom: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Tiêu đề</label><input type="text" placeholder="Thanh Xuân" style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'white', outline: 'none' }} value={newSong.title} onChange={e => setNewSong({...newSong, title: e.target.value})} /></div>
-                        <div className="form-group"><label style={{ display: 'block', marginBottom: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Nghệ sĩ</label><input type="text" placeholder="Da LAB" style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'white', outline: 'none' }} value={newSong.artist} onChange={e => setNewSong({...newSong, artist: e.target.value})} /></div>
+                        <div className="form-group"><label style={{ display: 'block', marginBottom: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Tiêu đề</label><input type="text" placeholder="Thanh Xuân" style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'var(--text-main)', outline: 'none' }} value={newSong.title} onChange={e => setNewSong({...newSong, title: e.target.value})} /></div>
+                        <div className="form-group"><label style={{ display: 'block', marginBottom: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Nghệ sĩ</label><input type="text" placeholder="Da LAB" style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'var(--text-main)', outline: 'none' }} value={newSong.artist} onChange={e => setNewSong({...newSong, artist: e.target.value})} /></div>
                         
                         <div className="form-group">
                             <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>Thể loại</label>
                             <select 
-                                style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'white', outline: 'none', cursor: 'pointer' }}
+                                style={{ width: '100%', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'var(--text-main)', outline: 'none', cursor: 'pointer' }}
                                 value={newSong.category}
                                 onChange={e => setNewSong({...newSong, category: e.target.value})}
                             >
                                 <option value="">-- Chọn thể loại --</option>
                                 {categories.map(cat => (
-                                    <option key={cat._id} value={cat.slug}>{cat.name}</option>
+                                    <option key={cat._id} value={cat.slug} style={{ background: 'var(--bg-main)', color: 'var(--text-main)' }}>{cat.name}</option>
                                 ))}
                             </select>
                         </div>
@@ -226,7 +226,7 @@ const AdminMusic: React.FC<AdminMusicProps> = ({
                                     type="text" 
                                     readOnly={!useExternalSource}
                                     placeholder={useExternalSource ? "https://..." : "Chọn từ thư mục..."} 
-                                    style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'white', opacity: !useExternalSource ? 0.8 : 1, outline: 'none' }} 
+                                    style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'var(--text-main)', opacity: !useExternalSource ? 0.8 : 1, outline: 'none' }} 
                                     value={newSong.cover} 
                                     onChange={e => useExternalSource && setNewSong({...newSong, cover: e.target.value})} 
                                 />
@@ -248,7 +248,7 @@ const AdminMusic: React.FC<AdminMusicProps> = ({
                                     type="text" 
                                     readOnly={!useExternalSource}
                                     placeholder={useExternalSource ? "YouTube Link..." : "Chọn từ thư mục..."} 
-                                    style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'white', opacity: !useExternalSource ? 0.8 : 1, outline: 'none' }} 
+                                    style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--glass-border)', padding: '12px', borderRadius: '10px', color: 'var(--text-main)', opacity: !useExternalSource ? 0.8 : 1, outline: 'none' }} 
                                     value={newSong.src} 
                                     onChange={e => useExternalSource && setNewSong({...newSong, src: e.target.value})} 
                                 />
