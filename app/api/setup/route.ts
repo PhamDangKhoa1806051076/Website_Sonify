@@ -47,13 +47,23 @@ export async function GET() {
         let songMsg = 'Songs already migrated.';
         const existingSongs = await Song.countDocuments();
         if (existingSongs === 0) {
-            const songsToInsert = songs.map(s => ({
-                customId: s.id.toString(),
-                title: s.title,
-                artist: s.artist,
-                cover: s.cover,
-                src: s.src
-            }));
+            const songsToInsert = songs.map(s => {
+                let defaultCategory = 'v-pop';
+                const title = s.title.toLowerCase();
+                if (title.includes('daylight') || title.includes('miss you') || title.includes('i just might') || title.includes('da key') || title.includes('back to friends')) {
+                    defaultCategory = 'us-uk';
+                } else if (title.includes('lemmeholla') || title.includes('hello em') || title.includes('chạy theo em') || title.includes('dalat mango') || title.includes('tương tư') || title.includes('tửu sầu') || title.includes('người bất an')) {
+                    defaultCategory = 'lofi-chill';
+                }
+                return {
+                    customId: s.id.toString(),
+                    title: s.title,
+                    artist: s.artist,
+                    cover: s.cover,
+                    src: s.src,
+                    category: defaultCategory
+                };
+            });
             await Song.insertMany(songsToInsert);
             songMsg = `Migrated ${songsToInsert.length} songs to database!`;
         }

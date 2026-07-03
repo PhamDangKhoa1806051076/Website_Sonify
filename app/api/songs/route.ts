@@ -26,6 +26,26 @@ export async function GET() {
             await dbConnect();
             let songs = await Song.find({});
 
+            // AUTO-SETUP: Update empty categories for existing songs in database
+            const emptyCatSongs = songs.filter(s => !s.category);
+            if (emptyCatSongs.length > 0) {
+                console.log(`--- AUTO-UPDATING CATEGORIES FOR ${emptyCatSongs.length} SONGS ---`);
+                for (const s of songs) {
+                    if (!s.category) {
+                        let defaultCategory = 'v-pop'; // Default to V-Pop
+                        const title = s.title.toLowerCase();
+                        if (title.includes('daylight') || title.includes('miss you') || title.includes('i just might') || title.includes('da key') || title.includes('back to friends')) {
+                            defaultCategory = 'us-uk';
+                        } else if (title.includes('lemmeholla') || title.includes('hello em') || title.includes('chạy theo em') || title.includes('dalat mango') || title.includes('tương tư') || title.includes('tửu sầu') || title.includes('người bất an')) {
+                            defaultCategory = 'lofi-chill';
+                        }
+                        s.category = defaultCategory;
+                        await Song.updateOne({ _id: s._id }, { category: defaultCategory });
+                    }
+                }
+                songs = await Song.find({}); // Refetch updated list
+            }
+
             // AUTO-SETUP: Sync missing default songs if count doesn't match
             if (songs.length < defaultSongs.length) {
                 console.log(`--- SYNCING MISSING SONGS (${songs.length} -> ${defaultSongs.length}) ---`);
