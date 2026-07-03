@@ -147,8 +147,16 @@ const AdminMusic: React.FC<AdminMusicProps> = ({
             <div className="section-header">
                 <h3>Quản lý kho nhạc</h3>
                 <button 
-                    className="btn-play-all" 
-                    style={{ background: 'white', color: 'var(--primary-color)', border: 'none', padding: '10px 24px', borderRadius: '50px', fontWeight: 700, cursor: 'pointer' }} 
+                    style={{
+                        background: 'linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%)',
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px 24px',
+                        borderRadius: '50px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        boxShadow: '0 4px 15px rgba(99, 102, 241, 0.35)',
+                    }} 
                     onClick={() => {
                         if (isAdding) handleCancel();
                         else setIsAdding(true);

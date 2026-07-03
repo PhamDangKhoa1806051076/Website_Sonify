@@ -114,9 +114,66 @@ const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers }) => {
                                 )}
                             </td>
                             <td style={{ padding: '16px 12px', textAlign: 'center' }}>
-                                <span style={{ background: u.role === 'admin' ? '#f59e0b' : 'var(--primary-color)', padding: '4px 12px', borderRadius: '50px', fontSize: '0.8rem', fontWeight: 'bold', color: 'white', display: 'inline-block', minWidth: '75px', textAlign: 'center' }}>
-                                    {u.role}
-                                </span>
+                                {u.username === 'admin' || u.username === user?.username ? (
+                                    <span style={{ 
+                                        background: u.role === 'admin' ? '#f59e0b' : 'var(--primary-color)', 
+                                        padding: '5px 14px', 
+                                        borderRadius: '50px', 
+                                        fontSize: '0.8rem', 
+                                        fontWeight: 'bold', 
+                                        color: 'white', 
+                                        display: 'inline-block', 
+                                        minWidth: '80px', 
+                                        textAlign: 'center',
+                                        boxShadow: u.role === 'admin' ? '0 2px 10px rgba(245, 158, 11, 0.3)' : '0 2px 10px rgba(99, 102, 241, 0.3)'
+                                    }}>
+                                        {u.role}
+                                    </span>
+                                ) : (
+                                    <select
+                                        value={u.role}
+                                        onChange={async (e) => {
+                                            const newRole = e.target.value as 'admin' | 'user';
+                                            if (confirm(`Bạn có chắc chắn muốn thay đổi vai trò của tài khoản "${u.username}" thành "${newRole}"?`)) {
+                                                try {
+                                                    const res = await fetch('/api/users', {
+                                                        method: 'PATCH',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'x-username': user?.username || ''
+                                                        },
+                                                        body: JSON.stringify({ username: u.username, role: newRole })
+                                                    });
+                                                    const data = await res.json();
+                                                    if (data.success) {
+                                                        setUsers(prev => prev.map(usr => usr.username === u.username ? { ...usr, role: newRole } : usr));
+                                                    } else {
+                                                        alert(data.error || 'Cập nhật phân quyền thất bại');
+                                                    }
+                                                } catch {
+                                                    alert('Lỗi hệ thống khi cập nhật phân quyền');
+                                                }
+                                            }
+                                        }}
+                                        style={{
+                                            background: u.role === 'admin' ? 'rgba(245, 158, 11, 0.12)' : 'rgba(99, 102, 241, 0.12)',
+                                            color: u.role === 'admin' ? '#f59e0b' : 'var(--primary-light)',
+                                            border: '1px solid var(--glass-border)',
+                                            padding: '5px 12px',
+                                            borderRadius: '50px',
+                                            fontSize: '0.8rem',
+                                            fontWeight: 700,
+                                            cursor: 'pointer',
+                                            outline: 'none',
+                                            textAlign: 'center',
+                                            minWidth: '90px',
+                                            transition: 'var(--transition)'
+                                        }}
+                                    >
+                                        <option value="user" style={{ background: '#0f172a', color: 'white' }}>user</option>
+                                        <option value="admin" style={{ background: '#0f172a', color: 'white' }}>admin</option>
+                                    </select>
+                                )}
                             </td>
                             <td style={{ padding: '16px 12px', textAlign: 'right' }}>
                                 {u.role !== 'admin' && (

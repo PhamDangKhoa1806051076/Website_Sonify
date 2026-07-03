@@ -2100,9 +2100,26 @@ h1, h2, h3, .logo span {
     background: rgba(255, 255, 255, 0.02) !important;
 }
 
-.add-song-form input:focus, 
-.add-song-form select:focus, 
-.add-song-form textarea:focus {
+/* Admin panel form inputs styling */
+.admin-main-content input, 
+.admin-main-content select, 
+.admin-main-content textarea {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.admin-main-content input:focus, 
+.admin-main-content select:focus, 
+.admin-main-content textarea:focus {
     border-color: var(--primary-light) !important;
-    box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.25) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Button transitions */
+.admin-main-content button {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.admin-main-content button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
 }

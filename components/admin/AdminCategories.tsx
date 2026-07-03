@@ -155,16 +155,15 @@ const AdminCategories: React.FC = () => {
             <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h3>Danh sách Thể loại Nhạc</h3>
                 <button
-                    className="btn-play-all"
                     style={{
-                        background: 'white',
-                        color: 'var(--primary-color)',
+                        background: 'linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%)',
+                        color: 'white',
                         border: 'none',
                         padding: '10px 24px',
                         borderRadius: '50px',
                         fontWeight: 700,
                         cursor: 'pointer',
-                        transition: 'var(--transition)'
+                        boxShadow: '0 4px 15px rgba(99, 102, 241, 0.35)',
                     }}
                     onClick={() => {
                         if (isAdding) resetForm();

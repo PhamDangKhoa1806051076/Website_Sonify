@@ -32,26 +32,57 @@ export async function PATCH(request: Request) {
     try {
         await dbConnect();
         const body = await request.json();
-        const { username, likedSongs, playlists } = body;
+        const { username, likedSongs, playlists, role } = body;
 
         if (!username) {
             return NextResponse.json({ success: false, error: 'Username is required' }, { status: 400 });
         }
 
-        // Verify that the user is updating their own account
         const requester = request.headers.get('x-username');
-        if (!requester || requester !== username) {
-            return NextResponse.json({ success: false, error: 'Unauthorized: Không thể cập nhật tài khoản của người khác' }, { status: 403 });
+        if (!requester) {
+            return NextResponse.json({ success: false, error: 'Unauthorized: Thiếu người dùng yêu cầu' }, { status: 401 });
+        }
+
+        // Check if requester is an admin
+        const requesterUser = await User.findOne({ username: requester });
+        const isRequesterAdmin = requesterUser?.role === 'admin';
+
+        // Authorized if updating own account, or if requester is admin
+        if (requester !== username && !isRequesterAdmin) {
+            return NextResponse.json({ success: false, error: 'Unauthorized: Không có quyền cập nhật tài khoản này' }, { status: 403 });
+        }
+
+        const updateData: {
+            likedSongs?: string[];
+            playlists?: { id: string; name: string; songIds: string[] }[];
+            role?: 'admin' | 'user';
+        } = {};
+
+        // Normal users can only update their own playlists/likedSongs
+        if (requester === username) {
+            if (likedSongs !== undefined) updateData.likedSongs = likedSongs;
+            if (playlists !== undefined) updateData.playlists = playlists;
+        }
+
+        // Admins can update roles of other users (with safety checks)
+        if (isRequesterAdmin && role !== undefined) {
+            if (username === 'admin' && role !== 'admin') {
+                return NextResponse.json({ success: false, error: 'Không thể hạ quyền của tài khoản admin mặc định' }, { status: 400 });
+            }
+            if (username === requester && role !== 'admin') {
+                return NextResponse.json({ success: false, error: 'Bạn không thể tự hạ quyền quản trị viên của chính mình' }, { status: 400 });
+            }
+            updateData.role = role;
         }
 
         const user = await User.findOneAndUpdate(
             { username },
-            { likedSongs, playlists },
+            updateData,
             { new: true }
         );
 
         if (!user) {
-            return NextResponse.json({ success: false, error: 'User not found' }, { status: 404 });
+            return NextResponse.json({ success: false, error: 'Không tìm thấy người dùng' }, { status: 404 });
         }
 
         return NextResponse.json({ success: true, data: user });
