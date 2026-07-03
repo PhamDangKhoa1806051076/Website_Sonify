@@ -85,32 +85,29 @@ const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers }) => {
                                 {u.createdAt ? new Date(u.createdAt).toLocaleDateString('vi-VN') : 'Không rõ'}
                             </td>
                             <td style={{ padding: '16px 12px', textAlign: 'center' }}>
-                                {u.sessions && u.sessions.length > 0 ? (
-                                    <div style={{ fontSize: '0.8rem' }}>
-                                        {u.sessions.map((s) => {
-                                            const lastActiveDate = new Date(s.lastActive);
-                                            const isOnline = (now - lastActiveDate.getTime()) < ONLINE_THRESHOLD_MS;
-                                            return (
-                                                <div key={s.deviceId} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '4px' }}>
-                                                    {/* Online / Offline dot */}
-                                                    <span style={{
-                                                        width: '8px', height: '8px', borderRadius: '50%',
-                                                        background: isOnline ? '#10b981' : '#6b7280',
-                                                        display: 'inline-block', flexShrink: 0,
-                                                        boxShadow: isOnline ? '0 0 6px #10b981' : 'none'
-                                                    }} />
-                                                    <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>{s.label}:</span>
-                                                    {isOnline ? (
-                                                        <span style={{ color: '#10b981', fontWeight: 700 }}>Online</span>
-                                                    ) : (
-                                                        <span style={{ color: 'var(--text-muted)' }}>{formatTimeAgo(lastActiveDate)}</span>
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                ) : (
-                                    <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Chưa đăng nhập</span>
+                                {u.sessions && u.sessions.length > 0 ? (() => {
+                                    // Pick the most recent session only
+                                    const sorted = [...u.sessions].sort((a, b) => new Date(b.lastActive).getTime() - new Date(a.lastActive).getTime());
+                                    const latest = sorted[0];
+                                    const lastActiveDate = new Date(latest.lastActive);
+                                    const isOnline = (now - lastActiveDate.getTime()) < ONLINE_THRESHOLD_MS;
+                                    return (
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontSize: '0.85rem' }}>
+                                            <span style={{
+                                                width: '8px', height: '8px', borderRadius: '50%',
+                                                background: isOnline ? '#10b981' : '#6b7280',
+                                                display: 'inline-block', flexShrink: 0,
+                                                boxShadow: isOnline ? '0 0 6px #10b981' : 'none'
+                                            }} />
+                                            {isOnline ? (
+                                                <span style={{ color: '#10b981', fontWeight: 700 }}>Đang online</span>
+                                            ) : (
+                                                <span style={{ color: 'var(--text-muted)' }}>{formatTimeAgo(lastActiveDate)}</span>
+                                            )}
+                                        </div>
+                                    );
+                                })() : (
+                                    <span style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>Chưa đăng nhập</span>
                                 )}
                             </td>
                             <td style={{ padding: '16px 12px', textAlign: 'center' }}>
