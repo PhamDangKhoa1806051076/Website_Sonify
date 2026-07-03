@@ -3,7 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { Song } from '@/data/constants';
-import { useLanguage } from '@/context/LanguageContext';
 import { usePlayer } from '@/context/PlayerContext';
 
 interface ChartSectionProps {
@@ -13,169 +12,138 @@ interface ChartSectionProps {
   bgColor?: string;
 }
 
-const ChartSection: React.FC<ChartSectionProps> = ({ title, songs, titleColor = '#ffffff', bgColor = 'rgba(255, 255, 255, 0.05)' }) => {
-  const { t } = useLanguage();
-  const { playSong } = usePlayer();
-
+const ChartSection: React.FC<ChartSectionProps> = ({
+  title, songs,
+  titleColor = '#ffffff',
+  bgColor = 'rgba(255,255,255,0.04)'
+}) => {
+  const { playSong, currentSong, isPlaying } = usePlayer();
   if (songs.length === 0) return null;
 
-  const handlePlayAll = () => {
-    if (songs.length > 0) {
-      playSong(songs[0]);
-      // Note: In a more advanced version, we would replace the entire queue with this chart
-    }
-  };
+  const rankColors = ['#f59e0b', '#94a3b8', '#b45309'];
 
   return (
-    <div className="chart-column" style={{
-      minWidth: '320px',
-      flex: '1',
+    <div style={{
+      minWidth: '300px', flex: '1',
       background: bgColor,
-      borderRadius: '20px',
-      padding: '20px',
+      borderRadius: '24px',
+      border: '1px solid var(--glass-border)',
+      backdropFilter: 'blur(20px)',
+      maxHeight: '560px',
+      overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
-      gap: '16px',
-      backdropFilter: 'blur(20px)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      maxHeight: '600px',
-      overflow: 'hidden'
+      boxShadow: 'var(--card-shadow)',
+      position: 'relative'
     }}>
-      <div className="chart-column-header" style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingBottom: '10px',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+      {/* Inner top highlight */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+        background: 'linear-gradient(to right, transparent, rgba(255,255,255,0.12), transparent)',
+        pointerEvents: 'none'
+      }} />
+
+      {/* Header */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '18px 20px 14px',
+        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 100%)',
+        flexShrink: 0
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', flex: 1, minWidth: 0 }}>
-          <h3 style={{ 
-            color: 'white', 
-            fontSize: '1.1rem', 
-            fontWeight: '700',
-            margin: 0,
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}>
-            {title}
-          </h3>
-          <i className="fa-solid fa-chevron-right" style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.8rem' }}></i>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+          <h3 style={{
+            color: 'white', fontSize: '1rem', fontWeight: 800, margin: 0,
+            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            letterSpacing: '-0.025em'
+          }}>{title}</h3>
+          <i className="fa-solid fa-chevron-right" style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.7rem', flexShrink: 0 }}></i>
         </div>
-        
-        <button 
-          onClick={handlePlayAll}
-          title={t('btn-play-all') || 'Phát'}
+        <button
+          onClick={() => songs.length > 0 && playSong(songs[0])}
           style={{
-            background: 'rgba(255, 255, 255, 0.12)',
-            border: 'none',
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.12)',
             borderRadius: '50%',
-            width: '34px',
-            height: '34px',
-            color: 'white',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            width: '34px', height: '34px',
+            color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
             cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            flexShrink: 0
+            transition: 'all 0.2s cubic-bezier(0.34,1.56,0.64,1)',
+            flexShrink: 0,
+            fontSize: '0.8rem'
           }}
-          onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'}
-          onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.2)'; e.currentTarget.style.transform = 'scale(1.1)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'scale(1)'; }}
         >
-          <i className="fa-solid fa-play" style={{ 
-            background: 'var(--accent-gradient)', 
-            width: '26px', 
-            height: '26px', 
-            borderRadius: '50%', 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center',
-            fontSize: '0.8rem',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
-          }}></i>
+          <i className="fa-solid fa-play" style={{ marginLeft: '1px' }}></i>
         </button>
       </div>
 
-      <div className="chart-list-scrollable" style={{
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-        paddingRight: '4px'
-      }}>
-        {songs.map((song, idx) => (
-          <div 
-            key={song.id} 
-            className="chart-list-item" 
-            onClick={() => playSong(song)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '14px',
-              padding: '10px',
-              borderRadius: '12px',
-              cursor: 'pointer',
-              transition: 'var(--transition)',
-              background: 'transparent'
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-          >
-            <div style={{
-              fontSize: '1rem',
-              fontWeight: '800',
-              color: idx < 3 ? titleColor : 'rgba(255, 255, 255, 0.4)',
-              minWidth: '24px',
-              textAlign: 'center'
-            }}>
-              {idx + 1}
-            </div>
-            
-            <Image 
-              src={song.cover} 
-              alt={song.title} 
-              width={48} 
-              height={48} 
-              style={{ borderRadius: '6px', objectFit: 'cover' }} 
-            />
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'hidden' }}>
-              <div style={{ 
-                color: 'white', 
-                fontWeight: '600', 
-                fontSize: '0.9rem',
-                whiteSpace: 'nowrap', 
-                overflow: 'hidden', 
-                textOverflow: 'ellipsis' 
+      {/* List */}
+      <div style={{ overflowY: 'auto', flex: 1, padding: '8px 10px' }}>
+        {songs.map((song, idx) => {
+          const isCurrent = currentSong?.id === song.id;
+          return (
+            <div
+              key={song.id}
+              onClick={() => playSong(song)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: '12px',
+                padding: '9px 10px',
+                borderRadius: '12px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                background: isCurrent ? 'rgba(99,102,241,0.12)' : 'transparent',
+                border: isCurrent ? '1px solid rgba(99,102,241,0.2)' : '1px solid transparent',
+                marginBottom: '2px'
+              }}
+              onMouseEnter={e => { if (!isCurrent) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
+              onMouseLeave={e => { if (!isCurrent) e.currentTarget.style.background = 'transparent'; }}
+            >
+              {/* Rank */}
+              <div style={{
+                fontSize: idx < 3 ? '1rem' : '0.875rem',
+                fontWeight: 800,
+                color: idx < 3 ? rankColors[idx] : 'rgba(255,255,255,0.3)',
+                minWidth: '22px', textAlign: 'center',
+                fontVariantNumeric: 'tabular-nums'
               }}>
-                {song.title}
+                {isCurrent && isPlaying ? (
+                  <i className="fa-solid fa-volume-high" style={{ color: 'var(--primary-light)', fontSize: '0.8rem' }}></i>
+                ) : idx + 1}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ 
-                  fontSize: '0.65rem', 
-                  color: 'rgba(255,255,255,0.6)', 
-                  padding: '1px 4px', 
-                  border: '1px solid rgba(255,255,255,0.2)', 
-                  borderRadius: '3px',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase'
-                }}>
-                  Lossless
-                </span>
-                <span style={{ 
-                  color: 'rgba(255,255,255,0.5)', 
-                  fontSize: '0.8rem',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}>
-                  {song.artist}
-                </span>
+
+              {/* Cover */}
+              <div style={{ position: 'relative', flexShrink: 0 }}>
+                <Image src={song.cover} alt={song.title} width={44} height={44}
+                  style={{ borderRadius: '10px', objectFit: 'cover', display: 'block' }} />
+              </div>
+
+              {/* Info */}
+              <div style={{ overflow: 'hidden', flex: 1 }}>
+                <div style={{
+                  color: isCurrent ? 'var(--primary-light)' : 'rgba(255,255,255,0.92)',
+                  fontWeight: 600, fontSize: '0.875rem',
+                  whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                  letterSpacing: '-0.01em'
+                }}>{song.title}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                  <span style={{
+                    fontSize: '0.6rem', color: 'rgba(255,255,255,0.45)',
+                    padding: '1px 5px',
+                    border: '1px solid rgba(255,255,255,0.12)',
+                    borderRadius: '4px', fontWeight: 700,
+                    textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0
+                  }}>Lossless</span>
+                  <span style={{
+                    color: 'rgba(255,255,255,0.45)', fontSize: '0.78rem', fontWeight: 500,
+                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
+                  }}>{song.artist}</span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

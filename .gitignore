@@ -48,3 +48,7 @@ eslint-output.txt
 .agents/
 skills-lock.json
 *.log
+
+# local skill references
+taste-skill/
+redesign-skill.md

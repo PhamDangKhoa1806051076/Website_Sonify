@@ -22,10 +22,11 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     const [newPassword, setNewPassword] = useState('');
     const [error, setError] = useState('');
     const [successMsg, setSuccessMsg] = useState('');
-    // forgot-password: step 1 = nhập username, step 2 = nhập xác thực + mật khẩu mới
     const [forgotStep, setForgotStep] = useState<1 | 2>(1);
     const [userRole, setUserRole] = useState<'admin' | 'user' | null>(null);
     const [isCheckingRole, setIsCheckingRole] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showNewPassword, setShowNewPassword] = useState(false);
 
     const switchView = (newView: 'login' | 'signup' | 'forgot-password') => {
         setView(newView);
@@ -38,9 +39,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         setShowPassword(false);
         setShowNewPassword(false);
     };
-
-    const [showPassword, setShowPassword] = useState(false);
-    const [showNewPassword, setShowNewPassword] = useState(false);
 
     if (!isOpen) return null;
 
@@ -127,130 +125,176 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         }
     };
 
+    const viewTitles = {
+        'login': t('header-login'),
+        'signup': 'Tạo tài khoản',
+        'forgot-password': 'Đổi mật khẩu'
+    };
+
+    const viewIcons = {
+        'login': 'fa-right-to-bracket',
+        'signup': 'fa-user-plus',
+        'forgot-password': 'fa-key'
+    };
+
     return (
-        <div className={`auth-overlay ${isOpen ? 'active' : ''}`}>
+        <div className="auth-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
             <div className="auth-card">
-                <button className="auth-close-btn" onClick={onClose}>&times;</button>
-                
-                {view === 'login' ? (
-                    <div id="login-form">
-                        <div className="auth-header">
-                            <h2>{t('header-login')}</h2>
+                {/* Header */}
+                <div className="auth-card-header">
+                    <button className="auth-close-btn" onClick={onClose} aria-label="Đóng">
+                        <i className="fa-solid fa-xmark"></i>
+                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <div style={{
+                            width: '44px', height: '44px', borderRadius: '14px',
+                            background: 'linear-gradient(135deg, var(--primary-color), #a855f7)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            boxShadow: '0 4px 16px rgba(99,102,241,0.4)',
+                            flexShrink: 0
+                        }}>
+                            <i className={`fa-solid ${viewIcons[view]}`} style={{ color: 'white', fontSize: '1.1rem' }}></i>
                         </div>
-                        {error && <p style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '0.85rem' }}>{error}</p>}
-                        {successMsg && <p style={{ color: '#22c55e', marginBottom: '1rem', fontSize: '0.85rem' }}>{successMsg}</p>}
+                        <div>
+                            <h2 className="auth-header" style={{ margin: 0, fontSize: '1.3rem', fontWeight: 800, letterSpacing: '-0.025em' }}>
+                                {viewTitles[view]}
+                            </h2>
+                            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: '2px 0 0', fontWeight: 500 }}>
+                                {view === 'login' ? 'Chào mừng bạn trở lại' : view === 'signup' ? 'Tham gia Sonify ngay hôm nay' : 'Lấy lại quyền truy cập tài khoản'}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Body */}
+                <div className="auth-card-body">
+                    {/* Messages */}
+                    {error && (
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: '8px',
+                            background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)',
+                            borderRadius: '10px', padding: '10px 14px', marginBottom: '1rem',
+                            fontSize: '0.8375rem', color: '#f87171', fontWeight: 500
+                        }}>
+                            <i className="fa-solid fa-circle-exclamation" style={{ flexShrink: 0 }}></i>
+                            {error}
+                        </div>
+                    )}
+                    {successMsg && (
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: '8px',
+                            background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.25)',
+                            borderRadius: '10px', padding: '10px 14px', marginBottom: '1rem',
+                            fontSize: '0.8375rem', color: '#4ade80', fontWeight: 500
+                        }}>
+                            <i className="fa-solid fa-circle-check" style={{ flexShrink: 0 }}></i>
+                            {successMsg}
+                        </div>
+                    )}
+
+                    {/* LOGIN */}
+                    {view === 'login' && (
                         <form onSubmit={handleLogin}>
                             <div className="form-group">
-                                <input 
-                                    type="text" 
-                                    placeholder="Nhập username của bạn" 
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                />
+                                <input type="text" placeholder="Tên đăng nhập" value={username} onChange={(e) => setUsername(e.target.value)} required autoComplete="username" />
                             </div>
                             <div className="form-group password-group">
-                                <input 
-                                    type={showPassword ? 'text' : 'password'}
-                                    placeholder="Nhập mật khẩu" 
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
+                                <input type={showPassword ? 'text' : 'password'} placeholder="Mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
                                 <i className={`fa-regular ${showPassword ? 'fa-eye' : 'fa-eye-slash'} toggle-password`} onClick={() => setShowPassword(!showPassword)} style={{ cursor: 'pointer' }}></i>
                             </div>
-                            
                             <div className="auth-options">
                                 <label className="custom-checkbox">
                                     <input type="checkbox" />
                                     <span className="checkmark"></span>
-                                    Nhớ cho lần đăng nhập tới
+                                    Nhớ đăng nhập
                                 </label>
                                 <a href="#" className="forgot-link" onClick={(e) => { e.preventDefault(); switchView('forgot-password'); }}>Quên mật khẩu?</a>
                             </div>
-
-                            <button type="submit" className="btn-auth-submit">Đăng nhập</button>
+                            <button type="submit" className="btn-auth-submit">
+                                <i className="fa-solid fa-right-to-bracket" style={{ marginRight: '8px' }}></i>
+                                Đăng nhập
+                            </button>
                             <p className="auth-switch">Chưa có tài khoản? <span onClick={() => switchView('signup')}>Đăng ký ngay</span></p>
                         </form>
-                    </div>
-                ) : view === 'signup' ? (
-                    <div id="signup-form">
-                        <div className="auth-header">
-                            <h2>Đăng ký tài khoản</h2>
-                        </div>
-                        {error && <p style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '0.85rem' }}>{error}</p>}
-                        {successMsg && <p style={{ color: '#22c55e', marginBottom: '1rem', fontSize: '0.85rem' }}>{successMsg}</p>}
+                    )}
+
+                    {/* SIGNUP */}
+                    {view === 'signup' && (
                         <form onSubmit={handleRegister}>
                             <div className="form-group">
-                                <input type="text" placeholder="Họ và tên của bạn" value={name} onChange={(e) => setName(e.target.value)} required />
+                                <input type="text" placeholder="Họ và tên" value={name} onChange={(e) => setName(e.target.value)} required />
                             </div>
                             <div className="form-group">
-                                <input type="text" placeholder="Tên đăng nhập" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                                <input type="text" placeholder="Tên đăng nhập" value={username} onChange={(e) => setUsername(e.target.value)} required autoComplete="username" />
                             </div>
                             <div className="form-group">
-                                <input type="text" placeholder="Số điện thoại" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+                                <input type="text" placeholder="Số điện thoại (dùng để khôi phục mật khẩu)" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
                             </div>
                             <div className="form-group password-group">
-                                <input type={showPassword ? 'text' : 'password'} placeholder="Mật khẩu của bạn" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                                <input type={showPassword ? 'text' : 'password'} placeholder="Mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="new-password" />
                                 <i className={`fa-regular ${showPassword ? 'fa-eye' : 'fa-eye-slash'} toggle-password`} onClick={() => setShowPassword(!showPassword)} style={{ cursor: 'pointer' }}></i>
                             </div>
-                            <button type="submit" className="btn-auth-submit">Đăng ký</button>
+                            <button type="submit" className="btn-auth-submit">
+                                <i className="fa-solid fa-user-plus" style={{ marginRight: '8px' }}></i>
+                                Tạo tài khoản
+                            </button>
                             <p className="auth-switch">Đã có tài khoản? <span onClick={() => switchView('login')}>Đăng nhập</span></p>
                         </form>
-                    </div>
-                ) : (
-                    <div id="forgot-password-form">
-                        <div className="auth-header">
-                            <h2>Đổi Mật Khẩu</h2>
-                        </div>
-                        {error && <p style={{ color: '#ef4444', marginBottom: '1rem', fontSize: '0.85rem' }}>{error}</p>}
-                        {successMsg && <p style={{ color: '#22c55e', marginBottom: '1rem', fontSize: '0.85rem' }}>{successMsg}</p>}
+                    )}
 
-                        {forgotStep === 1 ? (
-                            // Bước 1: Nhập tên đăng nhập để xác định loại tài khoản
-                            <form onSubmit={handleCheckRole}>
-                                <div className="form-group">
-                                    <input
-                                        type="text"
-                                        placeholder="Nhập tên đăng nhập của bạn"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <button type="submit" className="btn-auth-submit" disabled={isCheckingRole}>
-                                    {isCheckingRole ? 'Đang kiểm tra...' : 'Tiếp theo'}
-                                </button>
-                                <p className="auth-switch">Quay lại <span onClick={() => switchView('login')}>Đăng nhập</span></p>
-                            </form>
-                        ) : (
-                            // Bước 2: Hiện field xác thực tuỳ theo loại tài khoản
-                            <form onSubmit={handleResetPassword}>
-                                <div className="form-group">
-                                    <input type="text" value={username} readOnly style={{ opacity: 0.6, cursor: 'not-allowed' }} />
-                                </div>
-                                <div className="form-group">
-                                    <input
-                                        type={userRole === 'admin' ? 'password' : 'text'}
-                                        placeholder={userRole === 'admin' ? 'Mật khẩu xác nhận của Admin' : 'Số điện thoại đã đăng ký'}
-                                        value={authKey}
-                                        onChange={(e) => setAuthKey(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group password-group">
-                                    <input type={showNewPassword ? 'text' : 'password'} placeholder="Mật khẩu mới" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required />
-                                    <i className={`fa-regular ${showNewPassword ? 'fa-eye' : 'fa-eye-slash'} toggle-password`} onClick={() => setShowNewPassword(!showNewPassword)} style={{ cursor: 'pointer' }}></i>
-                                </div>
-                                <button type="submit" className="btn-auth-submit">Xác nhận đổi</button>
-                                <p className="auth-switch">
-                                    <span onClick={() => { setForgotStep(1); setError(''); setAuthKey(''); setNewPassword(''); }}>← Nhập lại tên đăng nhập</span>
-                                </p>
-                            </form>
-                        )}
-                    </div>
-                )}
+                    {/* FORGOT PASSWORD */}
+                    {view === 'forgot-password' && (
+                        <>
+                            {forgotStep === 1 ? (
+                                <form onSubmit={handleCheckRole}>
+                                    <div className="form-group">
+                                        <input type="text" placeholder="Nhập tên đăng nhập" value={username} onChange={(e) => setUsername(e.target.value)} required />
+                                    </div>
+                                    <button type="submit" className="btn-auth-submit" disabled={isCheckingRole}>
+                                        {isCheckingRole ? (
+                                            <><i className="fa-solid fa-spinner fa-spin" style={{ marginRight: '8px' }}></i>Đang kiểm tra...</>
+                                        ) : (
+                                            <><i className="fa-solid fa-arrow-right" style={{ marginRight: '8px' }}></i>Tiếp theo</>
+                                        )}
+                                    </button>
+                                    <p className="auth-switch">Nhớ mật khẩu? <span onClick={() => switchView('login')}>Đăng nhập</span></p>
+                                </form>
+                            ) : (
+                                <form onSubmit={handleResetPassword}>
+                                    <div className="form-group">
+                                        <input type="text" value={username} readOnly style={{ opacity: 0.5, cursor: 'not-allowed' }} />
+                                    </div>
+                                    <div className="form-group">
+                                        <input
+                                            type={userRole === 'admin' ? 'password' : 'text'}
+                                            placeholder={userRole === 'admin' ? 'Mật khẩu xác nhận (Admin)' : 'Số điện thoại đã đăng ký'}
+                                            value={authKey} onChange={(e) => setAuthKey(e.target.value)} required
+                                        />
+                                    </div>
+                                    <div className="form-group password-group">
+                                        <input type={showNewPassword ? 'text' : 'password'} placeholder="Mật khẩu mới" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required autoComplete="new-password" />
+                                        <i className={`fa-regular ${showNewPassword ? 'fa-eye' : 'fa-eye-slash'} toggle-password`} onClick={() => setShowNewPassword(!showNewPassword)} style={{ cursor: 'pointer' }}></i>
+                                    </div>
+                                    <button type="submit" className="btn-auth-submit">
+                                        <i className="fa-solid fa-key" style={{ marginRight: '8px' }}></i>
+                                        Xác nhận đổi mật khẩu
+                                    </button>
+                                    <p className="auth-switch">
+                                        <span onClick={() => { setForgotStep(1); setError(''); setAuthKey(''); setNewPassword(''); }}>
+                                            <i className="fa-solid fa-arrow-left" style={{ marginRight: '6px', fontSize: '0.75rem' }}></i>
+                                            Nhập lại tên đăng nhập
+                                        </span>
+                                    </p>
+                                </form>
+                            )}
+                        </>
+                    )}
 
-                <div className="demo-creds">
-                    <span>Username: <strong>user</strong> | Password: <strong>1234</strong></span>
+                    {/* Demo credentials */}
+                    <div className="demo-creds">
+                        <i className="fa-solid fa-circle-info" style={{ color: 'var(--primary-light)', flexShrink: 0 }}></i>
+                        <span>Dùng thử: <strong>user</strong> / <strong>1234</strong></span>
+                    </div>
                 </div>
             </div>
         </div>
