@@ -52,7 +52,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
                 if (iData.success) setLocalImages(iData.files);
 
                 // Fetch users
-                if (view === 'users') {
+                if (view === 'users' || view === 'manage' || view === 'stats') {
                     const uRes = await fetch('/api/users', {
                         headers: { 'x-username': user?.username || '' }
                     });
@@ -91,9 +91,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
                 {isDashboard && (
                     <AdminStats 
                         songsCount={allSongs.length}
-                        feedbacks={feedbacks}
-                        setFeedbacks={setFeedbacks}
-                        onClearAllFeedback={clearFeedback}
+                        feedbacksCount={feedbacks.length}
                     />
                 )}
 
@@ -114,6 +112,8 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
                     <AdminUsers 
                         users={users}
                         setUsers={setUsers}
+                        feedbacks={feedbacks}
+                        setFeedbacks={setFeedbacks}
                     />
                 )}
             </div>
