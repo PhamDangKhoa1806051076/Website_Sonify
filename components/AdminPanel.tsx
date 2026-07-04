@@ -68,17 +68,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
 
     if (user?.role !== 'admin') return <div className="content">Access Denied</div>;
 
-    const clearFeedback = async () => {
-        if (confirm('Bạn có chắc muốn xóa tất cả phản hồi?')) {
-            try {
-                await fetch('/api/feedback', { method: 'DELETE' });
-                setFeedbacks([]);
-            } catch (err) {
-                console.error('Error clearing feedback:', err);
-            }
-        }
-    };
-
     const isDashboard = view === 'manage' || view === 'stats' || view === 'music';
 
     return (

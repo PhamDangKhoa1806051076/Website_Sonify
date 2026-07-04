@@ -84,18 +84,6 @@ const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers, feedbacks, set
         });
     };
 
-    // Get "unassigned" feedbacks (those that don't match any user)
-    const getUnassignedFeedbacks = (): Feedback[] => {
-        return feedbacks.filter(f => {
-            const emailLower = (f.email || '').toLowerCase();
-            return !users.some(u => {
-                const usernameLower = u.username.toLowerCase();
-                const nameLower = u.name.toLowerCase();
-                return emailLower.includes(usernameLower) || emailLower.includes(nameLower) || emailLower === usernameLower;
-            });
-        });
-    };
-
     const handleOpenFeedback = (username: string, name: string, items: Feedback[]) => {
         setFeedbackModal({ open: true, username, name, items });
     };
@@ -115,7 +103,6 @@ const AdminUsers: React.FC<AdminUsersProps> = ({ users, setUsers, feedbacks, set
         }
     };
 
-    const unassigned = getUnassignedFeedbacks();
 
     return (
         <>

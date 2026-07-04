@@ -21,7 +21,7 @@ if (!global.mongoose) {
     global.mongoose = { conn: null, promise: null };
 }
 
-let cached = global.mongoose as {
+const cached = global.mongoose as {
     conn: typeof import('mongoose') | null;
     promise: Promise<typeof import('mongoose')> | null;
 };

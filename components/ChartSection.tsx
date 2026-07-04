@@ -14,7 +14,6 @@ interface ChartSectionProps {
 
 const ChartSection: React.FC<ChartSectionProps> = ({
   title, songs,
-  titleColor = '#ffffff',
   bgColor = 'rgba(255,255,255,0.04)'
 }) => {
   const { playSong, currentSong, isPlaying } = usePlayer();
