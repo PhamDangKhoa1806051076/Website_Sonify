@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -138,8 +139,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div className="auth-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-            <div className="auth-card">
+        <motion.div
+            className="auth-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        >
+            <motion.div
+                className="auth-card"
+                initial={{ opacity: 0, scale: 0.94, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96, y: 8 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            >
                 {/* Header */}
                 <div className="auth-card-header">
                     <button className="auth-close-btn" onClick={onClose} aria-label="Đóng">
@@ -296,8 +310,8 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                         <span>Dùng thử: <strong>user</strong> / <strong>1234</strong></span>
                     </div>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 

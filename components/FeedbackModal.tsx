@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 
 interface FeedbackModalProps {
@@ -60,28 +61,36 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             style={{
                 position: 'fixed', inset: 0,
                 background: 'rgba(2,6,23,0.8)',
                 backdropFilter: 'blur(20px)',
                 display: 'flex', justifyContent: 'center', alignItems: 'center',
                 zIndex: 10000,
-                animation: 'fadeIn 0.25s ease',
                 padding: '20px'
             }}
             onClick={e => { if (e.target === e.currentTarget) onClose(); }}
         >
-            <div style={{
-                background: 'var(--bg-sidebar)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '28px',
-                width: '100%',
-                maxWidth: '440px',
-                overflow: 'hidden',
-                boxShadow: '0 40px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)',
-                animation: 'dropIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
-            }}>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.94, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96, y: 8 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                    background: 'var(--bg-sidebar)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '28px',
+                    width: '100%',
+                    maxWidth: '440px',
+                    overflow: 'hidden',
+                    boxShadow: '0 40px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08)',
+                }}
+            >
                 {/* Header */}
                 <div style={{
                     padding: '1.5rem 2rem',
@@ -213,8 +222,8 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onClose }) => {
                         </form>
                     )}
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 

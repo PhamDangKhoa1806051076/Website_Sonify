@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePlayer } from '@/context/PlayerContext';
 import QueuePanel from './QueuePanel';
 
@@ -31,7 +32,13 @@ const PlayerBar: React.FC = () => {
     if (!currentSong) return null;
 
     return (
-        <footer className="player-bar">
+        <AnimatePresence>
+            <motion.footer
+                className="player-bar"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            >
             {/* LEFT — Track Info */}
             <div className="current-track">
                 <div className="track-img">
@@ -212,7 +219,8 @@ const PlayerBar: React.FC = () => {
             </div>
 
             <QueuePanel isOpen={isQueueOpen} onClose={() => setIsQueueOpen(false)} />
-        </footer>
+            </motion.footer>
+        </AnimatePresence>
     );
 };
 

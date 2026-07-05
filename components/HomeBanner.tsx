@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Song } from '@/data/constants';
 
 interface HomeBannerProps {
@@ -49,65 +50,79 @@ const HomeBanner: React.FC<HomeBannerProps> = ({ currentBanner, trendingSongs })
 
   return (
     <section className="hero-banner-wrapper">
-      {/* All banner slides - stacked on top of each other */}
-      {banners.map((banner, idx) => (
-        <div
-          key={idx}
-          className={`hero-banner-slide ${idx === currentBanner ? 'active' : ''}`}
-        >
-          {/* Background Image */}
-          <Image 
-            src={banner.img} 
-            alt="" 
-            fill 
-            priority={idx === 0}
-            sizes="(max-width: 768px) 100vw, 80vw"
-            style={{ objectFit: 'cover' }}
-          />
-          
-          {/* Dark overlay for readability */}
-          <div className="hero-banner-overlay" />
-
-          {/* Content */}
-          <div className="hero-banner-content" style={{
-            justifyContent: banner.featured ? 'space-between' : (banner.align as string),
-          }}>
-            <div className="hero-banner-text" style={{ 
-              background: banner.bg, 
-              maxWidth: banner.featured ? '45%' : '85%',
-              textAlign: banner.textAlign,
-            }}>
-              <h1 style={{ 
-                whiteSpace: banner.featured ? 'pre-line' : 'nowrap', 
-                color: banner.color,
+      <AnimatePresence mode="wait">
+        {banners.map((banner, idx) => (
+          idx === currentBanner && (
+            <motion.div
+              key={idx}
+              className="hero-banner-slide active"
+              initial={{ opacity: 0, scale: 1.04 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+              style={{ position: 'absolute', inset: 0 }}
+            >
+              <Image 
+                src={banner.img} 
+                alt="" 
+                fill 
+                priority={idx === 0}
+                sizes="(max-width: 768px) 100vw, 80vw"
+                style={{ objectFit: 'cover' }}
+              />
+              <div className="hero-banner-overlay" />
+              <div className="hero-banner-content" style={{
+                justifyContent: banner.featured ? 'space-between' : (banner.align as string),
               }}>
-                {banner.text}
-              </h1>
-            </div>
+                <motion.div
+                  className="hero-banner-text"
+                  initial={{ opacity: 0, x: -16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.15, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ 
+                    background: banner.bg, 
+                    maxWidth: banner.featured ? '45%' : '85%',
+                    textAlign: banner.textAlign,
+                  }}
+                >
+                  <h1 style={{ 
+                    whiteSpace: banner.featured ? 'pre-line' : 'nowrap', 
+                    color: banner.color,
+                  }}>
+                    {banner.text}
+                  </h1>
+                </motion.div>
 
-            {banner.featured && (
-              <div className="hero-banner-featured">
-                {banner.featured.map((song, songIdx) => (
-                  <div key={song.id} className="hero-banner-featured-item">
-                    <span className="hero-banner-rank" style={{ color: banner.color }}>{songIdx + 1}</span>
-                    <Image 
-                      src={song.cover} 
-                      alt={song.title}
-                      width={42} 
-                      height={42} 
-                      style={{ borderRadius: '8px', objectFit: 'cover', flexShrink: 0 }} 
-                    />
-                    <div style={{ overflow: 'hidden' }}>
-                      <div className="hero-banner-song-title">{song.title}</div>
-                      <div className="hero-banner-song-artist">{song.artist}</div>
-                    </div>
-                  </div>
-                ))}
+                {banner.featured && (
+                  <motion.div
+                    className="hero-banner-featured"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    {banner.featured.map((song, songIdx) => (
+                      <div key={song.id} className="hero-banner-featured-item">
+                        <span className="hero-banner-rank" style={{ color: banner.color }}>{songIdx + 1}</span>
+                        <Image 
+                          src={song.cover} 
+                          alt={song.title}
+                          width={42} 
+                          height={42} 
+                          style={{ borderRadius: '8px', objectFit: 'cover', flexShrink: 0 }} 
+                        />
+                        <div style={{ overflow: 'hidden' }}>
+                          <div className="hero-banner-song-title">{song.title}</div>
+                          <div className="hero-banner-song-artist">{song.artist}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
               </div>
-            )}
-          </div>
-        </div>
-      ))}
+            </motion.div>
+          )
+        ))}
+      </AnimatePresence>
     </section>
   );
 };

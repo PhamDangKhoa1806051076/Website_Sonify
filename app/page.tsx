@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from '@/components/Sidebar';
 import Header from '@/components/Header';
 import PlayerBar from '@/components/PlayerBar';
@@ -208,11 +209,33 @@ export default function Home() {
         )}
 
         {isAdminTab ? (
-          <AdminPanel view={activeTab.split('-')[1] as 'music' | 'users' | 'stats' | 'categories'} />
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <AdminPanel view={activeTab.split('-')[1] as 'music' | 'users' | 'stats' | 'categories'} />
+          </motion.div>
         ) : activeTab === 'profile' ? (
-          <Profile />
+          <motion.div
+            key="profile"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Profile />
+          </motion.div>
         ) : (
-          <div className="scroll-container">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              className="scroll-container"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            >
             {/* Local Section */}
             {activeTab !== 'charts' && (
               <section className="song-list-container">
@@ -344,7 +367,8 @@ export default function Home() {
                 <SongGrid songs={onlineSongs} />
               </section>
             )}
-          </div>
+          </motion.div>
+          </AnimatePresence>
         )}
       </main>
 

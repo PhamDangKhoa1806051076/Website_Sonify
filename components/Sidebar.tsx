@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
 import { usePlayer } from '@/context/PlayerContext';
@@ -73,12 +74,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isCollapsed =
                     {navItems.map(item => {
                         if (item.adminOnly && !isAdmin) return null;
                         return (
-                            <li 
+                            <motion.li 
                                 key={item.id}
                                 className={activeTab === item.id ? 'active' : ''}
                                 onClick={() => {
                                     if (item.id === 'home') {
-                                        // Full reload for home - resets everything
                                         window.location.href = '/';
                                     } else {
                                         onTabChange(item.id);
@@ -86,10 +86,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isCollapsed =
                                 }}
                                 title={isCollapsed ? (item.label.startsWith('nav-') ? t(item.label) : item.label) : ''}
                                 style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
+                                whileTap={{ scale: 0.96 }}
+                                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                             >
                                 <i className={`fa-solid ${item.icon}`}></i>
                                 {!isCollapsed && <span>{item.label.startsWith('nav-') ? t(item.label) : item.label}</span>}
-                            </li>
+                            </motion.li>
                         );
                     })}
                 </ul>
