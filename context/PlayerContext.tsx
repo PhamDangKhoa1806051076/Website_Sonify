@@ -411,28 +411,28 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
                     pointerEvents: 'none',
                     zIndex: -1
                 }}>
-                    {/* @ts-expect-error - dynamic import typing conflict */}
-                    <ReactPlayer
-                        ref={playerRef as never}
-                        url={youtubeUrl}
-                        playing={isPlaying}
-                        volume={volume}
-                        onBuffer={() => console.log('YouTube Buffering...')}
-                        onReady={() => console.log('YouTube Player Ready')}
-                        onStart={() => console.log('YouTube Playback Started')}
-                        onProgress={(state: { playedSeconds: number }) => setCurrentTime(state.playedSeconds)}
-                        onDuration={(d: number) => setDuration(d)}
-                        onEnded={nextSong}
-                        onError={(e: unknown) => {
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    {React.createElement(ReactPlayer as any, {
+                        ref: playerRef as never,
+                        url: youtubeUrl,
+                        playing: isPlaying,
+                        volume: volume,
+                        onBuffer: () => console.log('YouTube Buffering...'),
+                        onReady: () => console.log('YouTube Player Ready'),
+                        onStart: () => console.log('YouTube Playback Started'),
+                        onProgress: (state: { playedSeconds: number }) => setCurrentTime(state.playedSeconds),
+                        onDuration: (d: number) => setDuration(d),
+                        onEnded: nextSong,
+                        onError: (e: unknown) => {
                             console.error('ReactPlayer Error:', e);
                             alert('Lỗi khi phát video YouTube. Có thể do video bị giới hạn hoặc không hỗ trợ nhúng.');
-                        }}
-                        config={{
+                        },
+                        config: {
                             youtube: {
                                 playerVars: { autoplay: 1, controls: 0, origin: typeof window !== 'undefined' ? window.location.origin : '' }
                             }
-                        }}
-                    />
+                        }
+                    })}
                 </div>
             )}
         </PlayerContext.Provider>
