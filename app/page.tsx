@@ -15,6 +15,7 @@ import { usePlayer } from '@/context/PlayerContext';
 import { searchOnlineSongs, getGlobalTopSongs, getVietnamTopSongs, getTrendingSongs, getChineseTopSongs } from '@/services/musicService';
 import ChartSection from '@/components/ChartSection';
 import HomeBanner from '@/components/HomeBanner';
+import ScrollToTop from '@/components/ScrollToTop';
 
 import { Song } from '@/data/constants';
 
@@ -373,6 +374,8 @@ export default function Home() {
       </main>
 
       <PlayerBar />
+
+      <ScrollToTop />
 
       <AuthModal 
         isOpen={isAuthModalOpen} 
