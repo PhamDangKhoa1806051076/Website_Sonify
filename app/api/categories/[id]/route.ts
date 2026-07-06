@@ -1,20 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Category from '@/models/Category';
-import User from '@/models/User';
-
-async function verifyAdmin(request: Request): Promise<boolean> {
-    try {
-        const username = request.headers.get('x-username');
-        if (!username) return false;
-        await dbConnect();
-        const user = await User.findOne({ username });
-        return user?.role === 'admin';
-    } catch (e) {
-        console.error('Error verifying admin:', e);
-        return false;
-    }
-}
+import { verifyAdmin } from '@/lib/auth';
 
 export async function PUT(
     request: Request,

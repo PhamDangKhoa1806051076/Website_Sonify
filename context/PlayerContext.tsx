@@ -60,9 +60,18 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     const playerRef = useRef<unknown>(null);
 
     const { user, isAuthenticated } = useAuth();
+
+    // Fisher-Yates in-place shuffle — extracted to avoid duplication
+    const shuffleArray = useCallback(<T>(arr: T[]): T[] => {
+        const shuffled = [...arr];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }, []);
     
-    // Reusable fetch function
-    // Reusable fetch function
+    // Fetch all songs from database and update state
     const refreshSongs = useCallback(async () => {
         try {
             const response = await fetch('/api/songs');
@@ -365,29 +374,17 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     const shuffleQueue = useCallback(() => {
-        setQueue(prev => {
-            const shuffled = [...prev];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
-        });
-    }, []);
+        setQueue(prev => shuffleArray(prev));
+    }, [shuffleArray]);
 
     const shuffleAll = useCallback(() => {
         setPlaybackList(prev => {
             const listToShuffle = prev.length > 0 ? prev : allSongs;
-            const shuffled = [...listToShuffle];
-            for (let i = shuffled.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-            }
-            return shuffled;
+            return shuffleArray(listToShuffle);
         });
         shuffleQueue();
         setIsShuffle(true);
-    }, [shuffleQueue, allSongs]);
+    }, [shuffleQueue, shuffleArray, allSongs]);
 
     return (
         <PlayerContext.Provider value={{
