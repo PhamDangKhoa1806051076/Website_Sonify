@@ -38,7 +38,7 @@ interface PlayerContextType {
     shuffleAll: () => void;
     refreshSongs: () => Promise<void>;
     isQueueOpen: boolean;
-    setIsQueueOpen: (open: boolean) => void;
+    setIsQueueOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
