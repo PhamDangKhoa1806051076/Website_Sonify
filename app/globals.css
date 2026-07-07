@@ -2536,7 +2536,16 @@ h1, h2, h3, .logo span {
     transform: scale(0.97) !important;
 }
 
-/* ===== PREMIUM SCROLL ===== */
+/* ===== QUEUE PANEL OPEN STATE ===== */
+.queue-open .content {
+    padding-right: calc(300px + 2rem);
+}
+
+@media (max-width: 768px) {
+    .queue-open .content {
+        padding-right: 1rem;
+    }
+}
 .content {
     scroll-behavior: smooth;
 }
