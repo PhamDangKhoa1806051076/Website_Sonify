@@ -2537,13 +2537,24 @@ h1, h2, h3, .logo span {
 }
 
 /* ===== QUEUE PANEL OPEN STATE ===== */
-.queue-open .content {
-    padding-right: calc(300px + 2rem);
+.queue-open {
+    grid-template-columns: var(--sidebar-width) 1fr 300px;
+    grid-template-areas:
+        "sidebar content queue"
+        "player  player  player";
+}
+
+.queue-open.sidebar-collapsed {
+    grid-template-columns: var(--sidebar-collapsed-width) 1fr 300px;
 }
 
 @media (max-width: 768px) {
-    .queue-open .content {
-        padding-right: 1rem;
+    .queue-open {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "content"
+            "player"
+            "sidebar";
     }
 }
 .content {

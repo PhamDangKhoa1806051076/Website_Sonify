@@ -43,14 +43,13 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
 
     return (
         <div style={{
-            position: 'fixed',
-            top: 0,
-            right: 0,
+            gridArea: 'queue',
+            position: 'relative',
             width: '300px',
-            height: 'calc(100vh - var(--player-height))',
+            height: '100%',
             background: 'var(--bg-sidebar)',
             borderLeft: '1px solid var(--glass-border)',
-            zIndex: 1100,
+            zIndex: 100,
             overflowY: 'auto',
             animation: 'slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             boxShadow: '-12px 0 40px rgba(0,0,0,0.35), -1px 0 0 rgba(255,255,255,0.04)',

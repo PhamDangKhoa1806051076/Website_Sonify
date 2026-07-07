@@ -10,6 +10,7 @@ import AuthModal from '@/components/AuthModal';
 import AdminPanel from '@/components/AdminPanel';
 import Profile from '@/components/Profile';
 import FeedbackModal from '@/components/FeedbackModal';
+import QueuePanel from '@/components/QueuePanel';
 import { useLanguage } from '@/context/LanguageContext';
 import { usePlayer } from '@/context/PlayerContext';
 import { searchOnlineSongs, getGlobalTopSongs, getVietnamTopSongs, getTrendingSongs, getChineseTopSongs } from '@/services/musicService';
@@ -21,7 +22,7 @@ import { Song } from '@/data/constants';
 
 export default function Home() {
   const { t } = useLanguage();
-  const { likedSongs, playlists, allSongs, isQueueOpen } = usePlayer();
+  const { likedSongs, playlists, allSongs, isQueueOpen, setIsQueueOpen } = usePlayer();
 
   // Read tab from hash synchronously on first render to avoid flash
   const [activeTab, setActiveTabState] = useState<string>(() => {
@@ -372,6 +373,10 @@ export default function Home() {
           </AnimatePresence>
         )}
       </main>
+
+      {isQueueOpen && (
+        <QueuePanel isOpen={isQueueOpen} onClose={() => setIsQueueOpen(false)} />
+      )}
 
       <PlayerBar />
 

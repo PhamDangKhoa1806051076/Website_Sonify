@@ -4,7 +4,6 @@ import React, { useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { usePlayer } from '@/context/PlayerContext';
-import QueuePanel from './QueuePanel';
 
 const PlayerBar: React.FC = () => {
     const {
@@ -217,7 +216,6 @@ const PlayerBar: React.FC = () => {
                 </div>
             </div>
 
-            <QueuePanel isOpen={isQueueOpen} onClose={() => setIsQueueOpen(false)} />
             </motion.footer>
         </AnimatePresence>
     );
