@@ -52,3 +52,7 @@ skills-lock.json
 # local skill references
 taste-skill/
 redesign-skill.md
+
+# local docs (not for GitHub)
+README.md
+CHANGELOG.md
