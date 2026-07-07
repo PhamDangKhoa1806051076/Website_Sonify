@@ -304,11 +304,6 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                         </>
                     )}
 
-                    {/* Demo credentials */}
-                    <div className="demo-creds">
-                        <i className="fa-solid fa-circle-info" style={{ color: 'var(--primary-light)', flexShrink: 0 }}></i>
-                        <span>Dùng thử: <strong>user</strong> / <strong>1234</strong></span>
-                    </div>
                 </div>
             </motion.div>
         </motion.div>
