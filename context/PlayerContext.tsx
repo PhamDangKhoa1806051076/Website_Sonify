@@ -37,6 +37,8 @@ interface PlayerContextType {
     shuffleQueue: () => void;
     shuffleAll: () => void;
     refreshSongs: () => Promise<void>;
+    isQueueOpen: boolean;
+    setIsQueueOpen: (open: boolean) => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -55,6 +57,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     const [playlists, setPlaylists] = useState<{ id: string, name: string, songIds: (number | string)[] }[]>([]);
     const [queue, setQueue] = useState<Song[]>([]);
     const [youtubeUrl, setYoutubeUrl] = useState<string | null>(null);
+    const [isQueueOpen, setIsQueueOpen] = useState(false);
     
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const playerRef = useRef<unknown>(null);
@@ -392,7 +395,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             playSong, togglePlay, nextSong, prevSong, seek, setVolume, toggleShuffle, toggleRepeat,
             likedSongs, toggleLike,
             playlists, createPlaylist, deletePlaylist, addToPlaylist, removeFromPlaylist, createAndAddToPlaylist,
-            queue, allSongs, playbackList, addToNextUp, shuffleQueue, shuffleAll, refreshSongs
+            queue, allSongs, playbackList, addToNextUp, shuffleQueue, shuffleAll, refreshSongs,
+            isQueueOpen, setIsQueueOpen
         }}>
             {children}
             {/* Hidden ReactPlayer for YouTube Audio */}

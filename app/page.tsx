@@ -21,7 +21,7 @@ import { Song } from '@/data/constants';
 
 export default function Home() {
   const { t } = useLanguage();
-  const { likedSongs, playlists, allSongs } = usePlayer();
+  const { likedSongs, playlists, allSongs, isQueueOpen } = usePlayer();
 
   // Read tab from hash synchronously on first render to avoid flash
   const [activeTab, setActiveTabState] = useState<string>(() => {
@@ -186,7 +186,7 @@ export default function Home() {
   }, [searchQuery, displaySongs]);
 
   return (
-    <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+    <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''} ${isQueueOpen ? 'queue-open' : ''}`}>
       <Sidebar 
         activeTab={activeTab} 
         onTabChange={setActiveTab} 

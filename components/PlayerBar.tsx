@@ -11,10 +11,9 @@ const PlayerBar: React.FC = () => {
         currentSong, isPlaying, duration, currentTime, volume, isShuffle, isRepeat,
         togglePlay, nextSong, prevSong, seek, setVolume, toggleShuffle, toggleRepeat,
         likedSongs, toggleLike, playlists, addToPlaylist, createAndAddToPlaylist,
-        addToNextUp
+        addToNextUp, isQueueOpen, setIsQueueOpen
     } = usePlayer();
 
-    const [isQueueOpen, setIsQueueOpen] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [dropdownView, setDropdownView] = useState<'main' | 'playlists'>('main');
     const [newPlaylistName, setNewPlaylistName] = useState('');
