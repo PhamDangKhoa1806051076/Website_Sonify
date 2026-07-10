@@ -105,8 +105,7 @@ const AdminStats: React.FC<AdminStatsProps> = ({ songsCount, feedbacksCount }) =
                         lineHeight: '1', margin: 0, letterSpacing: '-0.03em'
                     }}>{feedbacksCount}</p>
                     <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px', opacity: 0.7 }}>
-                        <i className="fa-solid fa-arrow-right" style={{ marginRight: '5px', fontSize: '0.65rem' }}></i>
-                        Xem tại tab Góp ý → Quản lý User
+                        góp ý chờ xử lý
                     </p>
                 </div>
 
