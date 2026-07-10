@@ -54,7 +54,6 @@ const AdminStats: React.FC<AdminStatsProps> = ({ songsCount, feedbacksCount }) =
                         WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
                         lineHeight: '1', margin: 0, letterSpacing: '-0.03em'
                     }}>{songsCount}</p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px', opacity: 0.7 }}>bài trong thư viện</p>
                 </div>
 
                 {/* Stat: Góp ý */}
@@ -104,9 +103,6 @@ const AdminStats: React.FC<AdminStatsProps> = ({ songsCount, feedbacksCount }) =
                         color: feedbacksCount > 0 ? '#f59e0b' : 'var(--text-muted)',
                         lineHeight: '1', margin: 0, letterSpacing: '-0.03em'
                     }}>{feedbacksCount}</p>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px', opacity: 0.7 }}>
-                        góp ý chờ xử lý
-                    </p>
                 </div>
 
                 {/* Stat: Trạng thái */}
@@ -149,7 +145,6 @@ const AdminStats: React.FC<AdminStatsProps> = ({ songsCount, feedbacksCount }) =
                             lineHeight: '1', margin: 0, letterSpacing: '0.02em'
                         }}>ONLINE</p>
                     </div>
-                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '8px', opacity: 0.7 }}>tất cả dịch vụ hoạt động</p>
                 </div>
             </div>
         </div>
