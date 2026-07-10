@@ -235,6 +235,65 @@
     accent-color: #4f46e5;
 }
 
+/* ===== LIGHT THEME — ADMIN PANEL ===== */
+[data-theme='light'] .admin-table-container {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] .admin-table th {
+    background: rgba(0, 0, 0, 0.02);
+    color: #64748b;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+[data-theme='light'] .admin-table td {
+    color: #1e293b;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] .admin-table tr:hover td {
+    background: rgba(79, 70, 229, 0.03);
+}
+
+[data-theme='light'] .stat-card {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] .stat-info h3 {
+    color: #64748b;
+}
+
+[data-theme='light'] .stat-info p {
+    color: #0f172a;
+}
+
+[data-theme='light'] .btn-action {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #475569;
+}
+
+[data-theme='light'] .btn-action:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #0f172a;
+}
+
+[data-theme='light'] .btn-action.delete:hover {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.2);
+}
+
+[data-theme='light'] .role-badge {
+    background: rgba(79, 70, 229, 0.08);
+    color: #4f46e5;
+    border-color: rgba(79, 70, 229, 0.2);
+}
+
 [data-theme='blue'] {
     --bg-main: #000000;
     --bg-card: rgba(5, 10, 20, 0.85);

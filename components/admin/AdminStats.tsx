@@ -17,11 +17,11 @@ const AdminStats: React.FC<AdminStatsProps> = ({ songsCount, feedbacksCount }) =
             }}>
                 {/* Stat: Tổng bài hát */}
                 <div style={{
-                    background: 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(22,32,51,0.75) 100%)',
+                    background: 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, var(--bg-card) 100%)',
                     padding: '1.6rem 1.8rem',
                     borderRadius: '20px',
                     border: '1px solid rgba(99,102,241,0.18)',
-                    boxShadow: '0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    boxShadow: 'var(--card-shadow)',
                     transition: 'transform 0.25s ease, box-shadow 0.25s ease',
                     position: 'relative',
                     overflow: 'hidden'
@@ -60,12 +60,12 @@ const AdminStats: React.FC<AdminStatsProps> = ({ songsCount, feedbacksCount }) =
                 {/* Stat: Góp ý */}
                 <div style={{
                     background: feedbacksCount > 0
-                        ? 'linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(22,32,51,0.75) 100%)'
-                        : 'linear-gradient(135deg, rgba(22,32,51,0.75) 0%, rgba(15,23,42,0.5) 100%)',
+                        ? 'linear-gradient(135deg, rgba(245,158,11,0.1) 0%, var(--bg-card) 100%)'
+                        : 'var(--bg-card)',
                     padding: '1.6rem 1.8rem',
                     borderRadius: '20px',
-                    border: `1px solid ${feedbacksCount > 0 ? 'rgba(245,158,11,0.2)' : 'rgba(255,255,255,0.06)'}`,
-                    boxShadow: '0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    border: `1px solid ${feedbacksCount > 0 ? 'rgba(245,158,11,0.2)' : 'var(--glass-border)'}`,
+                    boxShadow: 'var(--card-shadow)',
                     transition: 'transform 0.25s ease, box-shadow 0.25s ease',
                     position: 'relative',
                     overflow: 'hidden'
@@ -112,11 +112,11 @@ const AdminStats: React.FC<AdminStatsProps> = ({ songsCount, feedbacksCount }) =
 
                 {/* Stat: Trạng thái */}
                 <div style={{
-                    background: 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(22,32,51,0.75) 100%)',
+                    background: 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, var(--bg-card) 100%)',
                     padding: '1.6rem 1.8rem',
                     borderRadius: '20px',
                     border: '1px solid rgba(34,197,94,0.15)',
-                    boxShadow: '0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)',
+                    boxShadow: 'var(--card-shadow)',
                     transition: 'transform 0.25s ease',
                     position: 'relative',
                     overflow: 'hidden'
