@@ -60,7 +60,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             setUser(savedUser);
             startHeartbeat(savedUser);
         }
-        // Cleanup on unmount
+
+        // Handle GitHub OAuth redirect — nhận user từ URL param ?github_user=...
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const githubUserParam = params.get('github_user');
+            const authError = params.get('auth_error');
+
+            if (githubUserParam) {
+                try {
+                    const userData = JSON.parse(decodeURIComponent(githubUserParam)) as User;
+                    setUser(userData);
+                    if (userData.deviceId) {
+                        localStorage.setItem('sonify_deviceId', userData.deviceId);
+                    }
+                    sessionStorage.setItem('sonify_session', JSON.stringify(userData));
+                    startHeartbeat(userData);
+                } catch { /* ignore parse error */ }
+                // Xoá param khỏi URL sau khi xử lý
+                const clean = window.location.pathname + window.location.hash;
+                window.history.replaceState({}, '', clean);
+            }
+
+            if (authError) {
+                console.error('GitHub OAuth error:', authError);
+                const clean = window.location.pathname + window.location.hash;
+                window.history.replaceState({}, '', clean);
+            }
+        }
+
         return () => stopHeartbeat();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

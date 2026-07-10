@@ -6,15 +6,17 @@ export interface IUser extends Document {
     name: string;
     phoneNumber?: string;
     role: 'admin' | 'user';
-    likedSongs: string[]; // Store Song IDs or custom ID strings
+    likedSongs: string[];
     playlists: { id: string, name: string, songIds: string[] }[];
     createdAt: Date;
     sessions: { deviceId: string; lastActive: Date; label: string }[];
+    githubId?: string;
+    avatarUrl?: string;
 }
 
 const UserSchema: Schema = new Schema({
     username: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     name: { type: String, required: true },
     phoneNumber: { type: String },
     role: { type: String, enum: ['admin', 'user'], default: 'user' },
@@ -29,7 +31,9 @@ const UserSchema: Schema = new Schema({
         deviceId: String,
         lastActive: { type: Date, default: Date.now },
         label: String
-    }]
+    }],
+    githubId: { type: String, sparse: true },
+    avatarUrl: { type: String }
 });
 
 // Since Next.js API routes are stateless, we avoid compiling the model multiple times
