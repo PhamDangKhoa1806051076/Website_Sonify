@@ -53,6 +53,188 @@
     --clock-border: rgba(79, 70, 229, 0.2);
 }
 
+/* ===== LIGHT THEME — HEADER OVERRIDES ===== */
+[data-theme='light'] .top-nav {
+    background: rgba(255, 255, 255, 0.82);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(28px) saturate(160%);
+}
+
+[data-theme='light'] .search-bar {
+    background: rgba(0, 0, 0, 0.035);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='light'] .search-bar:focus-within {
+    background: rgba(79, 70, 229, 0.04);
+    border-color: rgba(79, 70, 229, 0.35);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.08);
+}
+
+[data-theme='light'] .search-bar i {
+    color: #94a3b8;
+}
+
+[data-theme='light'] .search-bar input {
+    color: #0f172a;
+}
+
+[data-theme='light'] .search-bar input::placeholder {
+    color: #94a3b8;
+}
+
+[data-theme='light'] .user-row-group {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+[data-theme='light'] #greeting-text {
+    color: #64748b;
+}
+
+[data-theme='light'] .header-settings {
+    background: rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    color: #64748b;
+}
+
+[data-theme='light'] .header-settings:hover {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(79, 70, 229, 0.25);
+    color: #0f172a;
+}
+
+[data-theme='light'] .user-dropdown {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='light'] .user-dropdown button {
+    color: #1e293b;
+}
+
+[data-theme='light'] .user-dropdown button:hover {
+    background: rgba(79, 70, 229, 0.06);
+    color: #4f46e5;
+}
+
+[data-theme='light'] .settings-dropdown {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='light'] .settings-menu-item,
+[data-theme='light'] .lang-option {
+    color: #1e293b;
+}
+
+[data-theme='light'] .settings-menu-item:hover,
+[data-theme='light'] .lang-option:hover {
+    background: rgba(79, 70, 229, 0.06);
+    color: #4f46e5;
+}
+
+[data-theme='light'] .settings-menu-item .item-left i {
+    color: #64748b;
+}
+
+[data-theme='light'] .submenu-header {
+    color: #1e293b;
+    border-bottom-color: rgba(0, 0, 0, 0.07);
+}
+
+[data-theme='light'] .submenu-header:hover {
+    background: rgba(79, 70, 229, 0.05);
+    color: #4f46e5;
+}
+
+[data-theme='light'] .avatar-fallback {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    border-color: rgba(79, 70, 229, 0.3);
+}
+
+[data-theme='light'] .btn-login-header {
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+}
+
+/* ===== LIGHT THEME — SIDEBAR & PLAYER BAR ===== */
+[data-theme='light'] .sidebar {
+    border-right: 1px solid rgba(0, 0, 0, 0.07);
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme='light'] .nav-menu li {
+    color: #475569;
+}
+
+[data-theme='light'] .nav-menu li:hover {
+    background: rgba(79, 70, 229, 0.06);
+    color: #1e293b;
+    box-shadow: none;
+}
+
+[data-theme='light'] .nav-menu li.active {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3);
+}
+
+[data-theme='light'] .playlists li {
+    color: #475569;
+}
+
+[data-theme='light'] .playlists li:hover {
+    background: rgba(79, 70, 229, 0.06);
+    color: #1e293b;
+    box-shadow: none;
+}
+
+[data-theme='light'] .player-bar {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.06), 0 -1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme='light'] .btn-icon {
+    color: #64748b;
+}
+
+[data-theme='light'] .btn-icon:hover {
+    color: #0f172a;
+    background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='light'] .btn-icon.active {
+    color: #4f46e5;
+}
+
+[data-theme='light'] .track-info h4 {
+    color: #0f172a;
+}
+
+[data-theme='light'] .track-info p {
+    color: #64748b;
+}
+
+[data-theme='light'] .playback-progress span {
+    color: #94a3b8;
+}
+
+[data-theme='light'] .progress-bar-container {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='light'] .volume-control {
+    color: #64748b;
+}
+
+[data-theme='light'] .volume-control input[type="range"] {
+    background: rgba(0, 0, 0, 0.08);
+    accent-color: #4f46e5;
+}
+
 [data-theme='blue'] {
     --bg-main: #000000;
     --bg-card: rgba(5, 10, 20, 0.85);
