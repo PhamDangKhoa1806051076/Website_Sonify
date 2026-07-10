@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useCallback } from 'react';
 import Image from 'next/image';
 import { Song } from '@/data/constants';
 import { usePlayer } from '@/context/PlayerContext';
@@ -13,9 +13,10 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
     const { playSong, currentSong, isPlaying } = usePlayer();
 
     const isCurrent = currentSong?.id === song.id;
+    const handleClick = useCallback(() => playSong(song), [playSong, song]);
 
     return (
-        <div className={`song-card ${isCurrent ? 'active' : ''}`} onClick={() => playSong(song)}>
+        <div className={`song-card ${isCurrent ? 'active' : ''}`} onClick={handleClick}>
             <div className="song-card-inner">
                 <div className="img-wrap" style={{ position: 'relative' }}>
                     <Image 

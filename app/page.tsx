@@ -35,12 +35,11 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
   // Update URL hash silently (no scroll jump) when tab changes
-  const setActiveTab = (tab: string) => {
-    // history.replaceState avoids the browser's scroll-to-top behaviour
+  const setActiveTab = useCallback((tab: string) => {
     history.replaceState(null, '', `#${tab}`);
     setActiveTabState(tab);
-    setSelectedCategory(''); // Reset category filters on tab switch
-  };
+    setSelectedCategory('');
+  }, []);
 
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -60,9 +59,8 @@ export default function Home() {
   useEffect(() => {
     fetch('/api/categories')
       .then(r => r.json())
-      .then(d => {
-        if (d.success) setCategories(d.data);
-      });
+      .then(d => { if (d.success) setCategories(d.data); })
+      .catch(err => console.error('Failed to fetch categories:', err));
   }, []);
 
   useEffect(() => {
@@ -333,25 +331,21 @@ export default function Home() {
                   <ChartSection 
                     title={t('charts-trending')} 
                     songs={trendingSongs} 
-                    titleColor="#ff4d4d" 
                     bgColor="rgba(60, 20, 20, 0.4)"
                   />
                   <ChartSection 
                     title={t('charts-vietnam')} 
                     songs={vietnamSongs} 
-                    titleColor="#facc15" 
                     bgColor="rgba(40, 40, 10, 0.4)"
                   />
                   <ChartSection 
                     title={t('charts-chinese')} 
                     songs={chineseSongs} 
-                    titleColor="#a855f7" 
                     bgColor="rgba(30, 20, 50, 0.4)"
                   />
                   <ChartSection 
                     title={t('charts-usuk')} 
                     songs={usUkSongs} 
-                    titleColor="#3b82f6" 
                     bgColor="rgba(10, 30, 60, 0.4)"
                   />
                 </div>

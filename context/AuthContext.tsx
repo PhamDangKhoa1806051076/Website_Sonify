@@ -26,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
     const heartbeatRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    const sendHeartbeat = async (currentUser: User) => {
+    const sendHeartbeat = useCallback(async (currentUser: User) => {
         const deviceId = localStorage.getItem('sonify_deviceId');
         if (!deviceId || !currentUser?.username) return;
         try {
@@ -36,14 +36,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 body: JSON.stringify({ username: currentUser.username, deviceId })
             });
         } catch { /* silent fail */ }
-    };
+    }, []);
 
-    const startHeartbeat = (currentUser: User) => {
+    const startHeartbeat = useCallback((currentUser: User) => {
         if (heartbeatRef.current) clearInterval(heartbeatRef.current);
-        // Send immediately on login/page load
         sendHeartbeat(currentUser);
         heartbeatRef.current = setInterval(() => sendHeartbeat(currentUser), HEARTBEAT_INTERVAL);
-    };
+    }, [sendHeartbeat]);
 
     const stopHeartbeat = () => {
         if (heartbeatRef.current) {

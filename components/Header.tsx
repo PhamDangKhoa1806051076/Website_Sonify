@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useLanguage } from '@/context/LanguageContext';
 import { useAuth } from '@/context/AuthContext';
@@ -14,7 +14,7 @@ interface HeaderProps {
     onSearch: (query: string) => void;
 }
 
-const UserAvatar: React.FC<{ user: { name?: string }, onClick: () => void }> = ({ user, onClick }) => {
+const UserAvatar: React.FC<{ user: { name?: string }, onClick: () => void }> = React.memo(({ user, onClick }) => {
     const [imgError, setImgError] = useState(false);
     const initials = user.name ? user.name.charAt(0).toUpperCase() : '?';
     
@@ -37,7 +37,7 @@ const UserAvatar: React.FC<{ user: { name?: string }, onClick: () => void }> = (
             )}
         </>
     );
-};
+});
 
 const Header: React.FC<HeaderProps> = ({ setActiveTab, onLoginClick, onFeedbackClick, onSearch }) => {
     const { t, language, setLanguage } = useLanguage();
@@ -80,11 +80,11 @@ const Header: React.FC<HeaderProps> = ({ setActiveTab, onLoginClick, onFeedbackC
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = useCallback(() => {
         logout();
         setIsUserDropdownOpen(false);
         setActiveTab('home');
-    };
+    }, [logout, setActiveTab]);
 
     return (
         <header className="top-nav">

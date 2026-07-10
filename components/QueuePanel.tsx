@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import Image from 'next/image';
 import { usePlayer } from '@/context/PlayerContext';
 
@@ -12,14 +12,22 @@ interface QueuePanelProps {
 const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
     const { currentSong, playSong, queue, shuffleQueue, isShuffle, shuffleAll, playbackList, allSongs } = usePlayer();
 
-    if (!isOpen) return null;
+    const currentSongsList = useMemo(
+        () => playbackList.length > 0 ? playbackList : allSongs,
+        [playbackList, allSongs]
+    );
 
-    const currentSongsList = playbackList.length > 0 ? playbackList : allSongs;
-    const currentIndex = currentSong ? currentSongsList.findIndex(s => s.id === currentSong.id) : 0;
-    const regularUpcoming = [
+    const currentIndex = useMemo(
+        () => currentSong ? currentSongsList.findIndex(s => s.id === currentSong.id) : 0,
+        [currentSong, currentSongsList]
+    );
+
+    const regularUpcoming = useMemo(() => [
         ...currentSongsList.slice(currentIndex + 1),
         ...currentSongsList.slice(0, currentIndex)
-    ];
+    ], [currentSongsList, currentIndex]);
+
+    if (!isOpen) return null;
 
     const labelStyle: React.CSSProperties = {
         color: 'var(--text-muted)',

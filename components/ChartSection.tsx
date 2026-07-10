@@ -8,7 +8,6 @@ import { usePlayer } from '@/context/PlayerContext';
 interface ChartSectionProps {
   title: string;
   songs: Song[];
-  titleColor?: string;
   bgColor?: string;
 }
 
@@ -148,4 +147,4 @@ const ChartSection: React.FC<ChartSectionProps> = ({
   );
 };
 
-export default ChartSection;
+export default React.memo(ChartSection);

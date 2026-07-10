@@ -60,7 +60,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     const [isQueueOpen, setIsQueueOpen] = useState(false);
     
     const audioRef = useRef<HTMLAudioElement | null>(null);
-    const playerRef = useRef<unknown>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const playerRef = useRef<any>(null);
 
     const { user, isAuthenticated } = useAuth();
 
@@ -148,7 +149,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         // Debounce sync slightly to avoid spamming
         const timer = setTimeout(syncToCloud, 2000);
         return () => clearTimeout(timer);
-    }, [likedSongs, playlists, isAuthenticated, user]);
+    }, [likedSongs, playlists, isAuthenticated, user?.username]);
 
 
     const playSong = useCallback(async (song: Song) => {
@@ -215,7 +216,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
-    const togglePlay = async () => {
+    const togglePlay = useCallback(async () => {
         try {
             if (isPlaying) {
                 if (audioRef.current) audioRef.current.pause();
@@ -227,7 +228,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         } catch (error) {
             console.warn("Toggle playback intercepted", error);
         }
-    };
+    }, [isPlaying]);
 
     const nextSong = useCallback(() => {
         if (!currentSong) return;
@@ -412,9 +413,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
                     pointerEvents: 'none',
                     zIndex: -1
                 }}>
-                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     {React.createElement(ReactPlayer as any, {
-                        ref: playerRef as never,
+                        ref: playerRef,
                         url: youtubeUrl,
                         playing: isPlaying,
                         volume: volume,
