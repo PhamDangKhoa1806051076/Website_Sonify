@@ -14,7 +14,7 @@ interface HeaderProps {
     onSearch: (query: string) => void;
 }
 
-const UserAvatar: React.FC<{ user: { name?: string }, onClick: () => void }> = React.memo(({ user, onClick }) => {
+const UserAvatar: React.FC<{ user: { name?: string }, onClick: () => void }> = React.memo(function UserAvatar({ user, onClick }) {
     const [imgError, setImgError] = useState(false);
     const initials = user.name ? user.name.charAt(0).toUpperCase() : '?';
     

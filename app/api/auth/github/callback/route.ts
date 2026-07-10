@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
 
             if (!user) {
                 // Tạo username độc nhất từ GitHub login
-                let baseUsername = githubUser.login.toLowerCase().replace(/[^a-z0-9_]/g, '_');
+                const baseUsername = githubUser.login.toLowerCase().replace(/[^a-z0-9_]/g, '_');
                 let username = baseUsername;
                 let counter = 1;
                 while (await User.findOne({ username })) {

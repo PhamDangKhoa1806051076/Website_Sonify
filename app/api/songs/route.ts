@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Song from '@/models/Song';
-import User from '@/models/User';
 import { songs as defaultSongs } from '@/data/constants';
 import { verifyAdmin } from '@/lib/auth';
 
