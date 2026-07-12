@@ -17,10 +17,15 @@ export async function POST(request: Request) {
             return NextResponse.json({ success: false, message: 'Không tìm thấy tên đăng nhập này' }, { status: 404 });
         }
 
-        // Kiểm tra quyền và logic xác thực dựa vào loại tài khoản
+        // Kiểm tra quyền xác thực dựa vào loại tài khoản
         if (user.role === 'admin') {
-            if (authKey !== '123') {
-                return NextResponse.json({ success: false, message: 'Mật khẩu tạm xác thực không đúng' }, { status: 401 });
+            // Admin phải xác thực bằng mật khẩu hiện tại
+            if (!user.password) {
+                return NextResponse.json({ success: false, message: 'Không thể xác thực tài khoản admin' }, { status: 400 });
+            }
+            const isCurrentPasswordValid = await bcrypt.compare(authKey, user.password);
+            if (!isCurrentPasswordValid) {
+                return NextResponse.json({ success: false, message: 'Mật khẩu xác nhận không đúng' }, { status: 401 });
             }
         } else {
             // Là người dùng thông thường
@@ -35,7 +40,7 @@ export async function POST(request: Request) {
         // Cập nhật mật khẩu mới
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);
-        
+
         user.password = hashedPassword;
         await user.save();
 
@@ -46,9 +51,9 @@ export async function POST(request: Request) {
 
     } catch (error) {
         console.error('Reset password error:', error);
-        return NextResponse.json({ 
-            success: false, 
-            message: 'Lỗi hệ thống, vui lòng thử lại sau.' 
+        return NextResponse.json({
+            success: false,
+            message: 'Lỗi hệ thống, vui lòng thử lại sau.'
         }, { status: 500 });
     }
 }

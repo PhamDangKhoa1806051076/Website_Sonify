@@ -10,10 +10,23 @@ export async function GET(request: Request) {
         }
 
         await dbConnect();
-        const users = await User.find({}, '-password'); // Don't return passwords
-        return NextResponse.json({ success: true, data: users });
+        const url = new URL(request.url);
+        const page = Math.max(1, parseInt(url.searchParams.get('page') || '1'));
+        const limit = Math.min(100, parseInt(url.searchParams.get('limit') || '50'));
+        const skip = (page - 1) * limit;
+
+        const [users, total] = await Promise.all([
+            User.find({}, '-password -sessions').lean().skip(skip).limit(limit),
+            User.countDocuments()
+        ]);
+
+        return NextResponse.json({
+            success: true,
+            data: users,
+            pagination: { page, limit, total, pages: Math.ceil(total / limit) }
+        });
     } catch (error) {
-        return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 400 });
+        return NextResponse.json({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
     }
 }
 
@@ -89,7 +102,7 @@ export async function DELETE(request: Request) {
         await dbConnect();
         const url = new URL(request.url);
         const username = url.searchParams.get('username');
-        
+
         if (!username) {
             return NextResponse.json({ success: false, error: 'Thiếu tên đăng nhập' }, { status: 400 });
         }

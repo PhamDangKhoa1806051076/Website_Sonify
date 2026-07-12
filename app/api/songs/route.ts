@@ -36,35 +36,28 @@ export async function GET() {
             // AUTO-SETUP: Sync missing default songs if count doesn't match
             if (songs.length < defaultSongs.length) {
                 console.log(`--- SYNCING MISSING SONGS (${songs.length} -> ${defaultSongs.length}) ---`);
-                for (const s of defaultSongs) {
-                    const songId = s.id.toString();
-                    const exists = await Song.exists({ customId: songId });
-                    if (!exists) {
-                        try {
-                            // Seed default categories matching default songs
-                            let defaultCategory = '';
-                            if (s.title.includes('Còn Gì Đẹp Hơn') || s.title.includes('4 Mùa Thương Em') || s.title.includes('Anh Thanh Niên') || s.title.includes('Em Ổn Không')) {
-                                defaultCategory = 'v-pop';
-                            } else if (s.title.includes('Daylight') || s.title.includes('Miss You') || s.title.includes('I Just Might')) {
-                                defaultCategory = 'us-uk';
-                            } else if (s.title.includes('Tokyo Cypher') || s.title.includes('Ex\'s Hate Me')) {
-                                defaultCategory = 'v-pop';
-                            }
+                const existingIds = new Set(songs.map(s => s.customId));
+                const missingSongs = defaultSongs.filter(s => !existingIds.has(s.id.toString()));
 
-                            await Song.create({
-                                customId: songId,
-                                title: s.title,
-                                artist: s.artist,
-                                cover: s.cover,
-                                src: s.src,
-                                category: defaultCategory
-                            });
-                        } catch (e) {
-                            console.error(`Failed to seed song ${songId}:`, e);
+                if (missingSongs.length > 0) {
+                    const docsToInsert = missingSongs.map(s => {
+                        let defaultCategory = 'v-pop';
+                        if (s.title.includes('Daylight') || s.title.includes('Miss You') || s.title.includes('I Just Might')) {
+                            defaultCategory = 'us-uk';
                         }
-                    }
+                        return {
+                            customId: s.id.toString(),
+                            title: s.title,
+                            artist: s.artist,
+                            cover: s.cover,
+                            src: s.src,
+                            category: defaultCategory
+                        };
+                    });
+                    // Bulk insert — 1 query instead of N
+                    await Song.insertMany(docsToInsert, { ordered: false }).catch(() => { });
+                    songs = await Song.find({});
                 }
-                songs = await Song.find({}); // Refresh
             }
 
             if (songs.length > 0) {
@@ -86,17 +79,17 @@ export async function GET() {
 
         // FALLBACK: If DB fails or is empty, return constants
         console.log('--- USING STATIC FALLBACK DATA ---');
-        return NextResponse.json({ 
-            success: true, 
-            data: defaultSongs.map(s => ({ ...s, category: '' })), 
+        return NextResponse.json({
+            success: true,
+            data: defaultSongs.map(s => ({ ...s, category: '' })),
             source: 'static-fallback',
             dbError: 'Database unavailable, showing default songs.'
         });
 
     } catch (error) {
-        return NextResponse.json({ 
-            success: false, 
-            error: error instanceof Error ? error.message : 'Unknown error' 
+        return NextResponse.json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error'
         }, { status: 500 });
     }
 }
@@ -109,7 +102,7 @@ export async function POST(request: Request) {
 
         await dbConnect();
         const body = await request.json();
-        
+
         if (!body.customId) {
             body.customId = Date.now().toString();
         }
@@ -117,9 +110,9 @@ export async function POST(request: Request) {
         const song = await Song.create(body);
         return NextResponse.json({ success: true, data: song });
     } catch (error) {
-        return NextResponse.json({ 
-            success: false, 
-            error: error instanceof Error ? error.message : 'Unknown error' 
+        return NextResponse.json({
+            success: false,
+            error: error instanceof Error ? error.message : 'Unknown error'
         }, { status: 400 });
     }
 }

@@ -22,6 +22,10 @@ const SongSchema: Schema = new Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
+// Index for category filtering queries
+SongSchema.index({ category: 1 });
+SongSchema.index({ title: 'text', artist: 'text' }); // Text search
+
 const Song: Model<ISong> = mongoose.models.Song || mongoose.model<ISong>('Song', SongSchema);
 
 export default Song;

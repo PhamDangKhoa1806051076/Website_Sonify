@@ -36,6 +36,12 @@ const UserSchema: Schema = new Schema({
     avatarUrl: { type: String }
 });
 
+// Indexes for performance
+UserSchema.index({ username: 1 });                        // Already unique, explicit for clarity
+UserSchema.index({ githubId: 1 }, { sparse: true });      // OAuth lookup
+UserSchema.index({ 'sessions.deviceId': 1 });             // Heartbeat + login lookups
+UserSchema.index({ 'sessions.lastActive': 1 });           // Online status queries
+
 // Since Next.js API routes are stateless, we avoid compiling the model multiple times
 const User: Model<IUser> = mongoose.models.User || mongoose.model<IUser>('User', UserSchema);
 
