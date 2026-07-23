@@ -2452,22 +2452,76 @@ h1, h2, h3, .logo span {
         height: var(--player-height);
     }
 
-    /* Mobile player: show track + controls in one row, hide extra */
+    /* Mobile player: track info in 1 centered row with heart and plus on sides */
     .current-track {
         width: 100%;
-        gap: 10px;
+        display: grid;
+        grid-template-columns: 36px 1fr 36px;
+        align-items: center;
+        gap: 6px;
     }
 
     .track-img {
         display: none !important;
     }
 
+    .track-actions {
+        display: contents;
+    }
+
+    .like-btn {
+        order: 1;
+        justify-self: start;
+    }
+
+    .track-info {
+        order: 2;
+        margin-right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+        overflow: hidden;
+        text-align: center;
+    }
+
     .track-info h4 {
         font-size: 0.85rem;
+        margin-bottom: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 1;
     }
 
     .track-info p {
+        font-size: 0.78rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex-shrink: 1;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .track-info p::before {
+        content: "•";
+        color: var(--text-muted);
+        opacity: 0.5;
         font-size: 0.75rem;
+    }
+
+    .playlist-add-container {
+        order: 3;
+        justify-self: end;
+        position: relative;
+    }
+
+    .playlist-add-container .action-dropdown {
+        left: auto;
+        right: 0;
     }
 
     /* Hide extra controls (volume, queue) on mobile */
