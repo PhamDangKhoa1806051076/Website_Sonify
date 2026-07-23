@@ -367,7 +367,7 @@ h1, h2, h3, .logo span {
         "sidebar content"
         "player player";
     grid-template-columns: var(--sidebar-width) 1fr;
-    grid-template-rows: calc(100vh - var(--player-height)) var(--player-height);
+    grid-template-rows: 1fr;
     height: 100vh;
     transition: grid-template-columns 0.3s ease;
     width: 100vw;
@@ -375,8 +375,23 @@ h1, h2, h3, .logo span {
     position: relative;
 }
 
+.content {
+    grid-area: content;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1.5rem 2rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+    padding-bottom: calc(88px + 1.5rem);
+    transition: padding-bottom 0.35s ease;
+}
+
 .sidebar-collapsed {
     grid-template-columns: var(--sidebar-collapsed-width) 1fr;
+}
+
+.no-player .content {
+    padding-bottom: 1.5rem;
 }
 
 /* ===== SIDEBAR ===== */
@@ -513,8 +528,10 @@ h1, h2, h3, .logo span {
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1.5rem 2rem;
+    padding-bottom: calc(88px + 1.5rem);
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) transparent;
+    transition: padding-bottom 0.35s ease;
 }
 
 .content::-webkit-scrollbar { width: 5px; }
@@ -1181,7 +1198,10 @@ h1, h2, h3, .logo span {
    9. PLAYER BAR & CONTROLS
    ========================================================================== */
 .player-bar {
-    grid-area: player;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
     background: var(--bg-sidebar);
     border-top: 1px solid var(--glass-border);
     box-shadow: 0 -8px 32px rgba(0,0,0,0.25), 0 -1px 0 rgba(255,255,255,0.04);
@@ -1192,8 +1212,7 @@ h1, h2, h3, .logo span {
     padding: 0 1.5rem;
     gap: 1rem;
     z-index: 2000;
-    height: var(--player-height);
-    position: relative;
+    height: 88px;
     overflow: hidden;
 }
 

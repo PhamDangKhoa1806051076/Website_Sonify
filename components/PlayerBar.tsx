@@ -27,15 +27,15 @@ const PlayerBar: React.FC = () => {
     const progress = useMemo(() => duration ? (currentTime / duration) * 100 : 0, [currentTime, duration]);
     const isLiked = useMemo(() => currentSong ? likedSongs.includes(currentSong.id) : false, [likedSongs, currentSong]);
 
-    if (!currentSong) return null;
-
     return (
         <AnimatePresence>
+            {currentSong && isPlaying && (
             <motion.footer
                 className="player-bar"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                exit={{ y: 20, opacity: 0 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
             {/* LEFT — Track Info */}
             <div className="current-track">
@@ -217,6 +217,7 @@ const PlayerBar: React.FC = () => {
             </div>
 
             </motion.footer>
+            )}
         </AnimatePresence>
     );
 };

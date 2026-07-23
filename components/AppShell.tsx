@@ -26,7 +26,7 @@ export const useSearch = () => useContext(SearchContext);
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
-  const { isQueueOpen, setIsQueueOpen } = usePlayer();
+  const { currentSong, isPlaying, isQueueOpen, setIsQueueOpen } = usePlayer();
 
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -74,7 +74,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SearchContext.Provider value={{ searchQuery, setSearchQuery }}>
-      <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''} ${isQueueOpen ? 'queue-open' : ''}`}>
+      <div className={`app-container ${isSidebarCollapsed ? 'sidebar-collapsed' : ''} ${isQueueOpen ? 'queue-open' : ''} ${!(currentSong && isPlaying) ? 'no-player' : ''}`}>
         <Sidebar
           activeTab={activeTab}
           onTabChange={handleTabChange}

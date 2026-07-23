@@ -83,8 +83,8 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             if (data.success) {
                 setAllSongs(data.data);
                 setPlaybackList(data.data);
-                // Only set currentSong if it hasn't been set yet
-                setCurrentSong(prev => prev || (data.data.length > 0 ? data.data[0] : null));
+                // Keep currentSong as null initially so player bar only shows when playing
+                setCurrentSong(prev => prev);
             }
         } catch (error) {
             console.error('Failed to fetch songs:', error);
@@ -230,28 +230,33 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         }
     }, [isPlaying]);
 
-    const nextSong = useCallback(() => {
-        if (!currentSong) return;
+    const nextSong = useCallback((): boolean => {
+        if (!currentSong) return false;
         
         if (queue.length > 0) {
             const nextFromQueue = queue[0];
             setQueue(prev => prev.slice(1));
             playSong(nextFromQueue);
-            return;
+            return true;
         }
 
-        let nextIdx;
         const currentSongsList = playbackList.length > 0 ? playbackList : allSongs; 
+        if (currentSongsList.length === 0) return false;
+        
         const currentIdx = currentSongsList.findIndex(s => s.id === currentSong.id);
         
+        let nextIdx;
         if (isShuffle) {
             nextIdx = Math.floor(Math.random() * currentSongsList.length);
         } else {
             nextIdx = currentIdx === -1 ? 0 : (currentIdx + 1) % currentSongsList.length;
+            if (!isRepeat && nextIdx === 0) return false;
         }
         if (currentSongsList[nextIdx]) {
             playSong(currentSongsList[nextIdx]);
+            return true;
         }
+        return false;
     }, [currentSong, queue, allSongs, playbackList, isShuffle, playSong]);
 
     useEffect(() => {
@@ -272,8 +277,11 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             if (isRepeat) {
                 audio.currentTime = 0;
                 audio.play();
-            } else {
-                nextSong();
+            } else if (!nextSong()) {
+                setCurrentSong(null);
+                setIsPlaying(false);
+                setCurrentTime(0);
+                setDuration(0);
             }
         };
 
@@ -423,7 +431,14 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
                         onStart: () => console.log('YouTube Playback Started'),
                         onProgress: (state: { playedSeconds: number }) => setCurrentTime(state.playedSeconds),
                         onDuration: (d: number) => setDuration(d),
-                        onEnded: nextSong,
+                        onEnded: () => {
+                            if (!isRepeat && !nextSong()) {
+                                setCurrentSong(null);
+                                setIsPlaying(false);
+                                setCurrentTime(0);
+                                setDuration(0);
+                            }
+                        },
                         onError: (e: unknown) => {
                             console.error('ReactPlayer Error:', e);
                             alert('Lỗi khi phát video YouTube. Có thể do video bị giới hạn hoặc không hỗ trợ nhúng.');
