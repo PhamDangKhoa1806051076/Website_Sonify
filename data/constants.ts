@@ -6,7 +6,6 @@ export interface Song {
     src: string;
     isOnline?: boolean;
     category?: string;
-    lyrics?: string;
 }
 
 export const songs: Song[] = [
