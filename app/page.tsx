@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import SongGrid from '@/components/SongGrid';
 import HomeBanner from '@/components/HomeBanner';
@@ -48,35 +48,22 @@ export default function Home() {
   }, []);
 
   // Debounced online search
-  const fetchOnline = useCallback(
-    (() => {
-      let timeoutId: NodeJS.Timeout;
-      return (query: string) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(async () => {
-          if (!query.trim()) {
-            setOnlineSongs([]);
-            setIsSearching(false);
-            return;
-          }
-          setIsSearching(true);
-          const results = await searchOnlineSongs(query);
-          setOnlineSongs(results);
-          setIsSearching(false);
-        }, 800);
-      };
-    })(),
-    []
-  );
-
   useEffect(() => {
-    if (searchQuery.trim()) {
-      fetchOnline(searchQuery);
-    } else {
+    if (!searchQuery.trim()) {
       setOnlineSongs([]);
       setIsSearching(false);
+      return;
     }
-  }, [searchQuery, fetchOnline]);
+
+    setIsSearching(true);
+    const timer = setTimeout(async () => {
+      const results = await searchOnlineSongs(searchQuery);
+      setOnlineSongs(results);
+      setIsSearching(false);
+    }, 800);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Compute displayed local songs
   const displaySongs = useMemo(() => {

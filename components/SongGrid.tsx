@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import SongCard from './SongCard';
 import { Song } from '@/data/constants';
 
@@ -9,7 +9,7 @@ interface SongGridProps {
     songs: Song[];
 }
 
-const containerVariants = {
+const containerVariants: Variants = {
     hidden: {},
     show: {
         transition: {
@@ -19,7 +19,7 @@ const containerVariants = {
     }
 };
 
-const itemVariants: any = {
+const itemVariants: Variants = {
     hidden: { opacity: 0, y: 18, scale: 0.97 },
     show: {
         opacity: 1,
@@ -27,7 +27,7 @@ const itemVariants: any = {
         scale: 1,
         transition: {
             duration: 0.38,
-            ease: [0.16, 1, 0.3, 1]
+            ease: [0.16, 1, 0.3, 1] as unknown as number
         }
     }
 };

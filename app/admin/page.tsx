@@ -1,11 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import AdminPanel from '@/components/AdminPanel';
 
-export default function AdminPage() {
+function AdminContent() {
   const searchParams = useSearchParams();
   const rawView = searchParams.get('view');
   const view = (['music', 'users', 'stats', 'categories'].includes(rawView || '')
@@ -21,5 +21,13 @@ export default function AdminPage() {
     >
       <AdminPanel view={view} />
     </motion.div>
+  );
+}
+
+export default function AdminPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-zinc-400">Loading Admin...</div>}>
+      <AdminContent />
+    </Suspense>
   );
 }
