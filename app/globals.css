@@ -1212,7 +1212,7 @@ h1, h2, h3, .logo span {
     padding: 0 1.5rem;
     gap: 1rem;
     z-index: 2000;
-    height: 88px;
+    height: var(--player-height);
     overflow: hidden;
 }
 
@@ -2230,6 +2230,12 @@ h1, h2, h3, .logo span {
 
     .content {
         padding: 1rem 1.5rem;
+        padding-bottom: calc(88px + 1rem);
+        transition: padding-bottom 0.35s ease;
+    }
+
+    .no-player .content {
+        padding-bottom: 1rem;
     }
 
     .song-grid {
@@ -2350,7 +2356,13 @@ h1, h2, h3, .logo span {
     .content {
         grid-area: content;
         padding: 1rem;
+        padding-bottom: calc(var(--player-height) + 1rem);
         overflow-y: auto;
+        transition: padding-bottom 0.35s ease;
+    }
+
+    .no-player .content {
+        padding-bottom: calc(60px + 1rem);
     }
 
     /* === HEADER MOBILE OPTIMIZATION === */
@@ -2461,7 +2473,6 @@ h1, h2, h3, .logo span {
 
     /* === PLAYER BAR === */
     .player-bar {
-        grid-area: player;
         display: flex;
         flex-direction: column;
         justify-content: center;
