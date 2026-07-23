@@ -6,6 +6,8 @@ interface User {
     username: string;
     name: string;
     role: 'admin' | 'user';
+    avatar?: string;
+    email?: string;
     likedSongs?: string[];
     playlists?: { id: string; name: string; songIds: (number | string)[] }[];
     deviceId?: string;
