@@ -2458,9 +2458,8 @@ h1, h2, h3, .logo span {
         gap: 10px;
     }
 
-    .track-img img {
-        width: 42px;
-        height: 42px;
+    .track-img {
+        display: none !important;
     }
 
     .track-info h4 {
