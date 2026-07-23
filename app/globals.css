@@ -2280,10 +2280,9 @@ h1, h2, h3, .logo span {
         display: grid;
         grid-template-areas:
             "content"
-            "player"
             "sidebar";
         grid-template-columns: 1fr;
-        grid-template-rows: 1fr var(--player-height) 60px;
+        grid-template-rows: 1fr 60px;
         height: 100vh;
         width: 100vw;
         overflow: hidden;
