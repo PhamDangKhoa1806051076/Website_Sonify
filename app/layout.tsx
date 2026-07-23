@@ -6,6 +6,7 @@ import { PlayerProvider } from "@/context/PlayerContext";
 import { AuthProvider } from "@/context/AuthContext";
 import { LanguageProvider } from "@/context/LanguageContext";
 import Background from "@/components/Background";
+import AppShell from "@/components/AppShell";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -53,7 +54,7 @@ export default function RootLayout({
             <ThemeProvider>
               <PlayerProvider>
                 <Background />
-                {children}
+                <AppShell>{children}</AppShell>
               </PlayerProvider>
             </ThemeProvider>
           </LanguageProvider>
