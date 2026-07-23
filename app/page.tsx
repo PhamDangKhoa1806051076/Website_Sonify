@@ -118,8 +118,8 @@ export default function Home() {
                 onClick={() => setSelectedCategory('')}
                 className={`category-chip ${selectedCategory === '' ? 'active' : ''}`}
                 style={{
-                  background: selectedCategory === '' ? 'var(--primary-color)' : 'rgba(255,255,255,0.04)',
-                  color: 'white',
+                  background: selectedCategory === '' ? 'var(--primary-color)' : 'rgba(255,255,255,0.06)',
+                  color: selectedCategory === '' ? 'white' : 'var(--text-muted)',
                   border: '1px solid var(--glass-border)',
                   padding: '8px 22px',
                   borderRadius: '50px',
@@ -139,8 +139,8 @@ export default function Home() {
                   onClick={() => setSelectedCategory(cat.slug)}
                   className={`category-chip ${selectedCategory === cat.slug ? 'active' : ''}`}
                   style={{
-                    background: selectedCategory === cat.slug ? 'var(--primary-color)' : 'rgba(255,255,255,0.04)',
-                    color: 'white',
+                    background: selectedCategory === cat.slug ? 'var(--primary-color)' : 'rgba(255,255,255,0.06)',
+                    color: selectedCategory === cat.slug ? 'white' : 'var(--text-muted)',
                     border: '1px solid var(--glass-border)',
                     padding: '8px 22px',
                     borderRadius: '50px',

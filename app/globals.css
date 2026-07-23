@@ -2700,6 +2700,7 @@ h1, h2, h3, .logo span {
     background: rgba(255, 255, 255, 0.08) !important;
     border-color: rgba(99,102,241,0.3) !important;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2) !important;
+    color: var(--text-muted) !important;
 }
 
 .category-chip.active {
@@ -2709,6 +2710,7 @@ h1, h2, h3, .logo span {
 .category-chip.active:hover {
     transform: translateY(-2px) scale(1.03);
     background: var(--primary-color) !important;
+    color: white !important;
 }
 
 .admin-table-row {
