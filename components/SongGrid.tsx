@@ -25,10 +25,10 @@ const itemVariants: Variants = {
         opacity: 1,
         y: 0,
         scale: 1,
-        transition: {
-            duration: 0.38,
-            ease: [0.16, 1, 0.3, 1] as unknown as number
-        }
+            transition: {
+                duration: 0.38,
+                ease: [0.16, 1, 0.3, 1]
+            }
     }
 };
 
