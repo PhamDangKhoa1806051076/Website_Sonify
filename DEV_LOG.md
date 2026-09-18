@@ -59,11 +59,11 @@
 
 Sau khi push commit Phần 1 lên GitHub, chúng ta sẽ bắt đầu Phần 2 theo từng bước nhỏ:
 
-1. **Bước 2.1: Backend Audio Books**
-   - Tạo Model Mongoose `models/AudioBook.ts` (quản lý sách nói: tác giả, người đọc/voice, thể loại, số chương/tập, tóm tắt sách, cover, audio).
-   - Tạo API `app/api/audiobooks/route.ts` (GET + POST).
-   - Tạo API `app/api/audiobooks/[id]/route.ts` (PUT + DELETE).
-   - *Test và Commit + Push GitHub.*
+1. **Bước 2.1: Backend Audio Books** ✅ (HOÀN THÀNH)
+   - Đã tạo Model Mongoose `models/AudioBook.ts` (quản lý sách nói: tác giả, người đọc/voice, thể loại, số chương, tóm tắt sách, cover, audio).
+   - Đã tạo API `app/api/audiobooks/route.ts` (GET có bộ lọc search/category/author + POST có kiểm tra admin).
+   - Đã tạo API `app/api/audiobooks/[id]/route.ts` (PUT cập nhật + DELETE xóa có kiểm tra admin).
+   - *Đã commit & push GitHub.*
 
 2. **Bước 2.2: Frontend & Navigation**
    - Cập nhật `constants.ts` (từ khóa từ vựng tiếng Việt/Anh, cấu hình thể loại sách).
