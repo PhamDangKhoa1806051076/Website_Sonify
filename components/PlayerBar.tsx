@@ -10,7 +10,7 @@ const PlayerBar: React.FC = () => {
         currentSong, isPlaying, duration, currentTime, volume, isShuffle, isRepeat,
         togglePlay, nextSong, prevSong, seek, setVolume, toggleShuffle, toggleRepeat,
         likedSongs, toggleLike, playlists, addToPlaylist, createAndAddToPlaylist,
-        addToNextUp, isQueueOpen, setIsQueueOpen
+        addToNextUp, isQueueOpen, setIsQueueOpen, playbackRate, setPlaybackRate
     } = usePlayer();
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -64,9 +64,29 @@ const PlayerBar: React.FC = () => {
                                 Podcast
                             </span>
                         )}
+                        {currentSong.isAudioBook && (
+                            <span style={{ 
+                                fontSize: '0.65rem', 
+                                background: 'linear-gradient(135deg, #f59e0b, #ea580c)', 
+                                color: 'white', 
+                                padding: '1px 6px', 
+                                borderRadius: '4px', 
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px'
+                            }}>
+                                Sách nói
+                            </span>
+                        )}
                         <h4 style={{ margin: 0 }}>{currentSong.title}</h4>
                     </div>
-                    <p>{currentSong.podcastMeta?.showName ? `${currentSong.artist} • ${currentSong.podcastMeta.showName}` : currentSong.artist}</p>
+                    <p>
+                        {currentSong.isPodcast 
+                            ? (currentSong.podcastMeta?.showName ? `${currentSong.artist} • ${currentSong.podcastMeta.showName}` : currentSong.artist)
+                            : currentSong.isAudioBook
+                            ? (currentSong.audioBookMeta?.narrator ? `${currentSong.artist} • Giọng: ${currentSong.audioBookMeta.narrator}` : currentSong.artist)
+                            : currentSong.artist}
+                    </p>
                 </div>
                 <div className="track-actions">
                     <button
@@ -160,8 +180,25 @@ const PlayerBar: React.FC = () => {
             {/* CENTER — Controls */}
             <div className="player-controls">
                 <div className="playback-buttons">
-                    {currentSong.isPodcast ? (
+                    {(currentSong.isPodcast || currentSong.isAudioBook) ? (
                         <>
+                            <button
+                                className="btn-icon secondary"
+                                onClick={() => {
+                                    const rates = [1, 1.25, 1.5, 2, 0.75];
+                                    const currIdx = rates.indexOf(playbackRate);
+                                    const nextIdx = (currIdx === -1 ? 0 : currIdx + 1) % rates.length;
+                                    setPlaybackRate(rates[nextIdx]);
+                                }}
+                                title={`Tốc độ phát: ${playbackRate}x`}
+                                style={{ 
+                                    fontWeight: 700, 
+                                    fontSize: '0.72rem', 
+                                    color: playbackRate !== 1 ? 'var(--primary-light)' : 'var(--text-muted)'
+                                }}
+                            >
+                                {playbackRate}x
+                            </button>
                             <button
                                 className="btn-icon secondary"
                                 onClick={() => seek(Math.max(0, currentTime - 15))}

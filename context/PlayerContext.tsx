@@ -39,6 +39,8 @@ interface PlayerContextType {
     refreshSongs: () => Promise<void>;
     isQueueOpen: boolean;
     setIsQueueOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    playbackRate: number;
+    setPlaybackRate: (rate: number) => void;
 }
 
 const PlayerContext = createContext<PlayerContextType | undefined>(undefined);
@@ -58,6 +60,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
     const [queue, setQueue] = useState<Song[]>([]);
     const [youtubeUrl, setYoutubeUrl] = useState<string | null>(null);
     const [isQueueOpen, setIsQueueOpen] = useState(false);
+    const [playbackRate, setPlaybackRateState] = useState(1);
     
     const audioRef = useRef<HTMLAudioElement | null>(null);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -173,6 +176,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             // Check source type
             const isYoutube = song.src.includes('youtube.com') || song.src.includes('youtu.be');
             const isDirectAudio = song.isPodcast || 
+                song.isAudioBook ||
                 song.src.startsWith('/sound/') || 
                 song.src.match(/\.(mp3|m4a|wav|aac|ogg)($|\?)/i);
 
@@ -182,6 +186,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             } else if (isDirectAudio) {
                 if (audioRef.current) {
                     audioRef.current.src = song.src;
+                    audioRef.current.playbackRate = playbackRate;
                     audioRef.current.load();
                     await audioRef.current.play();
                     setIsPlaying(true);
@@ -321,6 +326,13 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('sonify_volume', v.toString());
     }, []);
 
+    const setPlaybackRate = useCallback((rate: number) => {
+        setPlaybackRateState(rate);
+        if (audioRef.current) {
+            audioRef.current.playbackRate = rate;
+        }
+    }, []);
+
     const toggleShuffle = useCallback(() => setIsShuffle(prev => !prev), []);
     const toggleRepeat = useCallback(() => setIsRepeat(prev => !prev), []);
 
@@ -409,7 +421,7 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             likedSongs, toggleLike,
             playlists, createPlaylist, deletePlaylist, addToPlaylist, removeFromPlaylist, createAndAddToPlaylist,
             queue, allSongs, playbackList, addToNextUp, shuffleQueue, shuffleAll, refreshSongs,
-            isQueueOpen, setIsQueueOpen
+            isQueueOpen, setIsQueueOpen, playbackRate, setPlaybackRate
         }}>
             {children}
             {/* Hidden ReactPlayer for YouTube Audio */}
