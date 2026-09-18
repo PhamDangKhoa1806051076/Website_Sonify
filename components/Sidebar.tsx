@@ -26,10 +26,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isCollapsed =
         { id: 'charts', icon: 'fa-chart-simple', label: 'nav-charts', userOnly: true, adminOnly: false },
         { id: 'explore', icon: 'fa-compass', label: 'nav-explore', userOnly: true, adminOnly: false },
         { id: 'podcast', icon: 'fa-microphone', label: 'nav-podcast', userOnly: false, adminOnly: false },
+        { id: 'audiobooks', icon: 'fa-book-open', label: 'nav-audio', userOnly: false, adminOnly: false },
         { id: 'library', icon: 'fa-music', label: 'nav-library', userOnly: true, adminOnly: false },
         { id: 'admin-music', icon: 'fa-compact-disc', label: 'Quản lý Nhạc', userOnly: false, adminOnly: true },
         { id: 'admin-categories', icon: 'fa-folder-tree', label: 'Quản lý Thể loại', userOnly: false, adminOnly: true },
         { id: 'admin-podcast', icon: 'fa-microphone', label: 'Quản lý Podcast', userOnly: false, adminOnly: true },
+        { id: 'admin-audio', icon: 'fa-book-open', label: 'Quản lý Sách nói', userOnly: false, adminOnly: true },
         { id: 'admin-users', icon: 'fa-users', label: 'Quản lý User', userOnly: false, adminOnly: true },
     ];
 

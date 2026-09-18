@@ -65,12 +65,13 @@ Sau khi push commit Phần 1 lên GitHub, chúng ta sẽ bắt đầu Phần 2 t
    - Đã tạo API `app/api/audiobooks/[id]/route.ts` (PUT cập nhật + DELETE xóa có kiểm tra admin).
    - *Đã commit & push GitHub.*
 
-2. **Bước 2.2: Frontend & Navigation**
-   - Cập nhật `constants.ts` (từ khóa từ vựng tiếng Việt/Anh, cấu hình thể loại sách).
-   - Thêm tab `audiobooks` vào `Sidebar.tsx` ngay dưới Podcast.
-   - Cập nhật `AppShell.tsx` định tuyến `/audiobooks`.
-   - Thêm chip thể loại "Sách nói" trên Trang chủ.
-   - *Test và Commit + Push GitHub.*
+2. **Bước 2.2: Frontend & Navigation** ✅ (HOÀN THÀNH)
+   - Đã mở rộng `Song` interface với `isAudioBook` và `audioBookMeta` (`author`, `narrator`, `chaptersCount`, `description`, `duration`).
+   - Đã bổ sung bộ từ khóa đa ngữ vi/en cho Audio Books vào `constants.ts`.
+   - Đã thêm tab `audiobooks` vào `Sidebar.tsx` ngay dưới tab Podcast và thêm mục `admin-audio` cho Admin.
+   - Đã cập nhật `AppShell.tsx` định tuyến `/audiobooks` và `/admin?view=audio`.
+   - Đã thêm chip thể loại "Sách nói" nổi bật trên Trang chủ (`app/page.tsx`).
+   - *Đã commit & push GitHub.*
 
 3. **Bước 2.3: Giao diện Sách nói & Player chuyên dụng**
    - Tạo `components/AudioBookCard.tsx` (thiết kế theo phong cách bìa sách chữ nhật đứng đặc trưng của sách nói).

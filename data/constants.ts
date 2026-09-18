@@ -14,6 +14,14 @@ export interface Song {
         description?: string;
         duration?: number;
     };
+    isAudioBook?: boolean;
+    audioBookMeta?: {
+        author?: string;
+        narrator?: string;
+        chaptersCount?: number;
+        description?: string;
+        duration?: number;
+    };
 }
 
 export const songs: Song[] = [
@@ -314,6 +322,14 @@ export const translations = {
         "podcast-all-shows": "Tất cả chương trình",
         "podcast-no-episodes": "Chưa có tập podcast nào",
         "podcast-episode": "Tập",
+        "nav-audio": "Sách nói",
+        "audiobook-title": "Sách nói & Audio",
+        "audiobook-count": "cuốn",
+        "audiobook-all-categories": "Tất cả thể loại",
+        "audiobook-no-books": "Chưa có sách nói nào",
+        "audiobook-author": "Tác giả",
+        "audiobook-narrator": "Giọng đọc",
+        "audiobook-chapters": "chương",
         "charts-trending": "Top 50 Bài Hát Thịnh Hành",
         "charts-vietnam": "Top 50 Nhạc Việt",
         "charts-chinese": "Top 50 Nhạc Hoa",
@@ -361,6 +377,14 @@ export const translations = {
         "podcast-all-shows": "All Shows",
         "podcast-no-episodes": "No podcast episodes yet",
         "podcast-episode": "Ep",
+        "nav-audio": "Audio Books",
+        "audiobook-title": "Audio Books",
+        "audiobook-count": "books",
+        "audiobook-all-categories": "All Genres",
+        "audiobook-no-books": "No audio books yet",
+        "audiobook-author": "Author",
+        "audiobook-narrator": "Narrator",
+        "audiobook-chapters": "chapters",
         "charts-trending": "Top 50 Trending Songs",
         "charts-vietnam": "Top 50 Vietnam Songs",
         "charts-chinese": "Top 50 Chinese Songs",

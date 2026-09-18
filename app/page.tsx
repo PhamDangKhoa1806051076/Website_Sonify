@@ -157,6 +157,28 @@ export default function Home() {
                 <i className="fa-solid fa-microphone"></i>
                 Podcast
               </button>
+              <button
+                onClick={() => router.push('/audiobooks')}
+                className="category-chip"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 88, 12, 0.15))',
+                  color: '#fbbf24',
+                  border: '1px solid rgba(245, 158, 11, 0.3)',
+                  padding: '8px 20px',
+                  borderRadius: '50px',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'var(--transition)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <i className="fa-solid fa-book-open"></i>
+                Sách nói
+              </button>
               {categories.map((cat) => (
                 <button
                   key={cat.slug}
