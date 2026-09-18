@@ -8,9 +8,9 @@ import AdminPanel from '@/components/AdminPanel';
 function AdminContent() {
   const searchParams = useSearchParams();
   const rawView = searchParams.get('view');
-  const view = (['music', 'users', 'stats', 'categories'].includes(rawView || '')
+  const view = (['music', 'users', 'stats', 'categories', 'podcast'].includes(rawView || '')
     ? rawView
-    : 'music') as 'music' | 'users' | 'stats' | 'categories';
+    : 'music') as 'music' | 'users' | 'stats' | 'categories' | 'podcast';
 
   return (
     <motion.div

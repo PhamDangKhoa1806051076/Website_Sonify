@@ -6,6 +6,14 @@ export interface Song {
     src: string;
     isOnline?: boolean;
     category?: string;
+    isPodcast?: boolean;
+    podcastMeta?: {
+        host?: string;
+        showName?: string;
+        episodeNumber?: number;
+        description?: string;
+        duration?: number;
+    };
 }
 
 export const songs: Song[] = [
@@ -300,6 +308,12 @@ export const translations = {
         "online-track": "Trực tuyến",
         "searching": "Đang tìm kiếm...",
         "nav-charts": "Bảng xếp hạng",
+        "nav-podcast": "Podcast",
+        "podcast-title": "Podcast",
+        "podcast-count": "tập",
+        "podcast-all-shows": "Tất cả chương trình",
+        "podcast-no-episodes": "Chưa có tập podcast nào",
+        "podcast-episode": "Tập",
         "charts-trending": "Top 50 Bài Hát Thịnh Hành",
         "charts-vietnam": "Top 50 Nhạc Việt",
         "charts-chinese": "Top 50 Nhạc Hoa",
@@ -341,6 +355,12 @@ export const translations = {
         "online-track": "Online",
         "searching": "Searching...",
         "nav-charts": "Charts",
+        "nav-podcast": "Podcast",
+        "podcast-title": "Podcast",
+        "podcast-count": "episodes",
+        "podcast-all-shows": "All Shows",
+        "podcast-no-episodes": "No podcast episodes yet",
+        "podcast-episode": "Ep",
         "charts-trending": "Top 50 Trending Songs",
         "charts-vietnam": "Top 50 Vietnam Songs",
         "charts-chinese": "Top 50 Chinese Songs",

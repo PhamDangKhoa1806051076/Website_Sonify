@@ -49,8 +49,24 @@ const PlayerBar: React.FC = () => {
                     />
                 </div>
                 <div className="track-info">
-                    <h4>{currentSong.title}</h4>
-                    <p>{currentSong.artist}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {currentSong.isPodcast && (
+                            <span style={{ 
+                                fontSize: '0.65rem', 
+                                background: 'linear-gradient(135deg, #ec4899, #a855f7)', 
+                                color: 'white', 
+                                padding: '1px 6px', 
+                                borderRadius: '4px', 
+                                fontWeight: 700,
+                                textTransform: 'uppercase',
+                                letterSpacing: '0.5px'
+                            }}>
+                                Podcast
+                            </span>
+                        )}
+                        <h4 style={{ margin: 0 }}>{currentSong.title}</h4>
+                    </div>
+                    <p>{currentSong.podcastMeta?.showName ? `${currentSong.artist} • ${currentSong.podcastMeta.showName}` : currentSong.artist}</p>
                 </div>
                 <div className="track-actions">
                     <button
@@ -98,33 +114,26 @@ const PlayerBar: React.FC = () => {
                                         </div>
                                         <h4>Add to Album</h4>
                                         <div className="create-playlist-inline" style={{ marginTop: 0, paddingTop: 0, borderTop: 'none', marginBottom: '10px' }}>
-                                            <input 
-                                                type="text" 
-                                                placeholder="New album..." 
+                                            <input
+                                                type="text"
+                                                placeholder="New playlist name..."
                                                 value={newPlaylistName}
                                                 onChange={(e) => setNewPlaylistName(e.target.value)}
                                                 onKeyDown={(e) => {
-                                                    if (e.key === 'Enter' && newPlaylistName.trim()) {
+                                                    if (e.key === 'Enter' && newPlaylistName.trim() && currentSong) {
                                                         createAndAddToPlaylist(newPlaylistName.trim(), currentSong.id);
                                                         setNewPlaylistName('');
                                                         setIsDropdownOpen(false);
                                                     }
                                                 }}
-                                                onClick={(e) => e.stopPropagation()}
-                                                autoFocus
                                             />
-                                            <button 
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    if (newPlaylistName.trim()) {
-                                                        createAndAddToPlaylist(newPlaylistName.trim(), currentSong.id);
-                                                        setNewPlaylistName('');
-                                                        setIsDropdownOpen(false);
-                                                    }
-                                                }}
-                                            >
-                                                <i className="fa-solid fa-plus"></i>
-                                            </button>
+                                            <button onClick={() => {
+                                                if (newPlaylistName.trim() && currentSong) {
+                                                    createAndAddToPlaylist(newPlaylistName.trim(), currentSong.id);
+                                                    setNewPlaylistName('');
+                                                    setIsDropdownOpen(false);
+                                                }
+                                            }}>Create</button>
                                         </div>
                                         
                                         {playlists.length > 0 && (
@@ -151,29 +160,61 @@ const PlayerBar: React.FC = () => {
             {/* CENTER — Controls */}
             <div className="player-controls">
                 <div className="playback-buttons">
-                    <button
-                        className={`btn-icon secondary ${isShuffle ? 'active' : ''}`}
-                        onClick={toggleShuffle}
-                        title="Shuffle"
-                    >
-                        <i className="fa-solid fa-shuffle"></i>
-                    </button>
-                    <button className="btn-icon primary" onClick={prevSong} title="Previous">
-                        <i className="fa-solid fa-backward-step"></i>
-                    </button>
-                    <button className="btn-icon main-play" onClick={togglePlay} title={isPlaying ? 'Pause' : 'Play'}>
-                        <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
-                    </button>
-                    <button className="btn-icon primary" onClick={nextSong} title="Next">
-                        <i className="fa-solid fa-forward-step"></i>
-                    </button>
-                    <button
-                        className={`btn-icon secondary ${isRepeat ? 'active' : ''}`}
-                        onClick={toggleRepeat}
-                        title="Repeat"
-                    >
-                        <i className="fa-solid fa-repeat"></i>
-                    </button>
+                    {currentSong.isPodcast ? (
+                        <>
+                            <button
+                                className="btn-icon secondary"
+                                onClick={() => seek(Math.max(0, currentTime - 15))}
+                                title="Lùi 15s"
+                                style={{ position: 'relative' }}
+                            >
+                                <i className="fa-solid fa-rotate-left"></i>
+                            </button>
+                            <button className="btn-icon primary" onClick={prevSong} title="Previous">
+                                <i className="fa-solid fa-backward-step"></i>
+                            </button>
+                            <button className="btn-icon main-play" onClick={togglePlay} title={isPlaying ? 'Pause' : 'Play'}>
+                                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+                            </button>
+                            <button className="btn-icon primary" onClick={nextSong} title="Next">
+                                <i className="fa-solid fa-forward-step"></i>
+                            </button>
+                            <button
+                                className="btn-icon secondary"
+                                onClick={() => seek(Math.min(duration, currentTime + 15))}
+                                title="Tua 15s"
+                                style={{ position: 'relative' }}
+                            >
+                                <i className="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <button
+                                className={`btn-icon secondary ${isShuffle ? 'active' : ''}`}
+                                onClick={toggleShuffle}
+                                title="Shuffle"
+                            >
+                                <i className="fa-solid fa-shuffle"></i>
+                            </button>
+                            <button className="btn-icon primary" onClick={prevSong} title="Previous">
+                                <i className="fa-solid fa-backward-step"></i>
+                            </button>
+                            <button className="btn-icon main-play" onClick={togglePlay} title={isPlaying ? 'Pause' : 'Play'}>
+                                <i className={`fa-solid ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+                            </button>
+                            <button className="btn-icon primary" onClick={nextSong} title="Next">
+                                <i className="fa-solid fa-forward-step"></i>
+                            </button>
+                            <button
+                                className={`btn-icon secondary ${isRepeat ? 'active' : ''}`}
+                                onClick={toggleRepeat}
+                                title="Repeat"
+                            >
+                                <i className="fa-solid fa-repeat"></i>
+                            </button>
+                        </>
+                    )}
                 </div>
 
                 <div className="playback-progress">

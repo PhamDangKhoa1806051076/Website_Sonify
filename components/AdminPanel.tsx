@@ -7,9 +7,10 @@ import AdminMusic from './admin/AdminMusic';
 import AdminUsers from './admin/AdminUsers';
 import AdminStats from './admin/AdminStats';
 import AdminCategories from './admin/AdminCategories';
+import AdminPodcast from './admin/AdminPodcast';
 
 interface AdminPanelProps {
-    view: 'manage' | 'users' | 'stats' | 'music' | 'categories';
+    view: 'manage' | 'users' | 'stats' | 'music' | 'categories' | 'podcast';
 }
 
 interface Feedback {
@@ -73,7 +74,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
     return (
         <section id="admin-panel" className="admin-section">
             <div className="section-header">
-                <h2>{view === 'users' ? 'Quản lý người dùng' : view === 'categories' ? 'Quản lý Thể loại' : 'Bảng điều khiển Admin'}</h2>
+                <h2>{view === 'users' ? 'Quản lý người dùng' : view === 'categories' ? 'Quản lý Thể loại' : view === 'podcast' ? 'Quản lý Podcast' : 'Bảng điều khiển Admin'}</h2>
             </div>
             
             <div className="admin-tools">
@@ -95,6 +96,13 @@ const AdminPanel: React.FC<AdminPanelProps> = ({ view }) => {
 
                 {view === 'categories' && (
                     <AdminCategories />
+                )}
+
+                {view === 'podcast' && (
+                    <AdminPodcast 
+                        localSounds={localSounds}
+                        localImages={localImages}
+                    />
                 )}
 
                 {view === 'users' && (

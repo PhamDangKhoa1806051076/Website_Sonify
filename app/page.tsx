@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import SongGrid from '@/components/SongGrid';
 import HomeBanner from '@/components/HomeBanner';
@@ -11,6 +12,7 @@ import { searchOnlineSongs, getTrendingSongs } from '@/services/musicService';
 import { Song } from '@/data/constants';
 
 export default function Home() {
+  const router = useRouter();
   const { t } = useLanguage();
   const { allSongs } = usePlayer();
   const { searchQuery } = useSearch();
@@ -132,6 +134,28 @@ export default function Home() {
                 }}
               >
                 Tất cả
+              </button>
+              <button
+                onClick={() => router.push('/podcast')}
+                className="category-chip"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15))',
+                  color: '#f472b6',
+                  border: '1px solid rgba(236, 72, 153, 0.3)',
+                  padding: '8px 20px',
+                  borderRadius: '50px',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'var(--transition)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <i className="fa-solid fa-microphone"></i>
+                Podcast
               </button>
               {categories.map((cat) => (
                 <button

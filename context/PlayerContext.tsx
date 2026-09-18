@@ -170,36 +170,40 @@ export function PlayerProvider({ children }: { children: React.ReactNode }) {
             // 2. Set new song
             setCurrentSong(song);
 
-            // CASE 1: Online Song (Need YouTube ID)
-            if (song.isOnline) {
-                console.log('Detected as ONLINE song. Fetching YouTube ID...');
+            // Check source type
+            const isYoutube = song.src.includes('youtube.com') || song.src.includes('youtu.be');
+            const isDirectAudio = song.isPodcast || 
+                song.src.startsWith('/sound/') || 
+                song.src.match(/\.(mp3|m4a|wav|aac|ogg)($|\?)/i);
+
+            if (isYoutube) {
+                setYoutubeUrl(song.src);
+                setIsPlaying(true);
+            } else if (isDirectAudio) {
+                if (audioRef.current) {
+                    audioRef.current.src = song.src;
+                    audioRef.current.load();
+                    await audioRef.current.play();
+                    setIsPlaying(true);
+                }
+            } else if (song.isOnline) {
+                // Online search track needing YouTube resolution
                 try {
                     const res = await fetch(`/api/youtube?q=${encodeURIComponent(song.title + ' ' + song.artist)}`);
                     const data = await res.json();
                     if (data.success) {
                         setYoutubeUrl(`https://www.youtube.com/watch?v=${data.videoId}`);
-                        // Playback will be handled by ReactPlayer via isPlaying
-                    } else {
-                        // Fallback to preview
-                        if (audioRef.current) {
-                            audioRef.current.src = song.src;
-                            await audioRef.current.play();
-                        }
+                    } else if (audioRef.current) {
+                        audioRef.current.src = song.src;
+                        await audioRef.current.play();
                     }
                 } catch (err) {
                     console.error('YouTube fetch error:', err);
                 } finally {
                     setIsPlaying(true);
                 }
-            } 
-            // CASE 2: Local Song (or manually added YouTube link)
-            else {
-                const isYoutube = song.src.includes('youtube.com') || song.src.includes('youtu.be');
-                
-                if (isYoutube) {
-                    setYoutubeUrl(song.src);
-                    setIsPlaying(true);
-                } else if (audioRef.current) {
+            } else {
+                if (audioRef.current) {
                     audioRef.current.src = song.src;
                     audioRef.current.load();
                     await audioRef.current.play();

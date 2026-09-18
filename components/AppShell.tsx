@@ -38,6 +38,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     if (path === '/') return 'home';
     if (path.startsWith('/charts')) return 'charts';
     if (path.startsWith('/explore')) return 'explore';
+    if (path.startsWith('/podcast')) return 'podcast';
     if (path.startsWith('/recent')) return 'recent';
     if (path.startsWith('/liked')) return 'liked';
     if (path.startsWith('/profile')) return 'profile';
@@ -46,6 +47,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     }
     if (path.startsWith('/admin')) {
       if (path.includes('categories')) return 'admin-categories';
+      if (path.includes('podcast')) return 'admin-podcast';
       if (path.includes('users')) return 'admin-users';
       return 'admin-music';
     }
@@ -59,6 +61,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     if (tab === 'home') router.push('/');
     else if (tab === 'charts') router.push('/charts');
     else if (tab === 'explore') router.push('/explore');
+    else if (tab === 'podcast') router.push('/podcast');
     else if (tab === 'recent') router.push('/recent');
     else if (tab === 'liked') router.push('/liked');
     else if (tab === 'profile') router.push('/profile');
@@ -67,6 +70,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       router.push(`/playlists/${pId}`);
     } else if (tab === 'admin-music') router.push('/admin?view=music');
     else if (tab === 'admin-categories') router.push('/admin?view=categories');
+    else if (tab === 'admin-podcast') router.push('/admin?view=podcast');
     else if (tab === 'admin-users') router.push('/admin?view=users');
     else if (tab === 'admin-stats') router.push('/admin?view=stats');
     else router.push('/');
