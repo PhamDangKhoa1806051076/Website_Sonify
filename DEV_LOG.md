@@ -11,7 +11,7 @@
 | Hạng mục | Trạng thái | Ghi chú |
 | :--- | :--- | :--- |
 | **Phần 1: Podcast** | ✅ **HOÀN THÀNH** | Đã hoàn thiện Model, API CRUD, Giao diện `/podcast`, Admin Panel, Tích hợp Player (tua 15s) & Build thành công 100%. |
-| **Phần 2: Audio Books (Sách nói)** | ⏳ **CHUẨN BỊ TRIỂN KHAI** | Bước tiếp theo: Triển khai Model, API, UI, Admin và Player cho Sách nói theo từng phần nhỏ. |
+| **Phần 2: Audio Books (Sách nói)** | ✅ **HOÀN THÀNH** | Đã hoàn thiện Model, API CRUD, Giao diện `/audiobooks`, Admin Panel, Player tốc độ đọc (0.75x-2x) & Build thành công 100%. |
 
 ---
 
@@ -80,8 +80,8 @@ Sau khi push commit Phần 1 lên GitHub, chúng ta sẽ bắt đầu Phần 2 t
    - Đã tích hợp tính năng đổi tốc độ đọc (0.75x, 1.0x, 1.25x, 1.5x, 2.0x) và badge "Sách nói" cùng 2 nút tua 15s trong `PlayerBar.tsx` & `PlayerContext.tsx`.
    - *Đã commit & push GitHub.*
 
-4. **Bước 2.4: Admin Panel Sách nói & Tổng kết nghiệm thu**
-   - Tạo `components/admin/AdminAudioBooks.tsx`.
-   - Tích hợp vào `AdminPanel.tsx` và `app/admin/page.tsx`.
-   - Chạy `npm run build` xác thực toàn diện.
-   - *Commit + Push GitHub.*
+4. **Bước 2.4: Admin Panel Sách nói & Tổng kết nghiệm thu** ✅ (HOÀN THÀNH)
+   - Đã tạo `components/admin/AdminAudioBooks.tsx` (thống kê sách & tác giả, form thêm/sửa sách nói, FilePicker, bảng quản lý với nút sửa/xóa).
+   - Đã tích hợp `AdminAudioBooks` vào `AdminPanel.tsx` (`view === 'audio'`) và `app/admin/page.tsx`.
+   - Đã chạy `npm run build` xác thực toàn diện: Biên dịch thành công 27 trang/tuyến với 0 lỗi.
+   - *Đã commit & push GitHub.*
