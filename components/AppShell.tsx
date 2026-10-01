@@ -9,6 +9,7 @@ import QueuePanel from '@/components/QueuePanel';
 import AuthModal from '@/components/AuthModal';
 import FeedbackModal from '@/components/FeedbackModal';
 import ScrollToTop from '@/components/ScrollToTop';
+import MobileNav from '@/components/MobileNav';
 import { usePlayer } from '@/context/PlayerContext';
 
 interface SearchContextType {
@@ -106,6 +107,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         )}
 
         <PlayerBar />
+
+        <MobileNav activeTab={activeTab} onTabChange={handleTabChange} />
 
         <ScrollToTop />
 
