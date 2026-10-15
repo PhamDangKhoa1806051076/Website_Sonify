@@ -2,9 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { useLanguage } from '@/context/LanguageContext';
 
 interface MobileNavProps {
   onTabChange: (tab: string) => void;
@@ -13,8 +11,6 @@ interface MobileNavProps {
 
 const MobileNav: React.FC<MobileNavProps> = ({ onTabChange, activeTab }) => {
   const { user } = useAuth();
-  const { t } = useLanguage();
-  const router = useRouter();
 
   const navItems = [
     { id: 'home', icon: 'fa-house', label: 'Trang chủ' },
