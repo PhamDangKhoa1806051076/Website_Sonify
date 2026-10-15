@@ -18,7 +18,7 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
     return (
         <div className={`song-card ${isCurrent ? 'active' : ''}`} onClick={handleClick}>
             <div className="song-card-inner">
-                <div className="img-wrap" style={{ position: 'relative' }}>
+                <div className="img-wrap" style={{ position: 'relative', width: '100%', paddingBottom: '100%', overflow: 'hidden' }}>
                     <Image 
                         src={song.cover} 
                         alt={song.title} 

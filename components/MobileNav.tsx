@@ -18,18 +18,18 @@ const MobileNav: React.FC<MobileNavProps> = ({ onTabChange, activeTab }) => {
       onClickTab: 'home',
     },
     {
+      id: 'library',
+      icon: 'fa-layer-group',
+      label: 'Library',
+      isActive: ['liked', 'recent', 'podcast', 'audiobooks'].includes(activeTab) || activeTab.startsWith('playlist-'),
+      onClickTab: 'liked',
+    },
+    {
       id: 'search',
       icon: 'fa-magnifying-glass',
       label: 'Search',
-      isActive: ['explore', 'search'].includes(activeTab),
+      isActive: ['explore', 'search', 'charts'].includes(activeTab),
       onClickTab: 'explore',
-    },
-    {
-      id: 'library',
-      icon: 'fa-lines-leaning',
-      label: 'Library',
-      isActive: ['liked', 'recent', 'podcast', 'audiobooks', 'charts'].includes(activeTab) || activeTab.startsWith('playlist-'),
-      onClickTab: 'liked',
     },
     {
       id: 'system',
@@ -46,13 +46,11 @@ const MobileNav: React.FC<MobileNavProps> = ({ onTabChange, activeTab }) => {
         {navItems.map((item) => {
           const active = item.isActive;
           return (
-            <motion.button
+            <button
               key={item.id}
               type="button"
               className={`mobile-dock-btn ${active ? 'active' : ''}`}
               onClick={() => onTabChange(item.onClickTab)}
-              whileTap={{ scale: 0.90 }}
-              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             >
               {active && (
                 <motion.div
@@ -65,7 +63,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ onTabChange, activeTab }) => {
                 <i className={`fa-solid ${item.icon} mobile-dock-icon`} />
                 <span className="mobile-dock-label">{item.label}</span>
               </span>
-            </motion.button>
+            </button>
           );
         })}
       </div>

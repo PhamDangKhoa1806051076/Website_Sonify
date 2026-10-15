@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import SongGrid from '@/components/SongGrid';
 import HomeBanner from '@/components/HomeBanner';
-import MobileVibesBar from '@/components/MobileVibesBar';
-import MobileEcosystemWidgets from '@/components/MobileEcosystemWidgets';
 import { useLanguage } from '@/context/LanguageContext';
 import { usePlayer } from '@/context/PlayerContext';
 import { useSearch } from '@/components/AppShell';
@@ -93,19 +91,7 @@ export default function Home() {
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
       >
         {!searchQuery.trim() && (
-          <>
-            <MobileVibesBar onSelectVibe={(vibe) => {
-              if (vibe === 'all') setSelectedCategory('');
-              else {
-                const matched = categories.find(c => c.name.toLowerCase().includes(vibe.toLowerCase()) || c.slug.includes(vibe));
-                if (matched) setSelectedCategory(matched.name);
-              }
-            }} />
-
-            <MobileEcosystemWidgets />
-
-            <HomeBanner currentBanner={currentBanner} trendingSongs={trendingSongs} />
-          </>
+          <HomeBanner currentBanner={currentBanner} trendingSongs={trendingSongs} />
         )}
 
         <section className="song-list-container">
@@ -116,14 +102,14 @@ export default function Home() {
             <span>{displaySongs.length} {t('song-count')}</span>
           </div>
 
-          {/* Category Chips Filters */}
-          {!searchQuery.trim() && categories.length > 0 && (
+          {/* Unified Category Chips Filters */}
+          {!searchQuery.trim() && (
             <div
               className="category-chips"
               style={{
                 display: 'flex',
                 gap: '10px',
-                marginBottom: '1.8rem',
+                marginBottom: '1.6rem',
                 overflowX: 'auto',
                 paddingBottom: '8px',
                 scrollbarWidth: 'none',
@@ -150,13 +136,35 @@ export default function Home() {
                 Tất cả
               </button>
               <button
+                onClick={() => router.push('/charts')}
+                className="category-chip"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(245, 158, 11, 0.15))',
+                  color: '#fbbf24',
+                  border: '1px solid rgba(234, 179, 8, 0.3)',
+                  padding: '8px 18px',
+                  borderRadius: '50px',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'var(--transition)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <i className="fa-solid fa-chart-simple"></i>
+                Bảng xếp hạng
+              </button>
+              <button
                 onClick={() => router.push('/podcast')}
                 className="category-chip"
                 style={{
                   background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15))',
                   color: '#f472b6',
                   border: '1px solid rgba(236, 72, 153, 0.3)',
-                  padding: '8px 20px',
+                  padding: '8px 18px',
                   borderRadius: '50px',
                   fontSize: '0.82rem',
                   fontWeight: 700,
@@ -175,10 +183,10 @@ export default function Home() {
                 onClick={() => router.push('/audiobooks')}
                 className="category-chip"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(234, 88, 12, 0.15))',
-                  color: '#fbbf24',
-                  border: '1px solid rgba(245, 158, 11, 0.3)',
-                  padding: '8px 20px',
+                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15))',
+                  color: '#34d399',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  padding: '8px 18px',
                   borderRadius: '50px',
                   fontSize: '0.82rem',
                   fontWeight: 700,
@@ -192,6 +200,28 @@ export default function Home() {
               >
                 <i className="fa-solid fa-book-open"></i>
                 Sách nói
+              </button>
+              <button
+                onClick={() => router.push('/liked')}
+                className="category-chip"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(236, 72, 153, 0.15))',
+                  color: '#fb7185',
+                  border: '1px solid rgba(244, 63, 94, 0.3)',
+                  padding: '8px 18px',
+                  borderRadius: '50px',
+                  fontSize: '0.82rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  transition: 'var(--transition)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                }}
+              >
+                <i className="fa-solid fa-heart"></i>
+                Yêu thích
               </button>
               {categories.map((cat) => (
                 <button

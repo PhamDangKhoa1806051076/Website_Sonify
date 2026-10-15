@@ -120,17 +120,23 @@ Sau khi push commit Phần 1 lên GitHub, chúng ta sẽ bắt đầu Phần 2 t
 6. `app/globals.css`:
    - Bổ sung toàn bộ style CSS cho: `.mobile-floating-dock`, `.mobile-mini-player-island`, `.mobile-vibes-bar`, `.mobile-ecosystem-widgets`, hiệu ứng kính mờ satin glass, safe area inset đáy màn hình.
 
-### 3. Kết quả triển khai:
-- **Bước 3.1: Dual Floating Island** ✅
-  - Đã chuyển đổi `MobileNav.tsx` thành Floating Capsule Dock 4 tab (`Home`, `Search`, `Library`, `System`) với active pill trượt và icon neon emerald.
-  - Đã chuyển đổi `PlayerBar.tsx` thành Floating Mini-Player Island nổi lơ lửng ngay phía trên dock, tích hợp dải tiến độ phát sáng neon (`mobile-player-progress-fill`) chạy thời gian thực và nút Play/Pause xúc giác.
-- **Bước 3.2: Vibes Bar & Ecosystem Widgets** ✅
-  - Đã tạo `components/MobileVibesBar.tsx` hỗ trợ chọn nhanh không gian nghe nhạc theo tâm trạng (*Coffee & Chill*, *Deep Focus*, *Night Relax*, *Workout*, *Healing*).
-  - Đã tạo `components/MobileEcosystemWidgets.tsx` với 4 widget card vuông cao cấp: Liked Songs (tím hồng), Podcasts (cam coral), Sách nói (xanh ngọc), Bảng xếp hạng (vàng kim).
-  - Đã tích hợp cả 2 component vào `app/page.tsx` và cấu hình định tuyến thông minh trong `components/AppShell.tsx`.
-- **Bước 3.3: Styling CSS & Nghiệm thu** ✅
-  - Đã bổ sung toàn diện CSS Frosted Glassmorphism, Dual Floating Island, Adaptive Media Cards trong `app/globals.css`.
-  - Đã chạy `npx next lint`: **0 warning, 0 error**.
-  - Đã chạy `npm run build`: **Thành công 100%** (27/27 trang & API routes biên dịch hoàn hảo).
+### 3. Kết quả triển khai & Tinh chỉnh sửa lỗi toàn diện:
+- **Xóa bỏ các khối widget/vibe thừa & trùng lặp:**
+  - Loại bỏ hoàn toàn `MobileVibesBar` và `MobileEcosystemWidgets` độc lập để tránh trùng lặp với danh mục và tránh chiếm không gian màn hình.
+  - Hợp nhất toàn bộ vào thanh Chips Filter ngang duy nhất trên trang chủ: **Tất cả**, **Bảng xếp hạng (Charts)**, **Podcast**, **Sách nói (Audiobooks)**, **Yêu thích (Liked)** cùng toàn bộ thể loại nhạc (`V-Pop`, `US-UK`, `K-Pop`, `C-Pop`...).
+- **Khắc phục triệt để lỗi thẻ nhạc bị kéo giãn trên Mobile (Explore page & SongGrid):**
+  - Khóa tỷ lệ khung ảnh vuông 1:1 qua kỹ thuật `paddingBottom: '100%'` trong `components/SongCard.tsx`, ngăn chặn mọi hiện tượng ảnh bị giãn cao bất thường trên Safari/Chromium mobile.
+  - Cấu hình `.song-grid` chuẩn xác: `grid-template-columns: repeat(2, minmax(0, 1fr)) !important` và gán `style={{ width: '100%', minWidth: 0 }}` cho từng `motion.div` trong `SongGrid.tsx` để luôn đảm bảo đúng 2 cột đều tăm tắp, không bao giờ bị dạt 1 cột.
+- **Xử lý dứt điểm lỗi tràn viền ngang (Horizontal Overflow & Purple Scrollbar):**
+  - Đã loại bỏ hoàn toàn các đoạn CSS mobile legacy cũ trong `app/globals.css` (từng định nghĩa `width: 100vw; height: 100vh; overflow: hidden;` xung đột).
+  - Khóa chặt `html, body, .app-container` ở `width: 100% !important; max-width: 100vw !important; overflow-x: hidden !important`.
+- **Hoàn thiện Floating Capsule Dock Navigation & Mini-Player Island:**
+  - Sắp xếp chuẩn 4 tab: **Home** (`fa-house`) -> **Library** (`fa-layer-group`) -> **Search** (`fa-magnifying-glass`) -> **System** (`fa-sliders`).
+  - Viên nang nổi bo tròn 9999px canh giữa chính xác với chiều rộng co giãn `width: min(380px, calc(100vw - 28px))`, icon & nhãn xanh ngọc Neon rực rỡ khi active.
+  - Mini-Player Island đặt nổi lơ lửng ngay phía trên dock với thanh tiến độ xanh phát quang và nút Play tròn xúc giác.
+- **Nghiệm thu toàn diện:**
+  - `npx next lint`: **0 warning, 0 error**.
+  - `npm run build`: **Thành công 100% (27/27 pages & API routes)**.
+
 
 

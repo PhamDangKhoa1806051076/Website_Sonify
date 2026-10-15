@@ -25,10 +25,10 @@ const itemVariants: Variants = {
         opacity: 1,
         y: 0,
         scale: 1,
-            transition: {
-                duration: 0.38,
-                ease: [0.16, 1, 0.3, 1]
-            }
+        transition: {
+            duration: 0.38,
+            ease: [0.16, 1, 0.3, 1]
+        }
     }
 };
 
@@ -42,7 +42,11 @@ const SongGrid: React.FC<SongGridProps> = ({ songs }) => {
             key={songs.map(s => s.id).join(',')}
         >
             {songs.map(song => (
-                <motion.div key={song.id} variants={itemVariants}>
+                <motion.div
+                    key={song.id}
+                    variants={itemVariants}
+                    style={{ width: '100%', minWidth: 0 }}
+                >
                     <SongCard song={song} />
                 </motion.div>
             ))}
