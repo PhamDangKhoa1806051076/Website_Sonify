@@ -37,6 +37,14 @@ const PlayerBar: React.FC = () => {
                 exit={{ y: 20, opacity: 0 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
+            {/* Mobile Glowing Progress Line */}
+            <div className="mobile-player-progress-track">
+                <div 
+                    className="mobile-player-progress-fill" 
+                    style={{ width: `${progress}%` }} 
+                />
+            </div>
+
             {/* LEFT — Track Info */}
             <div className="current-track">
                 <div className="track-img">

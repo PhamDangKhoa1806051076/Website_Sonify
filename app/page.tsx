@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import SongGrid from '@/components/SongGrid';
 import HomeBanner from '@/components/HomeBanner';
+import MobileVibesBar from '@/components/MobileVibesBar';
+import MobileEcosystemWidgets from '@/components/MobileEcosystemWidgets';
 import { useLanguage } from '@/context/LanguageContext';
 import { usePlayer } from '@/context/PlayerContext';
 import { useSearch } from '@/components/AppShell';
@@ -91,7 +93,19 @@ export default function Home() {
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
       >
         {!searchQuery.trim() && (
-          <HomeBanner currentBanner={currentBanner} trendingSongs={trendingSongs} />
+          <>
+            <MobileVibesBar onSelectVibe={(vibe) => {
+              if (vibe === 'all') setSelectedCategory('');
+              else {
+                const matched = categories.find(c => c.name.toLowerCase().includes(vibe.toLowerCase()) || c.slug.includes(vibe));
+                if (matched) setSelectedCategory(matched.name);
+              }
+            }} />
+
+            <MobileEcosystemWidgets />
+
+            <HomeBanner currentBanner={currentBanner} trendingSongs={trendingSongs} />
+          </>
         )}
 
         <section className="song-list-container">

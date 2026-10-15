@@ -63,12 +63,12 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   const handleTabChange = (tab: string) => {
     if (tab === 'home') router.push('/');
     else if (tab === 'charts') router.push('/charts');
-    else if (tab === 'explore') router.push('/explore');
+    else if (tab === 'explore' || tab === 'search') router.push('/explore');
     else if (tab === 'podcast') router.push('/podcast');
     else if (tab === 'audiobooks') router.push('/audiobooks');
     else if (tab === 'recent') router.push('/recent');
-    else if (tab === 'liked') router.push('/liked');
-    else if (tab === 'profile') router.push('/profile');
+    else if (tab === 'liked' || tab === 'library') router.push('/liked');
+    else if (tab === 'profile' || tab === 'system') router.push('/profile');
     else if (tab.startsWith('playlist-')) {
       const pId = tab.replace('playlist-', '');
       router.push(`/playlists/${pId}`);

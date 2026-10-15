@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { useAuth } from '@/context/AuthContext';
 
 interface MobileNavProps {
   onTabChange: (tab: string) => void;
@@ -10,49 +9,66 @@ interface MobileNavProps {
 }
 
 const MobileNav: React.FC<MobileNavProps> = ({ onTabChange, activeTab }) => {
-  const { user } = useAuth();
-
   const navItems = [
-    { id: 'home', icon: 'fa-house', label: 'Trang chủ' },
-    { id: 'recent', icon: 'fa-clock-rotate-left', label: 'Gần đây' },
-    { id: 'charts', icon: 'fa-chart-simple', label: 'BXH' },
-    { id: 'podcast', icon: 'fa-microphone', label: 'Podcast' },
-    { id: 'audiobooks', icon: 'fa-book-open', label: 'Sách nói' },
-    { id: 'liked', icon: 'fa-heart', label: 'Yêu thích' },
+    {
+      id: 'home',
+      icon: 'fa-house',
+      label: 'Home',
+      isActive: activeTab === 'home',
+      onClickTab: 'home',
+    },
+    {
+      id: 'search',
+      icon: 'fa-magnifying-glass',
+      label: 'Search',
+      isActive: ['explore', 'search'].includes(activeTab),
+      onClickTab: 'explore',
+    },
+    {
+      id: 'library',
+      icon: 'fa-lines-leaning',
+      label: 'Library',
+      isActive: ['liked', 'recent', 'podcast', 'audiobooks', 'charts'].includes(activeTab) || activeTab.startsWith('playlist-'),
+      onClickTab: 'liked',
+    },
+    {
+      id: 'system',
+      icon: 'fa-sliders',
+      label: 'System',
+      isActive: ['profile', 'system'].includes(activeTab) || activeTab.startsWith('admin'),
+      onClickTab: 'profile',
+    },
   ];
 
-  // Only show 5 items for non-logged in users
-  const visibleItems = user
-    ? navItems
-    : navItems.filter(i => !['recent', 'liked'].includes(i.id));
-
-  // Limit to 5 items max
-  const displayItems = visibleItems.slice(0, 5);
-
   return (
-    <nav className="mobile-bottom-nav">
-      {displayItems.map((item) => {
-        const isActive = activeTab === item.id;
-        return (
-          <motion.button
-            key={item.id}
-            className={`mobile-nav-item ${isActive ? 'active' : ''}`}
-            onClick={() => onTabChange(item.id)}
-            whileTap={{ scale: 0.88 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-          >
-            {isActive && (
-              <motion.div
-                className="mobile-nav-indicator"
-                layoutId="mobile-nav-indicator"
-                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
-              />
-            )}
-            <i className={`fa-solid ${item.icon} mobile-nav-icon`} />
-            <span className="mobile-nav-label">{item.label}</span>
-          </motion.button>
-        );
-      })}
+    <nav className="mobile-floating-dock" aria-label="Mobile Navigation">
+      <div className="mobile-dock-inner">
+        {navItems.map((item) => {
+          const active = item.isActive;
+          return (
+            <motion.button
+              key={item.id}
+              type="button"
+              className={`mobile-dock-btn ${active ? 'active' : ''}`}
+              onClick={() => onTabChange(item.onClickTab)}
+              whileTap={{ scale: 0.90 }}
+              transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+            >
+              {active && (
+                <motion.div
+                  className="mobile-dock-active-pill"
+                  layoutId="mobile-dock-active-pill"
+                  transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                />
+              )}
+              <span className="mobile-dock-btn-content">
+                <i className={`fa-solid ${item.icon} mobile-dock-icon`} />
+                <span className="mobile-dock-label">{item.label}</span>
+              </span>
+            </motion.button>
+          );
+        })}
+      </div>
     </nav>
   );
 };
