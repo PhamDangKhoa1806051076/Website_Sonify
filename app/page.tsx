@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import SongGrid from '@/components/SongGrid';
 import HomeBanner from '@/components/HomeBanner';
+import MobileGreeting from '@/components/MobileGreeting';
 import { useLanguage } from '@/context/LanguageContext';
 import { usePlayer } from '@/context/PlayerContext';
 import { useSearch } from '@/components/AppShell';
@@ -23,6 +24,17 @@ export default function Home() {
   const [onlineSongs, setOnlineSongs] = useState<Song[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [currentBanner, setCurrentBanner] = useState(0);
+  const [quickMixFilter, setQuickMixFilter] = useState<string | null>(null);
+
+  // Listen to Quick Mix mood filter from MobileGreeting
+  useEffect(() => {
+    const handleFilter = (e: Event) => {
+      const customEvent = e as CustomEvent<string | null>;
+      setQuickMixFilter(customEvent.detail || null);
+    };
+    window.addEventListener('quick-mix-filter', handleFilter);
+    return () => window.removeEventListener('quick-mix-filter', handleFilter);
+  }, []);
 
   // Fetch categories
   useEffect(() => {
@@ -73,12 +85,28 @@ export default function Home() {
     if (selectedCategory) {
       list = list.filter((s) => s.category === selectedCategory);
     }
+    if (quickMixFilter) {
+      const qf = quickMixFilter.toLowerCase();
+      const filtered = list.filter((s) => {
+        const text = `${s.title} ${s.artist} ${s.category || ''}`.toLowerCase();
+        if (qf === 'chill') return /chill|mưa|ballad|thương|yêu|phố|đẹp|cũ|nam|linh|nguyên/i.test(text);
+        if (qf === 'energy') return /remix|rap|right|ray|thanh niên|phù hộ|con|sôi/i.test(text);
+        if (qf === 'focus') return /piano|lofi|instrumental|không lời|cố đô|lá cờ|định|rum/i.test(text);
+        if (qf === 'sleep') return /mưa|êm|đêm|ngủ|phép màu|ổn|an|hùng/i.test(text);
+        if (qf === 'workout') return /remix|right|ray|pin|sáng ngời|việt nam|v\.a|domic/i.test(text);
+        if (qf === 'vibe') return /amee|domic|phúc|hate|hoàng|yêu|quinn/i.test(text);
+        return true;
+      });
+      if (filtered.length > 0) {
+        list = filtered;
+      }
+    }
     if (!searchQuery.trim()) return list;
     const q = searchQuery.toLowerCase();
     return list.filter(
       (s) => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q)
     );
-  }, [allSongs, selectedCategory, searchQuery]);
+  }, [allSongs, selectedCategory, quickMixFilter, searchQuery]);
 
   return (
     <AnimatePresence mode="wait">
@@ -91,14 +119,47 @@ export default function Home() {
         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
       >
         {!searchQuery.trim() && (
-          <HomeBanner currentBanner={currentBanner} trendingSongs={trendingSongs} />
+          <>
+            <div className="mobile-only-hero">
+              <MobileGreeting />
+            </div>
+            <div className="desktop-only-hero">
+              <HomeBanner currentBanner={currentBanner} trendingSongs={trendingSongs} />
+            </div>
+          </>
         )}
 
         <section className="song-list-container">
           <div className="section-header" style={{ marginBottom: '1rem' }}>
-            <h2>
-              {searchQuery.trim() ? t('search-local') : t('song-list-title')}
-            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <h2>
+                {searchQuery.trim() ? t('search-local') : t('song-list-title')}
+              </h2>
+              {quickMixFilter && (
+                <span
+                  style={{
+                    fontSize: '0.75rem',
+                    background: 'rgba(99, 102, 241, 0.2)',
+                    color: '#818cf8',
+                    border: '1px solid rgba(99, 102, 241, 0.4)',
+                    padding: '3px 10px',
+                    borderRadius: '20px',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    setQuickMixFilter(null);
+                    window.dispatchEvent(new CustomEvent('quick-mix-filter', { detail: null }));
+                  }}
+                  title="Bỏ lọc tâm trạng"
+                >
+                  <i className="fa-solid fa-sparkles" /> Mood: {quickMixFilter.toUpperCase()}
+                  <i className="fa-solid fa-xmark" style={{ fontSize: '0.7rem' }} />
+                </span>
+              )}
+            </div>
             <span>{displaySongs.length} {t('song-count')}</span>
           </div>
 

@@ -36,6 +36,15 @@ const PlayerBar: React.FC = () => {
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 20, opacity: 0 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                onClick={(e) => {
+                    // Only open fullscreen player on mobile (check viewport width)
+                    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+                        // Don't open if clicking controls
+                        const target = e.target as HTMLElement;
+                        if (target.closest('button') || target.closest('input')) return;
+                        window.dispatchEvent(new CustomEvent('open-fullscreen-player'));
+                    }
+                }}
             >
             {/* Mobile Glowing Progress Line */}
             <div className="mobile-player-progress-track">
