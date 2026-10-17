@@ -35,10 +35,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
             let actualTheme = theme;
             
             if (theme === 'system') {
-                const hour = new Date().getHours();
-                // 6:00 AM đến 5:59 PM là ban ngày (light), còn lại là ban đêm (dark)
-                const isDayTime = hour >= 6 && hour < 18;
-                actualTheme = isDayTime ? 'light' : 'dark';
+                // Sử dụng prefers-color-scheme để theo dõi chế độ hệ thống OS
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                actualTheme = prefersDark ? 'dark' : 'light';
             }
 
             setResolvedTheme(actualTheme);
@@ -48,14 +47,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
         updateTheme();
 
-        let intervalId: NodeJS.Timeout;
-        if (theme === 'system') {
-            // Kiểm tra mỗi phút để cập nhật giao diện nếu chuyển giao giữa ngày và đêm
-            intervalId = setInterval(updateTheme, 60000);
-        }
+        // Lắng nghe thay đổi chế độ hệ thống OS realtime
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handleChange = () => {
+            if (theme === 'system') {
+                updateTheme();
+            }
+        };
+        mediaQuery.addEventListener('change', handleChange);
 
         return () => {
-            if (intervalId) clearInterval(intervalId);
+            mediaQuery.removeEventListener('change', handleChange);
         };
     }, [theme]);
 

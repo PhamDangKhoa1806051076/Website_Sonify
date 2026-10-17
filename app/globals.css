@@ -3655,11 +3655,11 @@ h1, h2, h3, .logo span {
 
     /* === MOBILE SONG SECTION WRAPPER MATCHING REFERENCE SCREENSHOT === */
     .mobile-song-section {
-        background: #141416 !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        background: var(--bg-card) !important;
+        border: 1px solid var(--glass-border) !important;
         border-radius: 20px !important;
         padding: 16px 14px 22px !important;
-        box-shadow: 0 10px 32px rgba(0, 0, 0, 0.45) !important;
+        box-shadow: var(--card-shadow) !important;
         margin-bottom: 24px !important;
     }
 
@@ -3673,7 +3673,7 @@ h1, h2, h3, .logo span {
     .mobile-section-title {
         font-size: 1.25rem !important;
         font-weight: 700 !important;
-        color: #ffffff !important;
+        color: var(--text-main) !important;
         display: flex !important;
         align-items: baseline !important;
         gap: 8px !important;
@@ -3682,7 +3682,7 @@ h1, h2, h3, .logo span {
     }
 
     .mobile-section-dot {
-        color: rgba(255, 255, 255, 0.35) !important;
+        color: var(--text-muted) !important;
         font-weight: 400 !important;
         font-size: 1.1rem !important;
     }
@@ -3690,7 +3690,7 @@ h1, h2, h3, .logo span {
     .mobile-section-count {
         font-size: 0.95rem !important;
         font-weight: 400 !important;
-        color: rgba(255, 255, 255, 0.48) !important;
+        color: var(--text-muted) !important;
     }
 
     .mobile-mood-badge {
@@ -3727,8 +3727,8 @@ h1, h2, h3, .logo span {
     .mobile-segmented-group {
         display: inline-flex !important;
         align-items: center !important;
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        background: var(--bar-bg) !important;
+        border: 1px solid var(--glass-border) !important;
         border-radius: 12px !important;
         padding: 3px !important;
         gap: 2px !important;
@@ -3738,7 +3738,7 @@ h1, h2, h3, .logo span {
     .segmented-tab {
         background: transparent !important;
         border: none !important;
-        color: rgba(255, 255, 255, 0.7) !important;
+        color: var(--text-muted) !important;
         font-size: 0.86rem !important;
         font-weight: 500 !important;
         padding: 6px 14px !important;
@@ -3749,10 +3749,10 @@ h1, h2, h3, .logo span {
     }
 
     .segmented-tab.active {
-        background: #ffffff !important;
-        color: #121214 !important;
+        background: var(--primary-color) !important;
+        color: #ffffff !important;
         font-weight: 700 !important;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35) !important;
     }
 
     /* Action pills: [📊 Bảng xếp hạng] & [↕️ Sắp xếp] & Categories */
@@ -3760,9 +3760,9 @@ h1, h2, h3, .logo span {
         display: inline-flex !important;
         align-items: center !important;
         gap: 6px !important;
-        background: rgba(255, 255, 255, 0.06) !important;
-        border: 1px solid rgba(255, 255, 255, 0.12) !important;
-        color: rgba(255, 255, 255, 0.88) !important;
+        background: var(--bar-bg) !important;
+        border: 1px solid var(--glass-border) !important;
+        color: var(--text-main) !important;
         font-size: 0.84rem !important;
         font-weight: 600 !important;
         padding: 7px 14px !important;
@@ -3775,9 +3775,9 @@ h1, h2, h3, .logo span {
 
     .mobile-action-pill:active,
     .mobile-action-pill.active {
-        background: rgba(255, 255, 255, 0.14) !important;
-        border-color: rgba(255, 255, 255, 0.25) !important;
-        color: #ffffff !important;
+        background: var(--accent-glow) !important;
+        border-color: var(--primary-light) !important;
+        color: var(--text-main) !important;
     }
 
     @keyframes fadeInScale {
@@ -3798,11 +3798,11 @@ h1, h2, h3, .logo span {
         left: 0 !important;
         z-index: 100 !important;
         min-width: 210px !important;
-        background: #1c1c20 !important;
-        border: 1px solid rgba(255, 255, 255, 0.14) !important;
+        background: var(--bg-sidebar) !important;
+        border: 1px solid var(--glass-border) !important;
         border-radius: 14px !important;
         padding: 6px !important;
-        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65) !important;
+        box-shadow: var(--card-shadow) !important;
         backdrop-filter: blur(20px) !important;
         animation: fadeInScale 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
@@ -3812,7 +3812,7 @@ h1, h2, h3, .logo span {
         font-weight: 600 !important;
         text-transform: uppercase !important;
         letter-spacing: 0.05em !important;
-        color: rgba(255, 255, 255, 0.4) !important;
+        color: var(--text-muted) !important;
         padding: 8px 12px 4px !important;
     }
 
@@ -3825,7 +3825,7 @@ h1, h2, h3, .logo span {
         border: none !important;
         padding: 8px 12px !important;
         border-radius: 8px !important;
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: var(--text-main) !important;
         font-size: 0.84rem !important;
         font-weight: 500 !important;
         cursor: pointer !important;
@@ -3835,8 +3835,8 @@ h1, h2, h3, .logo span {
 
     .sort-option:hover,
     .sort-option.active {
-        background: rgba(255, 255, 255, 0.1) !important;
-        color: #ffffff !important;
+        background: var(--accent-glow) !important;
+        color: var(--text-main) !important;
         font-weight: 600 !important;
     }
 
@@ -3903,7 +3903,7 @@ h1, h2, h3, .logo span {
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35) !important;
         flex-shrink: 0 !important;
         overflow: hidden !important;
-        background: #202024 !important;
+        background: var(--bg-card) !important;
     }
 
     .song-card .img-wrap img {
@@ -3913,7 +3913,7 @@ h1, h2, h3, .logo span {
     .song-card h4 {
         font-size: 0.94rem !important;
         font-weight: 700 !important;
-        color: #ffffff !important;
+        color: var(--text-main) !important;
         padding: 8px 2px 2px !important;
         margin: 0 !important;
         white-space: nowrap !important;
@@ -3929,7 +3929,7 @@ h1, h2, h3, .logo span {
     .song-card p {
         font-size: 0.8rem !important;
         font-weight: 400 !important;
-        color: #9ca3af !important;
+        color: var(--text-muted) !important;
         padding: 0 2px 6px !important;
         margin: 0 !important;
         white-space: nowrap !important;
@@ -4993,7 +4993,7 @@ h1, h2, h3, .logo span {
     .mobile-section-proposal {
         display: block !important;
         font-size: 0.82rem !important;
-        color: rgba(255, 255, 255, 0.45) !important;
+        color: var(--text-muted) !important;
         margin: 0 0 10px 4px !important;
         font-weight: 500 !important;
         letter-spacing: -0.01em !important;

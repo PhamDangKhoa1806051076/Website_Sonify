@@ -358,8 +358,6 @@ export default function Home() {
             <div className="mobile-section-header">
               <h2 className="mobile-section-title">
                 {searchQuery.trim() ? t('search-local') : 'Danh sách bài hát'}
-                <span className="mobile-section-dot">·</span>
-                <span className="mobile-section-count">{displaySongs.length} {t('song-count')}</span>
               </h2>
               {quickMixFilter && (
                 <span
