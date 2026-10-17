@@ -4,6 +4,7 @@ import React, { useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import SongGrid from '@/components/SongGrid';
+import MobilePlaylistView from '@/components/MobilePlaylistView';
 import { usePlayer } from '@/context/PlayerContext';
 import { Song } from '@/data/constants';
 
@@ -33,7 +34,8 @@ export default function PlaylistDetailPage() {
       exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
     >
-      <section className="song-list-container">
+      {/* Desktop View (Untouched) */}
+      <section className="song-list-container desktop-only">
         <div className="section-header" style={{ marginBottom: '1rem' }}>
           <h2>{currentPlaylist ? currentPlaylist.name : 'Album / Playlist'}</h2>
           <span>{playlistSongs.length} bài hát</span>
@@ -45,6 +47,20 @@ export default function PlaylistDetailPage() {
           <p className="text-zinc-500 text-sm py-8 text-center">Không tìm thấy album / playlist này.</p>
         )}
       </section>
+
+      {/* Mobile App View (New Upgraded Playlist UI) */}
+      <div className="mobile-only">
+        {currentPlaylist ? (
+          <MobilePlaylistView
+            title={currentPlaylist.name}
+            subtitle={`${playlistSongs.length} bài hát • Tuyển chọn danh sách phát`}
+            songs={playlistSongs}
+            showExpandButton={playlistSongs.length > 6}
+          />
+        ) : (
+          <p className="text-zinc-500 text-sm py-8 text-center">Không tìm thấy album / playlist này.</p>
+        )}
+      </div>
     </motion.div>
   );
 }

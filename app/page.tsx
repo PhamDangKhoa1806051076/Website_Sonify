@@ -4,6 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import SongGrid from '@/components/SongGrid';
+import MobilePlaylistView from '@/components/MobilePlaylistView';
 import HomeBanner from '@/components/HomeBanner';
 import MobileGreeting from '@/components/MobileGreeting';
 import { useLanguage } from '@/context/LanguageContext';
@@ -351,11 +352,8 @@ export default function Home() {
            ============================================================ */}
         <div className="mobile-only">
           <section className="song-list-container mobile-song-section">
-            <div className="mobile-section-header">
-              <h2 className="mobile-section-title">
-                {searchQuery.trim() ? t('search-local') : 'Danh sách bài hát'}
-              </h2>
-              {quickMixFilter && (
+            {quickMixFilter && (
+              <div style={{ marginBottom: '12px', display: 'flex', alignItems: 'center' }}>
                 <span
                   className="mobile-mood-badge"
                   onClick={() => {
@@ -364,11 +362,11 @@ export default function Home() {
                   }}
                   title="Bỏ lọc tâm trạng"
                 >
-                  <i className="fa-solid fa-sparkles" /> {quickMixFilter.toUpperCase()}
+                  <i className="fa-solid fa-sparkles" /> Tâm trạng: {quickMixFilter.toUpperCase()}
                   <i className="fa-solid fa-xmark" style={{ fontSize: '0.7rem' }} />
                 </span>
-              )}
-            </div>
+              </div>
+            )}
 
             {!searchQuery.trim() && (
               <div className="mobile-filter-bar">
@@ -482,7 +480,13 @@ export default function Home() {
               </div>
             )}
 
-            <SongGrid songs={displaySongs} />
+            <MobilePlaylistView
+              title={searchQuery.trim() ? t('search-local') : 'Bài hát dành cho bạn'}
+              subtitle={`${displaySongs.length} bài hát • Tuyển chọn hôm nay`}
+              songs={displaySongs}
+              initialCount={6}
+              showExpandButton={displaySongs.length > 6}
+            />
           </section>
         </div>
 
