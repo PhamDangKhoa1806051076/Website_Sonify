@@ -47,11 +47,11 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
                         </div>
                     )}
                 </div>
-                <h4 className="desktop-only">{song.title}</h4>
-                <h4 className="mobile-only" title={song.title}>
-                    <span className="song-title-text">{mobileCleanTitle}</span>
+                <h4 title={song.title}>
+                    <span className="song-title-text desktop-only">{song.title}</span>
+                    <span className="song-title-text mobile-only">{mobileCleanTitle}</span>
                     {mobileBadge && (
-                        <span className="song-badge-tag">{mobileBadge}</span>
+                        <span className="song-badge-tag mobile-only">{mobileBadge}</span>
                     )}
                 </h4>
                 <p>{song.artist}</p>

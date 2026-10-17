@@ -50,32 +50,11 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
     };
 
     return (
-        <div style={{
-            gridArea: 'queue',
-            position: 'relative',
-            width: '300px',
-            height: '100%',
-            background: 'var(--bg-sidebar)',
-            borderLeft: '1px solid var(--glass-border)',
-            zIndex: 100,
-            overflowY: 'auto',
-            animation: 'slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-            boxShadow: '-12px 0 40px rgba(0,0,0,0.35), -1px 0 0 rgba(255,255,255,0.04)',
-            display: 'flex',
-            flexDirection: 'column',
-        }}>
+        <div className="queue-panel">
             {/* Header */}
-            <div style={{
-                padding: '20px 20px 16px',
-                borderBottom: '1px solid var(--glass-border)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                background: 'linear-gradient(to bottom, rgba(99,102,241,0.05) 0%, transparent 100%)',
-                flexShrink: 0
-            }}>
+            <div className="queue-panel-header">
                 <div>
-                    <h3 style={{ fontSize: '1rem', margin: 0, fontWeight: 700, letterSpacing: '-0.02em' }}>Hàng chờ</h3>
+                    <h3 style={{ fontSize: '1rem', margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-main)' }}>Hàng chờ</h3>
                     <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: '2px 0 0', fontWeight: 500 }}>
                         {queue.length + regularUpcoming.length} bài tiếp theo
                     </p>
@@ -85,7 +64,7 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
                         onClick={shuffleAll}
                         title="Xáo trộn"
                         style={{
-                            background: isShuffle ? 'rgba(99,102,241,0.2)' : 'rgba(255,255,255,0.06)',
+                            background: isShuffle ? 'rgba(99,102,241,0.2)' : 'var(--bar-bg)',
                             border: `1px solid ${isShuffle ? 'rgba(99,102,241,0.4)' : 'var(--glass-border)'}`,
                             color: isShuffle ? 'var(--primary-light)' : 'var(--text-muted)',
                             cursor: 'pointer',
@@ -100,8 +79,9 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
                     </button>
                     <button
                         onClick={onClose}
+                        title="Đóng hàng chờ"
                         style={{
-                            background: 'rgba(255,255,255,0.06)',
+                            background: 'var(--bar-bg)',
                             border: '1px solid var(--glass-border)',
                             color: 'var(--text-muted)',
                             cursor: 'pointer',
@@ -111,8 +91,8 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                             transition: 'all 0.2s cubic-bezier(0.34,1.56,0.64,1)'
                         }}
-                        onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.transform = 'scale(1.1) rotate(90deg)'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.transform = 'scale(1) rotate(0)'; }}
+                        onMouseEnter={e => { e.currentTarget.style.background = 'var(--accent-glow)'; e.currentTarget.style.transform = 'scale(1.1) rotate(90deg)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = 'var(--bar-bg)'; e.currentTarget.style.transform = 'scale(1) rotate(0)'; }}
                     >
                         <i className="fa-solid fa-xmark"></i>
                     </button>
@@ -120,7 +100,7 @@ const QueuePanel: React.FC<QueuePanelProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Scroll Area */}
-            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="queue-panel-scroll">
 
                 {/* Now Playing */}
                 {currentSong && (

@@ -350,10 +350,6 @@ export default function Home() {
             MOBILE SONG LIST (Reference UI Mockup Layout - Mobile Only)
            ============================================================ */}
         <div className="mobile-only">
-          <div className="mobile-section-proposal">
-            Bản đề xuất — bấm thử tab, Bảng xếp hạng, Sắp xếp
-          </div>
-
           <section className="song-list-container mobile-song-section">
             <div className="mobile-section-header">
               <h2 className="mobile-section-title">
