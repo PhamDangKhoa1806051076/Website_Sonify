@@ -25,6 +25,23 @@ export default function Home() {
   const [isSearching, setIsSearching] = useState(false);
   const [currentBanner, setCurrentBanner] = useState(0);
   const [quickMixFilter, setQuickMixFilter] = useState<string | null>(null);
+  const [sortBy, setSortBy] = useState<'default' | 'title-asc' | 'title-desc' | 'artist-asc' | 'duration-desc'>('default');
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'songs' | 'podcast' | 'audiobooks'>('songs');
+
+  // Close sort menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.sort-menu-container')) {
+        setIsSortOpen(false);
+      }
+    };
+    if (isSortOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isSortOpen]);
 
   // Listen to Quick Mix mood filter from MobileGreeting
   useEffect(() => {
@@ -101,12 +118,26 @@ export default function Home() {
         list = filtered;
       }
     }
-    if (!searchQuery.trim()) return list;
-    const q = searchQuery.toLowerCase();
-    return list.filter(
-      (s) => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q)
-    );
-  }, [allSongs, selectedCategory, quickMixFilter, searchQuery]);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(
+        (s) => s.title.toLowerCase().includes(q) || s.artist.toLowerCase().includes(q)
+      );
+    }
+    if (sortBy === 'title-asc') {
+      return [...list].sort((a, b) => a.title.localeCompare(b.title, 'vi'));
+    }
+    if (sortBy === 'title-desc') {
+      return [...list].sort((a, b) => b.title.localeCompare(a.title, 'vi'));
+    }
+    if (sortBy === 'artist-asc') {
+      return [...list].sort((a, b) => a.artist.localeCompare(b.artist, 'vi'));
+    }
+    if (sortBy === 'duration-desc') {
+      return [...list].sort((a, b) => (b.duration || '0:00').localeCompare(a.duration || '0:00'));
+    }
+    return list;
+  }, [allSongs, selectedCategory, quickMixFilter, searchQuery, sortBy]);
 
   return (
     <AnimatePresence mode="wait">
@@ -129,181 +160,146 @@ export default function Home() {
           </>
         )}
 
-        <section className="song-list-container">
-          <div className="section-header" style={{ marginBottom: '1rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <h2>
-                {searchQuery.trim() ? t('search-local') : t('song-list-title')}
-              </h2>
-              {quickMixFilter && (
-                <span
-                  style={{
-                    fontSize: '0.75rem',
-                    background: 'rgba(99, 102, 241, 0.2)',
-                    color: '#818cf8',
-                    border: '1px solid rgba(99, 102, 241, 0.4)',
-                    padding: '3px 10px',
-                    borderRadius: '20px',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    setQuickMixFilter(null);
-                    window.dispatchEvent(new CustomEvent('quick-mix-filter', { detail: null }));
-                  }}
-                  title="Bỏ lọc tâm trạng"
-                >
-                  <i className="fa-solid fa-sparkles" /> Mood: {quickMixFilter.toUpperCase()}
-                  <i className="fa-solid fa-xmark" style={{ fontSize: '0.7rem' }} />
-                </span>
-              )}
-            </div>
-            <span>{displaySongs.length} {t('song-count')}</span>
+        {/* Caption proposal header matching mockup */}
+        <div className="mobile-section-proposal">
+          Bản đề xuất — bấm thử tab, Bảng xếp hạng, Sắp xếp
+        </div>
+
+        <section className="song-list-container mobile-song-section">
+          {/* Header matching screenshot: "Danh sách bài hát · 36 bài hát" */}
+          <div className="mobile-section-header">
+            <h2 className="mobile-section-title">
+              {searchQuery.trim() ? t('search-local') : 'Danh sách bài hát'}
+              <span className="mobile-section-dot">·</span>
+              <span className="mobile-section-count">{displaySongs.length} {t('song-count')}</span>
+            </h2>
+            {quickMixFilter && (
+              <span
+                className="mobile-mood-badge"
+                onClick={() => {
+                  setQuickMixFilter(null);
+                  window.dispatchEvent(new CustomEvent('quick-mix-filter', { detail: null }));
+                }}
+                title="Bỏ lọc tâm trạng"
+              >
+                <i className="fa-solid fa-sparkles" /> {quickMixFilter.toUpperCase()}
+                <i className="fa-solid fa-xmark" style={{ fontSize: '0.7rem' }} />
+              </span>
+            )}
           </div>
 
-          {/* Unified Category Chips Filters */}
+          {/* Unified horizontal control bar: Segmented Tabs [Bài hát | Podcast | Sách] + Action pills */}
           {!searchQuery.trim() && (
-            <div
-              className="category-chips"
-              style={{
-                display: 'flex',
-                gap: '10px',
-                marginBottom: '1.6rem',
-                overflowX: 'auto',
-                paddingBottom: '8px',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-              }}
-            >
+            <div className="mobile-filter-bar">
+              {/* Segmented Capsule for content types */}
+              <div className="mobile-segmented-group">
+                <button
+                  type="button"
+                  className={`segmented-tab ${activeTab === 'songs' ? 'active' : ''}`}
+                  onClick={() => setActiveTab('songs')}
+                >
+                  Bài hát
+                </button>
+                <button
+                  type="button"
+                  className={`segmented-tab ${activeTab === 'podcast' ? 'active' : ''}`}
+                  onClick={() => router.push('/podcast')}
+                >
+                  Podcast
+                </button>
+                <button
+                  type="button"
+                  className={`segmented-tab ${activeTab === 'audiobooks' ? 'active' : ''}`}
+                  onClick={() => router.push('/audiobooks')}
+                >
+                  Sách
+                </button>
+              </div>
+
+              {/* Action pill: Bảng xếp hạng */}
               <button
-                onClick={() => setSelectedCategory('')}
-                className={`category-chip ${selectedCategory === '' ? 'active' : ''}`}
-                style={{
-                  background: selectedCategory === '' ? 'var(--primary-color)' : 'rgba(255,255,255,0.06)',
-                  color: selectedCategory === '' ? 'white' : 'var(--text-muted)',
-                  border: '1px solid var(--glass-border)',
-                  padding: '8px 22px',
-                  borderRadius: '50px',
-                  fontSize: '0.82rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'var(--transition)',
-                  boxShadow: selectedCategory === '' ? '0 4px 15px rgba(99, 102, 241, 0.4)' : 'none',
-                }}
-              >
-                Tất cả
-              </button>
-              <button
+                type="button"
                 onClick={() => router.push('/charts')}
-                className="category-chip"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.15), rgba(245, 158, 11, 0.15))',
-                  color: '#fbbf24',
-                  border: '1px solid rgba(234, 179, 8, 0.3)',
-                  padding: '8px 18px',
-                  borderRadius: '50px',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'var(--transition)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
+                className="mobile-action-pill"
               >
-                <i className="fa-solid fa-chart-simple"></i>
-                Bảng xếp hạng
+                <i className="fa-solid fa-chart-simple" style={{ fontSize: '0.85rem' }} />
+                <span>Bảng xếp hạng</span>
               </button>
+
+              {/* Action pill: Sắp xếp with dropdown menu */}
+              <div className="sort-menu-container" style={{ position: 'relative' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsSortOpen((prev) => !prev)}
+                  className={`mobile-action-pill ${sortBy !== 'default' ? 'active' : ''}`}
+                >
+                  <i className="fa-solid fa-arrow-down-wide-short" style={{ fontSize: '0.85rem' }} />
+                  <span>Sắp xếp {sortBy !== 'default' && '•'}</span>
+                </button>
+
+                {isSortOpen && (
+                  <div className="sort-dropdown-menu">
+                    <div className="sort-dropdown-title">Sắp xếp theo</div>
+                    <button
+                      type="button"
+                      className={`sort-option ${sortBy === 'default' ? 'active' : ''}`}
+                      onClick={() => { setSortBy('default'); setIsSortOpen(false); }}
+                    >
+                      <span>Mặc định</span>
+                      {sortBy === 'default' && <i className="fa-solid fa-check" />}
+                    </button>
+                    <button
+                      type="button"
+                      className={`sort-option ${sortBy === 'title-asc' ? 'active' : ''}`}
+                      onClick={() => { setSortBy('title-asc'); setIsSortOpen(false); }}
+                    >
+                      <span>Tên bài hát (A → Z)</span>
+                      {sortBy === 'title-asc' && <i className="fa-solid fa-check" />}
+                    </button>
+                    <button
+                      type="button"
+                      className={`sort-option ${sortBy === 'title-desc' ? 'active' : ''}`}
+                      onClick={() => { setSortBy('title-desc'); setIsSortOpen(false); }}
+                    >
+                      <span>Tên bài hát (Z → A)</span>
+                      {sortBy === 'title-desc' && <i className="fa-solid fa-check" />}
+                    </button>
+                    <button
+                      type="button"
+                      className={`sort-option ${sortBy === 'artist-asc' ? 'active' : ''}`}
+                      onClick={() => { setSortBy('artist-asc'); setIsSortOpen(false); }}
+                    >
+                      <span>Ca sĩ (A → Z)</span>
+                      {sortBy === 'artist-asc' && <i className="fa-solid fa-check" />}
+                    </button>
+                    <button
+                      type="button"
+                      className={`sort-option ${sortBy === 'duration-desc' ? 'active' : ''}`}
+                      onClick={() => { setSortBy('duration-desc'); setIsSortOpen(false); }}
+                    >
+                      <span>Thời lượng dài nhất</span>
+                      {sortBy === 'duration-desc' && <i className="fa-solid fa-check" />}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Category pills */}
               <button
-                onClick={() => router.push('/podcast')}
-                className="category-chip"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15))',
-                  color: '#f472b6',
-                  border: '1px solid rgba(236, 72, 153, 0.3)',
-                  padding: '8px 18px',
-                  borderRadius: '50px',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'var(--transition)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
+                type="button"
+                onClick={() => setSelectedCategory('')}
+                className={`mobile-action-pill ${selectedCategory === '' ? 'active' : ''}`}
               >
-                <i className="fa-solid fa-microphone"></i>
-                Podcast
-              </button>
-              <button
-                onClick={() => router.push('/audiobooks')}
-                className="category-chip"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15))',
-                  color: '#34d399',
-                  border: '1px solid rgba(16, 185, 129, 0.3)',
-                  padding: '8px 18px',
-                  borderRadius: '50px',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'var(--transition)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-              >
-                <i className="fa-solid fa-book-open"></i>
-                Sách nói
-              </button>
-              <button
-                onClick={() => router.push('/liked')}
-                className="category-chip"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(236, 72, 153, 0.15))',
-                  color: '#fb7185',
-                  border: '1px solid rgba(244, 63, 94, 0.3)',
-                  padding: '8px 18px',
-                  borderRadius: '50px',
-                  fontSize: '0.82rem',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap',
-                  transition: 'var(--transition)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-              >
-                <i className="fa-solid fa-heart"></i>
-                Yêu thích
+                <span>Tất cả</span>
               </button>
               {categories.map((cat) => (
                 <button
                   key={cat.slug}
-                  onClick={() => setSelectedCategory(cat.slug)}
-                  className={`category-chip ${selectedCategory === cat.slug ? 'active' : ''}`}
-                  style={{
-                    background: selectedCategory === cat.slug ? 'var(--primary-color)' : 'rgba(255,255,255,0.06)',
-                    color: selectedCategory === cat.slug ? 'white' : 'var(--text-muted)',
-                    border: '1px solid var(--glass-border)',
-                    padding: '8px 22px',
-                    borderRadius: '50px',
-                    fontSize: '0.82rem',
-                    fontWeight: 600,
-                    cursor: 'pointer',
-                    whiteSpace: 'nowrap',
-                    transition: 'var(--transition)',
-                    boxShadow: selectedCategory === cat.slug ? '0 4px 15px rgba(99, 102, 241, 0.4)' : 'none',
-                  }}
+                  type="button"
+                  onClick={() => setSelectedCategory(selectedCategory === cat.slug ? '' : cat.slug)}
+                  className={`mobile-action-pill ${selectedCategory === cat.slug ? 'active' : ''}`}
                 >
-                  {cat.name}
+                  <span>{cat.name}</span>
                 </button>
               ))}
             </div>

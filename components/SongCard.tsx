@@ -19,6 +19,9 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
         <div className={`song-card ${isCurrent ? 'active' : ''}`} onClick={handleClick}>
             <div className="song-card-inner">
                 <div className="img-wrap" style={{ position: 'relative', width: '100%', paddingBottom: '100%', overflow: 'hidden' }}>
+                    <div className="song-card-placeholder">
+                        <i className="fa-solid fa-music"></i>
+                    </div>
                     <Image 
                         src={song.cover} 
                         alt={song.title} 
@@ -29,6 +32,11 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
                     <div className={`play-overlay ${isCurrent && isPlaying ? 'playing' : ''}`}>
                         <i className={`fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
                     </div>
+                    {song.duration && (
+                        <div className="song-card-duration">
+                            {song.duration}
+                        </div>
+                    )}
                     {song.isOnline && (
                         <div className="online-badge">
                             <i className="fa-solid fa-cloud"></i>
@@ -36,8 +44,13 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
                         </div>
                     )}
                 </div>
-                <h4>{song.title}</h4>
-                <p>{song.artist}</p>
+                <h4 title={song.title}>
+                    <span className="song-title-text">{song.title}</span>
+                    {song.badge && (
+                        <span className="song-badge-tag">{song.badge}</span>
+                    )}
+                </h4>
+                <p title={song.artist}>{song.artist}</p>
             </div>
         </div>
     );

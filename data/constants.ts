@@ -4,6 +4,8 @@ export interface Song {
     artist: string;
     cover: string;
     src: string;
+    duration?: string;
+    badge?: string;
     isOnline?: boolean;
     category?: string;
     isPodcast?: boolean;
@@ -30,252 +32,289 @@ export const songs: Song[] = [
         title: "4 Mùa Thương Em",
         artist: "Lập Nguyên",
         cover: "/img/4muathuongem.jpg",
-        src: "/sound/4muathuongem-lapnguyen.mp3"
+        src: "/sound/4muathuongem-lapnguyen.mp3",
+        duration: "4:12"
     },
     {
         id: 2,
         title: "Anh Thanh Niên",
         artist: "HuyR",
         cover: "/img/anhthanhnien.jpg",
-        src: "/sound/anhthanhnien-huyr.mp3"
+        src: "/sound/anhthanhnien-huyr.mp3",
+        duration: "3:45"
     },
     {
         id: 3,
-        title: "Còn Gì Đẹp Hơn (BCN)",
+        title: "Còn Gì Đẹp Hơn",
         artist: "Bùi Công Nam, Nguyễn Hùng",
         cover: "/img/congidephon-bcn.jpg",
-        src: "/sound/congidephon-buicongnam-nguyenhung.mp3"
+        src: "/sound/congidephon-buicongnam-nguyenhung.mp3",
+        duration: "5:02",
+        badge: "2 bản"
     },
     {
         id: 4,
         title: "Còn Gì Đẹp Hơn",
         artist: "Nguyễn Hùng",
         cover: "/img/congidephon.jpg",
-        src: "/sound/congidephon-nguyenhung.mp3"
+        src: "/sound/congidephon-nguyenhung.mp3",
+        duration: "4:42"
     },
     {
         id: 5,
         title: "Em Ổn Không",
         artist: "Thiên An",
         cover: "/img/emonkhong.jpg",
-        src: "/sound/emonkhong-thienan.mp3"
+        src: "/sound/emonkhong-thienan.mp3",
+        duration: "5:19"
     },
     {
         id: 6,
         title: "Giờ Thì",
         artist: "Bùi Trường Linh",
         cover: "/img/giothi.jpg",
-        src: "/sound/giothi-buitruonglinh.mp3"
+        src: "/sound/giothi-buitruonglinh.mp3",
+        duration: "3:54"
     },
     {
         id: 7,
         title: "Người Có Thương",
         artist: "Đạt Kaa",
         cover: "/img/nguoicothuong.jpg",
-        src: "/sound/nguoicothuong-datkaa.mp3"
+        src: "/sound/nguoicothuong-datkaa.mp3",
+        duration: "4:42"
     },
     {
         id: 8,
         title: "Người Em Cố Đô",
         artist: "Rum, Xuân Định",
         cover: "/img/nguoiemcodo.jpg",
-        src: "/sound/nguoiemcodo-rum-xuandinh.mp3"
+        src: "/sound/nguoiemcodo-rum-xuandinh.mp3",
+        duration: "3:34"
     },
     {
         id: 9,
         title: "Nhà Tôi Có Treo Một Lá Cờ",
         artist: "Hà Anh Tuấn",
         cover: "/img/nhatoicotreomotlaco.jpg",
-        src: "/sound/nhatoicotreomotlaco-haanhtuan.mp3"
+        src: "/sound/nhatoicotreomotlaco-haanhtuan.mp3",
+        duration: "3:43"
     },
     {
         id: 10,
         title: "Phép Màu",
         artist: "Nguyễn Hùng",
         cover: "/img/phepmau.jpg",
-        src: "/sound/phepmau-nguyenhung.mp3"
+        src: "/sound/phepmau-nguyenhung.mp3",
+        duration: "4:17"
     },
     {
         id: 11,
         title: "Phố Cũ Còn Anh",
         artist: "Quinn",
         cover: "/img/phocuconanh.jpg",
-        src: "/sound/phocuconanh-quinn.mp3"
+        src: "/sound/phocuconanh-quinn.mp3",
+        duration: "3:53"
     },
     {
         id: 12,
         title: "Thịnh Vượng Việt Nam Sáng Ngời",
         artist: "V.A",
         cover: "/img/thinhvuongvietnamsangngoi.jpg",
-        src: "/sound/thinhvuongvietnamsangngoi.mp3"
+        src: "/sound/thinhvuongvietnamsangngoi.mp3",
+        duration: "3:54"
     },
     {
         id: 13,
         title: "Yêu Được Không",
         artist: "Đức Phúc",
         cover: "/img/yeuduockhong.jpg",
-        src: "/sound/yeuduockhong-ducphuc.mp3"
+        src: "/sound/yeuduockhong-ducphuc.mp3",
+        duration: "5:05"
     },
     {
         id: 14,
         title: "Phù Hộ Cho Con",
         artist: "24k.Right ft. B-Ray",
         cover: "/img/chuaphuhocon.jpg",
-        src: "/sound/24k-right-phu-ho-cho-con-feat-b-ray-huynh-cong-hieu-hipz-official-music-video-24kright.mp3"
+        src: "/sound/24k-right-phu-ho-cho-con-feat-b-ray-huynh-cong-hieu-hipz-official-music-video-24kright.mp3",
+        duration: "4:36"
     },
     {
         id: 15,
         title: "Ex's Hate Me Part 2",
         artist: "Amee x B-Ray",
         cover: "/img/ex-s-hate-me.jpg",
-        src: "/sound/amee-x-b-ray-ex-s-hate-me-part-2-lyric-video-from-album-dreamee-st-319-entertainment.mp3"
+        src: "/sound/amee-x-b-ray-ex-s-hate-me-part-2-lyric-video-from-album-dreamee-st-319-entertainment.mp3",
+        duration: "3:40"
     },
     {
         id: 16,
         title: "Pin Dự Phòng",
         artist: "Dương Domic ft. Lou Hoàng",
         cover: "/img/pinduphong.jpg",
-        src: "/sound/duong-domic-ft-lou-hoang-pin-du-phong-ep-du-lieu-quy-duong-domic.mp3"
+        src: "/sound/duong-domic-ft-lou-hoang-pin-du-phong-ep-du-lieu-quy-duong-domic.mp3",
+        duration: "3:46"
     },
     {
         id: 17,
         title: "Dạo Này",
         artist: "Obito",
         cover: "/img/daonay.jpg",
-        src: "/sound/obito-dao-nay-official-music-video-obito-official.mp3"
+        src: "/sound/obito-dao-nay-official-music-video-obito-official.mp3",
+        duration: "4:48"
     },
     {
         id: 18,
         title: "Ôm Em Thật Lâu",
         artist: "MONO",
         cover: "/img/omemthatlau.jpg",
-        src: "/sound/mono-om-em-that-lau-official-music-video-mono-official.mp3"
+        src: "/sound/mono-om-em-that-lau-official-music-video-mono-official.mp3",
+        duration: "5:41"
     },
     {
         id: 19,
         title: "Daylight",
         artist: "David Kushner",
         cover: "/img/daylight.jpg",
-        src: "/sound/david-kushner-daylight-official-music-video-davidkushnervevo.mp3"
+        src: "/sound/david-kushner-daylight-official-music-video-davidkushnervevo.mp3",
+        duration: "3:49"
     },
     {
         id: 20,
         title: "Miss You",
         artist: "Oliver Tree & Robin Schulz",
         cover: "/img/missyou.jpg",
-        src: "/sound/oliver-tree-robin-schulz-miss-you-official-music-video-oliver-tree.mp3"
+        src: "/sound/oliver-tree-robin-schulz-miss-you-official-music-video-oliver-tree.mp3",
+        duration: "2:49"
     },
     {
         id: 21,
         title: "I Just Might",
         artist: "Bruno Mars",
         cover: "/img/ijustmight.jpg",
-        src: "/sound/bruno-mars-i-just-might-official-music-video-bruno-mars.mp3"
+        src: "/sound/bruno-mars-i-just-might-official-music-video-bruno-mars.mp3",
+        duration: "3:33"
     },
     {
         id: 22,
         title: "Da Key",
         artist: "Gurbane",
         cover: "/img/da-key.jpg",
-        src: "/sound/2-da-key-gurbane-official-audio-all-black-records.mp3"
+        src: "/sound/2-da-key-gurbane-official-audio-all-black-records.mp3",
+        duration: "2:58"
     },
     {
         id: 23,
         title: "Lemmeholla",
         artist: "Gnob",
         cover: "/img/lemmeholla.jpg",
-        src: "/sound/gnob-lemmeholla-prod-prod-april16-official-mv-gnob.mp3"
+        src: "/sound/gnob-lemmeholla-prod-prod-april16-official-mv-gnob.mp3",
+        duration: "4:25"
     },
     {
         id: 24,
         title: "Gợi Anh Đây",
         artist: "Binz",
         cover: "/img/goianhday.jpg",
-        src: "/sound/go-anh-day-binz-binz-da-poet.mp3"
+        src: "/sound/go-anh-day-binz-binz-da-poet.mp3",
+        duration: "3:39"
     },
     {
         id: 25,
         title: "Hello Em Có Khỏe Không",
         artist: "Dfoxie37 x MyHoa",
         cover: "/img/helloemcokhoekhong.jpg",
-        src: "/sound/hello-em-co-khoe-khong-mp3-dfoxie37-myhoa-tuann-dfoxie37.mp3"
+        src: "/sound/hello-em-co-khoe-khong-mp3-dfoxie37-myhoa-tuann-dfoxie37.mp3",
+        duration: "2:37"
     },
     {
         id: 26,
         title: "Tokyo Cypher",
         artist: "Lil Wuyn x 16 Typh",
         cover: "/img/tokyocypher.jpg",
-        src: "/sound/lil-wuyn-16-brt-16-typh-tokyo-cypher-lil-wuyn-official.mp3"
+        src: "/sound/lil-wuyn-16-brt-16-typh-tokyo-cypher-lil-wuyn-official.mp3",
+        duration: "2:59"
     },
     {
         id: 27,
         title: "An",
         artist: "Lil Wuyn ft. Minstu",
         cover: "/img/an.jpg",
-        src: "/sound/lil-wuyn-an-feat-minstu-an-album-lil-wuyn-official.mp3"
+        src: "/sound/lil-wuyn-an-feat-minstu-an-album-lil-wuyn-official.mp3",
+        duration: "3:24"
     },
     {
         id: 28,
         title: "Chạy Theo Em",
         artist: "Nha (mihuman)",
         cover: "/img/chaytheoem.jpg",
-        src: "/sound/nha-mihuman-chay-theo-em-official-music-video-nha-official.mp3"
+        src: "/sound/nha-mihuman-chay-theo-em-official-music-video-nha-official.mp3",
+        duration: "3:59"
     },
     {
         id: 29,
         title: "Anh Không Làm Được",
         artist: "Par-SG ft. Vũ Thanh Vân",
         cover: "/img/anhkhonglamduoc.jpg",
-        src: "/sound/par-sg-anh-khong-lam-duoc-ft-vu-thanh-van-lyrics-video-par-sg.mp3"
+        src: "/sound/par-sg-anh-khong-lam-duoc-ft-vu-thanh-van-lyrics-video-par-sg.mp3",
+        duration: "3:26"
     },
     {
         id: 30,
         title: "Hennessy",
         artist: "Par-SG ft. Saabirose",
         cover: "/img/henessy.jpg",
-        src: "/sound/par-sg-hennessy-ft-saabirose-official-music-video-par-sg.mp3"
+        src: "/sound/par-sg-hennessy-ft-saabirose-official-music-video-par-sg.mp3",
+        duration: "3:18"
     },
     {
         id: 31,
         title: "Dalat Mango",
         artist: "PC",
         cover: "/img/dalat-mango.jpg",
-        src: "/sound/pc-dalatmango-prod-just-big-hills-official-mv-pc-feelingsoundz.mp3"
+        src: "/sound/pc-dalatmango-prod-just-big-hills-official-mv-pc-feelingsoundz.mp3",
+        duration: "2:44"
     },
     {
         id: 32,
         title: "Back to Friends",
         artist: "Sombr",
         cover: "/img/backtofriend.jpg",
-        src: "/sound/sombr-back-to-friends-official-video-sombr.mp3"
+        src: "/sound/sombr-back-to-friends-official-video-sombr.mp3",
+        duration: "3:21"
     },
     {
         id: 33,
         title: "Tương Tư",
         artist: "Clow x Flepy",
         cover: "/img/tuongtu.jpg",
-        src: "/sound/tuong-tu-clow-x-flepy-ft-darkc-official-video-clow.mp3"
+        src: "/sound/tuong-tu-clow-x-flepy-ft-darkc-official-video-clow.mp3",
+        duration: "3:26"
     },
     {
         id: 34,
         title: "Tửu Sầu",
         artist: "Xám x D-Blue",
         cover: "/img/tuusau.jpg",
-        src: "/sound/tuu-sau-xam-x-d-blue-official-lyric-video-dblue-official.mp3"
+        src: "/sound/tuu-sau-xam-x-d-blue-official-lyric-video-dblue-official.mp3",
+        duration: "2:48"
     },
     {
         id: 35,
         title: "Người Bất An",
         artist: "Ultimit",
         cover: "/img/nguoibatan.jpg",
-        src: "/sound/ultimit-nguoi-bat-an-1337-battle.mp3"
+        src: "/sound/ultimit-nguoi-bat-an-1337-battle.mp3",
+        duration: "3:17"
     },
     {
         id: 36,
         title: "Vùng An Toàn",
         artist: "B-Ray",
         cover: "/img/vungantoan.jpg",
-        src: "/sound/vung-an-toan-b-ray.mp3"
+        src: "/sound/vung-an-toan-b-ray.mp3",
+        duration: "4:25"
     }
 ];
 
