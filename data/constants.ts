@@ -45,7 +45,7 @@ export const songs: Song[] = [
     },
     {
         id: 3,
-        title: "Còn Gì Đẹp Hơn",
+        title: "Còn Gì Đẹp Hơn (BCN)",
         artist: "Bùi Công Nam, Nguyễn Hùng",
         cover: "/img/congidephon-bcn.jpg",
         src: "/sound/congidephon-buicongnam-nguyenhung.mp3",

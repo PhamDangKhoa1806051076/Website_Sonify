@@ -15,11 +15,14 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
     const isCurrent = currentSong?.id === song.id;
     const handleClick = useCallback(() => playSong(song), [playSong, song]);
 
+    const mobileCleanTitle = song.title.replace(/\s*\(BCN\)\s*/i, '');
+    const mobileBadge = song.badge || (song.title.includes('(BCN)') ? '2 bản' : undefined);
+
     return (
         <div className={`song-card ${isCurrent ? 'active' : ''}`} onClick={handleClick}>
             <div className="song-card-inner">
                 <div className="img-wrap" style={{ position: 'relative', width: '100%', paddingBottom: '100%', overflow: 'hidden' }}>
-                    <div className="song-card-placeholder">
+                    <div className="song-card-placeholder mobile-only">
                         <i className="fa-solid fa-music"></i>
                     </div>
                     <Image 
@@ -33,7 +36,7 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
                         <i className={`fa-solid ${isCurrent && isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
                     </div>
                     {song.duration && (
-                        <div className="song-card-duration">
+                        <div className="song-card-duration mobile-only">
                             {song.duration}
                         </div>
                     )}
@@ -44,13 +47,14 @@ const SongCard: React.FC<SongCardProps> = ({ song }) => {
                         </div>
                     )}
                 </div>
-                <h4 title={song.title}>
-                    <span className="song-title-text">{song.title}</span>
-                    {song.badge && (
-                        <span className="song-badge-tag">{song.badge}</span>
+                <h4 className="desktop-only">{song.title}</h4>
+                <h4 className="mobile-only" title={song.title}>
+                    <span className="song-title-text">{mobileCleanTitle}</span>
+                    {mobileBadge && (
+                        <span className="song-badge-tag">{mobileBadge}</span>
                     )}
                 </h4>
-                <p title={song.artist}>{song.artist}</p>
+                <p>{song.artist}</p>
             </div>
         </div>
     );
